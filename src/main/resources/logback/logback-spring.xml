@@ -2,8 +2,9 @@
 
 <configuration>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd" />
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
     <property name="LOG_PATTERN"
-        value="%green([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %magenta([%22.22thread]) %highlight(%-5level) | %yellow(%50.50logger{50}) | %msg%n" />
+        value="%yellow([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %magenta([%22.22thread]) %clr(%-5level) | %blue(%50.50logger{50}) | %msg%n" />
     <property name="LOG_FILE_PATTERN"
         value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%22.22thread] %-5level | %50.50logger{50} | %msg%n" />
     <property name="DEFAULT_DIR" value="/" />

@@ -1,8 +1,27 @@
 spring:
-  datasource:
-    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_SCHEMA}?characterEncoding=UTF-8&serverTimezone=UTC
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: validate
+  config:
+    activate:
+      on-profile: local
+    import:
+      - classpath:secrets/application-common.yml
+      - classpath:secrets/application-local.yml
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: develop
+    import:
+      - classpath:secrets/application-common.yml
+      - classpath:secrets/application-dev.yml
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: production
+    import:
+      - classpath:secrets/application-common.yml
+      - classpath:secrets/application-prod.yml
