@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: 신규 기능 구현
-title: "[Feature]"
+title: "[feature]"
 labels: "\U0001F4ABFeature"
 assignees: ''
 
