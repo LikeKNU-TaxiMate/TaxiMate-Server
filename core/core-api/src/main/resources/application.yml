@@ -25,3 +25,10 @@ spring:
     import:
       - classpath:secrets/application-common.yml
       - classpath:secrets/application-prod.yml
+
+---
+
+spring:
+  config:
+    import:
+      - logging.yml
