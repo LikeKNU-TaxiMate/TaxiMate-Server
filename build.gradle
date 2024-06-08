@@ -1,11 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.0'
-    id 'io.spring.dependency-management' version '1.1.5'
+    id 'org.springframework.boot' version '3.3.0' apply false
+    id 'io.spring.dependency-management' version '1.1.5' apply false
 }
-
-group = 'com.woopaca'
-version = '1.0.0'
 
 java {
     sourceCompatibility = '17'
@@ -17,52 +14,26 @@ configurations {
     }
 }
 
-repositories {
-    mavenCentral()
+allprojects {
+    group = 'com.woopaca.taxipod'
+    version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
 }
 
-dependencies {
-    // Web
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
 
-    // JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    dependencies {
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
 
-    // Validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    // Auth
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    // DB
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    // Message queue
-    implementation 'org.springframework.boot:spring-boot-starter-amqp'
-    testImplementation 'org.springframework.amqp:spring-rabbit-test'
-
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
-    // QueryDSL
-    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
-    annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
-    annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
-    annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
-
-    // Test
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'io.rest-assured:rest-assured'
-
-    // Monitoring
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    bootJar.enabled = false
+    jar.enabled = true
 }
 
 tasks.named('test') {

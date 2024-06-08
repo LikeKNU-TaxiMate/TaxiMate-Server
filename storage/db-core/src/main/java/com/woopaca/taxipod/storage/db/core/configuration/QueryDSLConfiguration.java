@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.configuration;
+package com.woopaca.taxipod.storage.db.core.configuration;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -18,4 +18,5 @@ public class QueryDSLConfiguration {
     public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(entityManager);
     }
+
 }
