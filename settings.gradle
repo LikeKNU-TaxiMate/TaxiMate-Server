@@ -1,8 +1,8 @@
 rootProject.name = 'TaxiPod'
 
 include 'core:core-api'
-include 'core:core-message'
 include 'core:core-security'
 include 'storage:db-core'
 include 'storage:db-nosql'
 include 'support:logging'
+include 'support:message'
