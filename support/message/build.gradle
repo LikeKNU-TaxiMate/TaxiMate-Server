@@ -1,4 +1,7 @@
 dependencies {
+    implementation project(':storage:db-core')
+    implementation project(':storage:db-nosql')
+
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
