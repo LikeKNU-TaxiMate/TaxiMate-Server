@@ -2,18 +2,14 @@ bootJar.enabled = true
 jar.enabled = false
 
 dependencies {
-    implementation project(':core:core-security')
     implementation project(':storage:db-core')
     implementation project(':storage:db-nosql')
     implementation project(':support:logging')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     testImplementation 'io.rest-assured:rest-assured'
 }
