@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.core.api.config;
+package com.woopaca.taxipod.core.api.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
