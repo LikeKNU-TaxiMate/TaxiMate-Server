@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class KakaoOAuth2Properties {
 
     private String tokenUrl;
-    private String userInfoUrl;
+    private String userUrl;
     private String redirectUri;
     private String clientId;
 

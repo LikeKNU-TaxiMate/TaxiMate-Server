@@ -11,7 +11,7 @@ import org.springframework.web.client.RestClient;
 
 @Slf4j
 @Component
-public class KakaoOAuth2Client implements OAuth2Client {
+public class KakaoOAuth2Client implements OAuth2Client<KakaoUser> {
 
     private final RestClient restClient;
     private final KakaoOAuth2Properties kakaoOAuth2Properties;
@@ -37,8 +37,23 @@ public class KakaoOAuth2Client implements OAuth2Client {
                     .retrieve()
                     .body(OAuth2Tokens.class);
         } catch (HttpStatusCodeException exception) {
-            log.warn("카카오 OAuth 2.0 클라이언트 토큰 요청 오류", exception);
+            log.warn("카카오 OAuth 2.0 토큰 요청 오류", exception);
             //TODO Handle kakao token request failure
+        }
+        return null;
+    }
+
+    @Override
+    public KakaoUser requestUserInfo(String accessToken) {
+        try {
+            return restClient.get()
+                    .uri(kakaoOAuth2Properties.getUserUrl())
+                    .headers(headers -> headers.setBearerAuth(accessToken))
+                    .retrieve()
+                    .body(KakaoUser.class);
+        } catch (HttpStatusCodeException exception) {
+            log.warn("카카오 OAuth 2.0 사용자 정보 요청 오류", exception);
+            //TODO Handle kakao user request failure
         }
         return null;
     }
