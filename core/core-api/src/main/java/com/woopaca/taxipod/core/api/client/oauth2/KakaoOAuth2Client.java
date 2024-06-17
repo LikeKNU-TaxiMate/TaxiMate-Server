@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.core.api.client;
+package com.woopaca.taxipod.core.api.client.oauth2;
 
 import com.woopaca.taxipod.core.api.config.KakaoOAuth2Properties;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.web.client.RestClient;
 
 @Slf4j
 @Component
-public class KakaoOAuth2Client implements OAuth2Client<KakaoUser> {
+public class KakaoOAuth2Client implements OAuth2Client {
 
     private final RestClient restClient;
     private final KakaoOAuth2Properties kakaoOAuth2Properties;
@@ -22,7 +22,7 @@ public class KakaoOAuth2Client implements OAuth2Client<KakaoUser> {
     }
 
     @Override
-    public OAuth2Tokens requestToken(String authorizationCode) {
+    public OAuth2Token requestToken(String authorizationCode) {
         MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("grant_type", "authorization_code");
         requestBody.add("client_id", kakaoOAuth2Properties.getClientId());
@@ -35,7 +35,7 @@ public class KakaoOAuth2Client implements OAuth2Client<KakaoUser> {
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .body(requestBody)
                     .retrieve()
-                    .body(OAuth2Tokens.class);
+                    .body(OAuth2Token.class);
         } catch (HttpStatusCodeException exception) {
             log.warn("카카오 OAuth 2.0 토큰 요청 오류", exception);
             //TODO Handle kakao token request failure
