@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.storage.db.core.configuration;
+package com.woopaca.taximate.storage.db.core.configuration;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

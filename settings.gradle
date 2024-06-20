@@ -1,4 +1,4 @@
-rootProject.name = 'TaxiPod'
+rootProject.name = 'TaxiMate'
 
 include 'core:core-api'
 include 'storage:db-core'
