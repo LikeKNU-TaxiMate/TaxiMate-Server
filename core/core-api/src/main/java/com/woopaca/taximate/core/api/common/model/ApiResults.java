@@ -2,21 +2,21 @@ package com.woopaca.taximate.core.api.common.model;
 
 import com.woopaca.taximate.core.api.common.error.ErrorType;
 
-public record ApiResults<T>() {
+public record ApiResults() {
 
-    public ApiResponse<T> success(T data) {
+    public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(true, null, data);
     }
 
-    public ApiResponse<T> success(String message, T data) {
+    public static <T> ApiResponse<T> success(String message, T data) {
         return new ApiResponse<>(true, message, data);
     }
 
-    public ErrorResponse error(ErrorType errorType) {
+    public static ErrorResponse error(ErrorType errorType) {
         return error(errorType.getMessage(), errorType.getErrorCode());
     }
 
-    public ErrorResponse error(String message, String errorCode) {
+    public static ErrorResponse error(String message, String errorCode) {
         return new ErrorResponse(false, message, errorCode);
     }
 
