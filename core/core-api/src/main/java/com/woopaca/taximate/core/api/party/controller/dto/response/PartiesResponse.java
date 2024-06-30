@@ -6,6 +6,6 @@ import java.time.LocalDateTime;
 
 public record PartiesResponse(
         Long id, String title, LocalDateTime departureTime, String origin,
-        String destination, int maxPassengers, Coordinate originLocation
+        String destination, int maxParticipants, int currentParticipants, Coordinate originLocation
 ) {
 }
