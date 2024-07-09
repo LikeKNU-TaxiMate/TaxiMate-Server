@@ -1,6 +1,7 @@
 package com.woopaca.taximate.core.api.common.model;
 
 import com.woopaca.taximate.core.api.common.error.ErrorType;
+import com.woopaca.taximate.core.api.common.error.exception.BusinessException;
 
 public record ApiResults() {
 
@@ -12,8 +13,12 @@ public record ApiResults() {
         return new ApiResponse<>(true, message, data);
     }
 
-    public static ErrorResponse error(ErrorType errorType) {
-        return error(errorType.getMessage(), errorType.getErrorCode());
+    public static ErrorResponse error(BusinessException exception) {
+        return error(exception.getMessage(), exception.getErrorType());
+    }
+
+    public static ErrorResponse error(String message, ErrorType errorType) {
+        return error(message, errorType.getErrorCode());
     }
 
     public static ErrorResponse error(String message, String errorCode) {
@@ -25,5 +30,4 @@ public record ApiResults() {
 
     public record ErrorResponse(boolean success, String message, String errorCode) {
     }
-
 }
