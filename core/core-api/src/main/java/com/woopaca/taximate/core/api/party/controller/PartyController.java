@@ -2,8 +2,10 @@ package com.woopaca.taximate.core.api.party.controller;
 
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
-import com.woopaca.taximate.core.api.party.controller.dto.request.MapRange;
+import com.woopaca.taximate.core.api.party.controller.dto.request.MapBound;
 import com.woopaca.taximate.core.api.party.controller.dto.response.PartiesResponse;
+import com.woopaca.taximate.core.api.party.domain.Parties;
+import com.woopaca.taximate.core.api.party.service.PartyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +19,19 @@ import java.util.List;
 @RestController
 public class PartyController {
 
+    private final PartyService partyService;
+
+    public PartyController(PartyService partyService) {
+        this.partyService = partyService;
+    }
+
     @GetMapping
-    public ApiResponse<List<PartiesResponse>> searchByMapRange(@Validated MapRange mapRange) {
-        return ApiResults.success(List.of());
+    public ApiResponse<List<PartiesResponse>> searchByMapRange(@Validated MapBound mapBound) {
+        Parties partiesInRange = partyService.getPartiesInRange(mapBound);
+        List<PartiesResponse> response = partiesInRange.stream()
+                .map(PartiesResponse::from)
+                .toList();
+        return ApiResults.success(response);
     }
 
 }
