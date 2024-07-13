@@ -9,6 +9,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Polygon;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.woopaca.taximate.storage.db.core.entity.QPartyEntity.partyEntity;
@@ -25,8 +26,9 @@ public class PartyCustomRepositoryImpl implements PartyCustomRepository {
     }
 
     @Override
-    public List<PartyEntity> findContains(double minLatitude, double minLongitude,
-                                          double maxLatitude, double maxLongitude) {
+    public List<PartyEntity> findContainsDepartureAfter(double minLatitude, double minLongitude,
+                                                        double maxLatitude, double maxLongitude,
+                                                        LocalDateTime after) {
         Polygon polygon = geometryFactory.createPolygon(new Coordinate[]{
                 new Coordinate(minLongitude, minLatitude),
                 new Coordinate(maxLongitude, minLatitude),
@@ -39,7 +41,8 @@ public class PartyCustomRepositoryImpl implements PartyCustomRepository {
         );
         return queryFactory.select(partyEntity)
                 .from(partyEntity)
-                .where(contains)
+                .where(contains.and(partyEntity.departureTime.after(after)))
+                .orderBy(partyEntity.departureTime.asc())
                 .fetch();
     }
 }

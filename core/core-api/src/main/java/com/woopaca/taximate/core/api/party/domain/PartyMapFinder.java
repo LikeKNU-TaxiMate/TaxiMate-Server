@@ -5,6 +5,7 @@ import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -16,11 +17,11 @@ public class PartyMapFinder {
         this.partyRepository = partyRepository;
     }
 
-    public List<Party> findByRange(Coordinate minCoordinate, Coordinate maxCoordinate) {
-        // TODO 범위 내에 속하는 Party 리스트 DB 조회
-        List<PartyEntity> partyEntities = partyRepository.findContains(
+    public List<Party> findByRangeAndDateTime(Coordinate minCoordinate, Coordinate maxCoordinate, LocalDateTime dateTime) {
+        List<PartyEntity> partyEntities = partyRepository.findContainsDepartureAfter(
                 minCoordinate.latitude(), minCoordinate.longitude(),
-                maxCoordinate.latitude(), maxCoordinate.longitude()
+                maxCoordinate.latitude(), maxCoordinate.longitude(),
+                dateTime
         );
         return partyEntities.stream()
                 .map(Party::fromEntity)

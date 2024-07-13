@@ -7,6 +7,7 @@ import com.woopaca.taximate.core.api.party.domain.PartyMapFinder;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,9 +20,11 @@ public class PartyService {
     }
 
     public Parties getPartiesInRange(MapBound mapBound) {
-        List<Party> partiesInRange = partyMapFinder.findByRange(
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        List<Party> partiesInRange = partyMapFinder.findByRangeAndDateTime(
                 Coordinate.of(mapBound.minLatitude(), mapBound.minLongitude()),
-                Coordinate.of(mapBound.maxLatitude(), mapBound.maxLongitude())
+                Coordinate.of(mapBound.maxLatitude(), mapBound.maxLongitude()),
+                currentDateTime.minusMinutes(30)
         );
         return new Parties(partiesInRange);
     }
