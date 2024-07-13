@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import org.locationtech.jts.geom.Point;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Entity(name = "party")
 public class PartyEntity {
@@ -17,6 +19,8 @@ public class PartyEntity {
     private Long id;
 
     private String title;
+
+    private LocalDateTime departureTime;
 
     @Column(columnDefinition = "POINT SRID 4326")
     private Point originLocation;

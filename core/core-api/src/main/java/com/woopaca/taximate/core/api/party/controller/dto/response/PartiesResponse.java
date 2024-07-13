@@ -11,6 +11,6 @@ public record PartiesResponse(
 ) {
 
     public static PartiesResponse from(Party party) {
-        return new PartiesResponse(party.id(), party.title(), LocalDateTime.now(), null, null, 4, 2, null);
+        return new PartiesResponse(party.id(), party.title(), party.departureTime(), null, null, 4, 2, null);
     }
 }
