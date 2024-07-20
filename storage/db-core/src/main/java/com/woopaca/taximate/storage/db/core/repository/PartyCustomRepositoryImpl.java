@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.woopaca.taximate.storage.db.core.entity.QParticipationEntity.participationEntity;
 import static com.woopaca.taximate.storage.db.core.entity.QPartyEntity.partyEntity;
 
 @Repository
@@ -41,6 +42,7 @@ public class PartyCustomRepositoryImpl implements PartyCustomRepository {
         );
         return queryFactory.select(partyEntity)
                 .from(partyEntity)
+                .leftJoin(partyEntity.participationSet, participationEntity).fetchJoin()
                 .where(contains.and(partyEntity.departureTime.after(after)))
                 .orderBy(partyEntity.departureTime.asc())
                 .fetch();
