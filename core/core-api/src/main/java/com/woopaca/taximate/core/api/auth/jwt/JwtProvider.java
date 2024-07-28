@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.core.api.config.security;
+package com.woopaca.taximate.core.api.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -39,5 +39,4 @@ public class JwtProvider {
                 .withSubject(subject)
                 .sign(algorithm);
     }
-
 }

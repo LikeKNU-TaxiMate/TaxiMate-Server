@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.core.api.client.oauth2;
+package com.woopaca.taximate.core.api.auth.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

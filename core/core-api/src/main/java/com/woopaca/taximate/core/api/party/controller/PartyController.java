@@ -33,5 +33,4 @@ public class PartyController {
                 .toList();
         return ApiResults.success(response);
     }
-
 }

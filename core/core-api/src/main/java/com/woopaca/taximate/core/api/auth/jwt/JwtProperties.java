@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.core.api.config.security;
+package com.woopaca.taximate.core.api.auth.jwt;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +15,4 @@ public class JwtProperties {
     private String clientSecret;
     private long accessTokenExpiry;
     private long refreshTokenExpiry;
-
 }

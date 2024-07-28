@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.core.api.client.oauth2;
+package com.woopaca.taximate.core.api.auth.oauth2;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -22,5 +22,4 @@ public record KakaoUser(KakaoAccount kakaoAccount) implements OAuth2User {
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
     record Profile(String profileImageUrl) {
     }
-
 }

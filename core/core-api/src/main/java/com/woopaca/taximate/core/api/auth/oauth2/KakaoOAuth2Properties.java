@@ -1,4 +1,4 @@
-package com.woopaca.taxipod.core.api.config;
+package com.woopaca.taximate.core.api.auth.oauth2;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +15,4 @@ public class KakaoOAuth2Properties {
     private String userUrl;
     private String redirectUri;
     private String clientId;
-
 }

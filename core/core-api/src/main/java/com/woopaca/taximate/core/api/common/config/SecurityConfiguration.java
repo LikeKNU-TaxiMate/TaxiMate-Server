@@ -22,10 +22,10 @@ public class SecurityConfiguration {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(exceptionHandling -> exceptionHandling
+                .authorizeHttpRequests(request -> request.requestMatchers("/api/v1/**").permitAll()
+                        .anyRequest().authenticated())
+                .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .build();
     }
-
 }

@@ -1,6 +1,5 @@
-package com.woopaca.taxipod.core.api.client.oauth2;
+package com.woopaca.taximate.core.api.auth.oauth2;
 
-import com.woopaca.taxipod.core.api.config.KakaoOAuth2Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -57,5 +56,4 @@ public class KakaoOAuth2Client implements OAuth2Client {
         }
         return null;
     }
-
 }
