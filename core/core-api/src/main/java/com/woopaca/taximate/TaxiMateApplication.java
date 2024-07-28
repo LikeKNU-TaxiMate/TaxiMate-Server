@@ -1,13 +1,13 @@
-package com.woopaca.taxipod;
+package com.woopaca.taximate;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TaxiPodApplication {
+public class TaxiMateApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TaxiPodApplication.class, args);
+        SpringApplication.run(TaxiMateApplication.class, args);
     }
 
 }
