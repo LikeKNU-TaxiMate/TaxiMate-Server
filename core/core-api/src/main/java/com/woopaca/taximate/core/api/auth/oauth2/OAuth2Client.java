@@ -1,8 +1,5 @@
 package com.woopaca.taximate.core.api.auth.oauth2;
 
-/**
- * @param <T> User account type
- */
 public interface OAuth2Client {
 
     //TODO Retry handling for 5xx responses
