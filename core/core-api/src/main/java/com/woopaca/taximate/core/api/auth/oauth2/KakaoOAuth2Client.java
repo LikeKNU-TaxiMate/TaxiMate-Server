@@ -38,8 +38,8 @@ public class KakaoOAuth2Client implements OAuth2Client {
         } catch (HttpStatusCodeException exception) {
             log.warn("카카오 OAuth 2.0 토큰 요청 오류", exception);
             //TODO Handle kakao token request failure
+            throw exception;
         }
-        return null;
     }
 
     @Override
