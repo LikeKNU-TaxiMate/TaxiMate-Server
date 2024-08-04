@@ -16,7 +16,7 @@ public class PartyService {
 
     private final PartyMapFinder partyMapFinder;
 
-    PartyService(PartyMapFinder partyMapFinder) {
+    public PartyService(PartyMapFinder partyMapFinder) {
         this.partyMapFinder = partyMapFinder;
     }
 
