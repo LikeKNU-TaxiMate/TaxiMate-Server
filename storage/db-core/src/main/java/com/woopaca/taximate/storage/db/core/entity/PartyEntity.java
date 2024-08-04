@@ -1,6 +1,5 @@
 package com.woopaca.taximate.storage.db.core.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,6 +9,7 @@ import lombok.Getter;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,19 +23,36 @@ public class PartyEntity {
 
     private String title;
 
+    private String explanation;
+
     private LocalDateTime departureTime;
 
     private String origin;
 
     private String destination;
 
-    @Column(columnDefinition = "POINT SRID 4326")
+    private String originAddress;
+
+    private String destinationAddress;
+
     private Point originLocation;
+
+    private Point destinationLocation;
 
     private int maxPassengers;
 
+    private int views;
+
+    private int fare;
+
+    private int duration;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     @OneToMany(mappedBy = "party")
-    private Set<ParticipationEntity> participationSet = Set.of();
+    private Set<ParticipationEntity> participationSet = Collections.emptySet();
 
     public double getOriginLatitude() {
         return originLocation.getY();
@@ -43,6 +60,14 @@ public class PartyEntity {
 
     public double getOriginLongitude() {
         return originLocation.getX();
+    }
+
+    public double getDestinationLatitude() {
+        return destinationLocation.getY();
+    }
+
+    public double getDestinationLongitude() {
+        return destinationLocation.getX();
     }
 
     @Override
