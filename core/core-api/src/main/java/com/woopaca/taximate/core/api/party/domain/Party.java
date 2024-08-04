@@ -9,8 +9,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Builder
-public record Party(Long id, String title, LocalDateTime departureTime, String origin, String destination,
-                    Coordinate originLocation, int maxPassengers, Set<Participation> participationSet) {
+public record Party(Long id, String title, String explanation, LocalDateTime departureTime,
+                    String origin, String originAddress, Coordinate originLocation,
+                    String destination, String destinationAddress, Coordinate destinationLocation,
+                    int maxParticipants, int views, LocalDateTime createdAt, Set<Participation> participationSet) {
 
     public static Party fromEntity(PartyEntity entity) {
         Set<Participation> participationSet = entity.getParticipationSet()
@@ -20,14 +22,21 @@ public record Party(Long id, String title, LocalDateTime departureTime, String o
         return Party.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
+                .explanation(entity.getExplanation())
                 .departureTime(entity.getDepartureTime())
                 .origin(entity.getOrigin())
-                .destination(entity.getDestination())
+                .originAddress(entity.getOriginAddress())
                 .originLocation(Coordinate.of(
                         entity.getOriginLatitude(),
                         entity.getOriginLongitude()
                 ))
-                .maxPassengers(entity.getMaxPassengers())
+                .destination(entity.getDestination())
+                .destinationAddress(entity.getDestinationAddress())
+                .destinationLocation(Coordinate.of(
+                        entity.getDestinationLatitude(),
+                        entity.getDestinationLongitude()
+                ))
+                .maxParticipants(entity.getMaxParticipants())
                 .participationSet(participationSet)
                 .build();
     }
