@@ -7,6 +7,7 @@ import com.woopaca.taximate.core.api.party.domain.PartyDetails;
 import com.woopaca.taximate.core.api.party.domain.PartyFinder;
 import com.woopaca.taximate.core.api.party.domain.PartyMapFinder;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
+import com.woopaca.taximate.core.api.taxi.api.KakaoMobilityClient;
 import com.woopaca.taximate.core.api.taxi.domain.Taxi;
 import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.core.api.user.domain.UserFinder;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -25,11 +25,13 @@ public class PartyService {
     private final PartyMapFinder partyMapFinder;
     private final PartyFinder partyFinder;
     private final UserFinder userFinder;
+    private final KakaoMobilityClient kakaoMobilityClient;
 
-    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, UserFinder userFinder) {
+    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, UserFinder userFinder, KakaoMobilityClient kakaoMobilityClient) {
         this.partyMapFinder = partyMapFinder;
         this.partyFinder = partyFinder;
         this.userFinder = userFinder;
+        this.kakaoMobilityClient = kakaoMobilityClient;
     }
 
     /**
@@ -61,8 +63,7 @@ public class PartyService {
         User authenticatedUser = userFinder.findAuthenticatedUser();
         User host = userFinder.findUser(party.hostId());
 
-        //TODO 택시 경로 및 비용, 예상 소요 시간 조회(외부 API)
-        Taxi taxi = new Taxi(Collections.emptyList(), 0, 0);
+        Taxi taxi = kakaoMobilityClient.requestTaxi(party.originLocation(), party.destinationLocation());
         return new PartyDetails(party, host, taxi, authenticatedUser);
     }
 }
