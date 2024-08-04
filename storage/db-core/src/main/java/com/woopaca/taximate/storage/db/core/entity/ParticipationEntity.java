@@ -8,11 +8,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 
-import java.util.Objects;
-
 @Getter
 @Entity(name = "participation")
-public class ParticipationEntity {
+public class ParticipationEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,20 +19,4 @@ public class ParticipationEntity {
     @JoinColumn(name = "party_id", nullable = false)
     @ManyToOne(optional = false, targetEntity = PartyEntity.class)
     private PartyEntity party;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        ParticipationEntity that = (ParticipationEntity) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 }
