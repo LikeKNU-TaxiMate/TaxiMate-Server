@@ -14,5 +14,5 @@ public class KakaoOAuth2Properties {
     private String tokenUrl;
     private String userUrl;
     private String redirectUri;
-    private String clientId;
+    private String apiKey;
 }
