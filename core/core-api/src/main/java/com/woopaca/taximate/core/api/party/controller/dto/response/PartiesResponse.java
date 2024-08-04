@@ -19,7 +19,7 @@ public record PartiesResponse(
                 .departureTime(party.departureTime())
                 .origin(party.origin())
                 .destination(party.destination())
-                .maxParticipants(party.maxPassengers())
+                .maxParticipants(party.maxParticipants())
                 .currentParticipants(party.currentParticipants())
                 .originLocation(party.originLocation())
                 .build();

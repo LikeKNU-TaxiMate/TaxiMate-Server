@@ -39,13 +39,9 @@ public class PartyEntity {
 
     private Point destinationLocation;
 
-    private int maxPassengers;
+    private int maxParticipants;
 
     private int views;
-
-    private int fare;
-
-    private int duration;
 
     private LocalDateTime createdAt;
 
