@@ -1,10 +1,13 @@
 package com.woopaca.taximate.core.api.party.domain;
 
+import com.woopaca.taximate.core.api.party.domain.Participation.ParticipationStatus;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
+import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,5 +46,22 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
 
     public int currentParticipants() {
         return participationSet.size();
+    }
+
+    public Long hostId() {
+        // TODO 호스트가 존재하지 않는 경우 예외 처리
+        return participationSet.stream()
+                .filter(Participation::isHost)
+                .findAny()
+                .map(Participation::userId)
+                .orElse(-1L);
+    }
+
+    public ParticipationStatus participationStatusOf(User user) {
+        return participationSet.stream()
+                .filter(participation -> Objects.equals(participation.userId(), user.id()))
+                .findAny()
+                .map(Participation::status)
+                .orElse(ParticipationStatus.NONE);
     }
 }
