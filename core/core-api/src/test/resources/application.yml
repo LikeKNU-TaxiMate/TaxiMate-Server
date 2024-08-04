@@ -17,3 +17,9 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
     com.woopaca.taxipod: debug
+
+jwt:
+  issuer: test-issuer
+  client-secret: test-secret-key-test-secret-key-test-secret-key
+  access-token-expiry: 60
+  refresh-token-expiry: 120
