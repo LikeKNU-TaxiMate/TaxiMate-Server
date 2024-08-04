@@ -40,6 +40,8 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                         entity.getDestinationLongitude()
                 ))
                 .maxParticipants(entity.getMaxParticipants())
+                .views(entity.getViews())
+                .createdAt(entity.getCreatedAt())
                 .participationSet(participationSet)
                 .build();
     }
