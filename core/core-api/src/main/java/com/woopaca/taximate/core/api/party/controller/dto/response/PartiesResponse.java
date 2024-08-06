@@ -4,11 +4,9 @@ import com.woopaca.taximate.core.api.party.domain.Party;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
-
 @Builder
 public record PartiesResponse(
-        Long id, String title, LocalDateTime departureTime, String origin,
+        Long id, String title, String departureTime, String origin,
         String destination, int maxParticipants, int currentParticipants, Coordinate originLocation
 ) {
 
@@ -16,7 +14,7 @@ public record PartiesResponse(
         return PartiesResponse.builder()
                 .id(party.id())
                 .title(party.title())
-                .departureTime(party.departureTime())
+                .departureTime(party.departureTime().toString())
                 .origin(party.origin())
                 .destination(party.destination())
                 .maxParticipants(party.maxParticipants())

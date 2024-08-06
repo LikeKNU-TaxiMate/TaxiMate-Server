@@ -8,15 +8,14 @@ import com.woopaca.taximate.core.api.taxi.domain.Taxi;
 import com.woopaca.taximate.core.api.user.domain.User;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
-public record PartyDetailsResponse(Long id, String title, LocalDateTime departureTime, String explanation,
+public record PartyDetailsResponse(Long id, String title, String departureTime, String explanation,
                                    String origin, String originAddress, Coordinate originLocation,
                                    String destination, String destinationAddress, Coordinate destinationLocation,
                                    int maxParticipants, int currentParticipants, int views, String status,
-                                   LocalDateTime createdAt, HostResponse host, TaxiResponse taxi) {
+                                   String createdAt, HostResponse host, TaxiResponse taxi) {
 
     public static PartyDetailsResponse from(PartyDetails partyDetails) {
         ParticipationStatus status = partyDetails.party()
@@ -28,7 +27,7 @@ public record PartyDetailsResponse(Long id, String title, LocalDateTime departur
         return PartyDetailsResponse.builder()
                 .id(party.id())
                 .title(party.title())
-                .departureTime(party.departureTime())
+                .departureTime(party.departureTime().toString())
                 .explanation(party.explanation())
                 .origin(party.origin())
                 .originAddress(party.originAddress())
@@ -40,7 +39,7 @@ public record PartyDetailsResponse(Long id, String title, LocalDateTime departur
                 .currentParticipants(party.currentParticipants())
                 .views(party.views())
                 .status(status.name())
-                .createdAt(party.createdAt())
+                .createdAt(party.createdAt().toString())
                 .host(HostResponse.from(user))
                 .taxi(TaxiResponse.from(taxi))
                 .build();
