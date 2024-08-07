@@ -1,18 +1,16 @@
-package com.woopaca.taximate.core.api.auth.oauth2;
+package com.woopaca.taximate.core.api.taxi.api;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-@Getter
 @Setter
+@Getter
 @Configuration
-@ConfigurationProperties(prefix = "oauth2.kakao")
-public class KakaoOAuth2Properties {
+@ConfigurationProperties(prefix = "kakao.mobility")
+public class KakaoMobilityProperties {
 
-    private String tokenUrl;
-    private String userUrl;
-    private String redirectUri;
+    private String directionsUrl;
     private String apiKey;
 }

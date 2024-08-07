@@ -1,27 +1,24 @@
 package com.woopaca.taximate.storage.db.core.entity;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import org.locationtech.jts.geom.Point;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.Collections;
 import java.util.Set;
 
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Entity(name = "party")
-public class PartyEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class PartyEntity extends BaseEntity {
 
     private String title;
+
+    private String explanation;
 
     private LocalDateTime departureTime;
 
@@ -29,13 +26,20 @@ public class PartyEntity {
 
     private String destination;
 
-    @Column(columnDefinition = "POINT SRID 4326")
+    private String originAddress;
+
+    private String destinationAddress;
+
     private Point originLocation;
 
-    private int maxPassengers;
+    private Point destinationLocation;
+
+    private int maxParticipants;
+
+    private int views;
 
     @OneToMany(mappedBy = "party")
-    private Set<ParticipationEntity> participationSet = Set.of();
+    private Set<ParticipationEntity> participationSet = Collections.emptySet();
 
     public double getOriginLatitude() {
         return originLocation.getY();
@@ -45,19 +49,11 @@ public class PartyEntity {
         return originLocation.getX();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (o == null || getClass() != o.getClass())
-            return false;
-
-        PartyEntity that = (PartyEntity) o;
-        return Objects.equals(id, that.id);
+    public double getDestinationLatitude() {
+        return destinationLocation.getY();
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
+    public double getDestinationLongitude() {
+        return destinationLocation.getX();
     }
 }
