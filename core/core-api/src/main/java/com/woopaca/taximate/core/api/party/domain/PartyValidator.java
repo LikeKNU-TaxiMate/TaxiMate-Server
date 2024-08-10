@@ -1,7 +1,6 @@
 package com.woopaca.taximate.core.api.party.domain;
 
 import com.woopaca.taximate.core.api.user.domain.User;
-import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +11,9 @@ import java.util.List;
 public class PartyValidator {
 
     private final PartyFinder partyFinder;
-    private final PartyRepository partyRepository;
 
-    public PartyValidator(PartyFinder partyFinder, PartyRepository partyRepository) {
+    public PartyValidator(PartyFinder partyFinder) {
         this.partyFinder = partyFinder;
-        this.partyRepository = partyRepository;
     }
 
     public void validateMaxPartiesCount(User user) {
