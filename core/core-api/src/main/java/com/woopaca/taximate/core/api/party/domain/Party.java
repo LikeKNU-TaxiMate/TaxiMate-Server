@@ -66,4 +66,8 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                 .map(Participation::status)
                 .orElse(ParticipationStatus.NONE);
     }
+
+    public boolean isProgress() {
+        return departureTime.isAfter(LocalDateTime.now().minusMinutes(30));
+    }
 }
