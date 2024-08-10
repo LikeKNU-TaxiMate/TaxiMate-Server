@@ -1,5 +1,6 @@
 package com.woopaca.taximate.core.api.party.domain;
 
+import com.woopaca.taximate.core.api.party.controller.dto.request.CreatePartyRequest;
 import com.woopaca.taximate.core.api.party.domain.Participation.ParticipationStatus;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
 import com.woopaca.taximate.core.api.user.domain.User;
@@ -16,6 +17,10 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                     String origin, String originAddress, Coordinate originLocation,
                     String destination, String destinationAddress, Coordinate destinationLocation,
                     int maxParticipants, int views, LocalDateTime createdAt, Set<Participation> participationSet) {
+
+    public static final int MAX_PARTIES_COUNT = 3;
+    public static final int MAX_PARTICIPANTS_COUNT = 4;
+    public static final int MIN_PARTICIPANTS_COUNT = 2;
 
     public static Party fromEntity(PartyEntity entity) {
         Set<Participation> participationSet = entity.getParticipationSet()
@@ -43,6 +48,17 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                 .views(entity.getViews())
                 .createdAt(entity.getCreatedAt())
                 .participationSet(participationSet)
+                .build();
+    }
+
+    public static Party newParty(CreatePartyRequest request) {
+        return Party.builder()
+                .title(request.title())
+                .explanation(request.explanation())
+                .departureTime(request.departureTime())
+                .originLocation(request.originLocation())
+                .destinationLocation(request.destinationLocation())
+                .maxParticipants(request.maxParticipants())
                 .build();
     }
 
