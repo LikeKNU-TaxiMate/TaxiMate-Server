@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `party`
 (
     `id`                   BIGINT          NOT NULL AUTO_INCREMENT,
-    `title`                VARCHAR(255)    NOT NULL,           # 팟 제목
+    `title`                VARCHAR(20)     NOT NULL,           # 팟 제목
     `explanation`          VARCHAR(255),                       # 간단 설명
     `departure_time`       DATETIME        NOT NULL,           # 출발 시간
     `origin`               VARCHAR(255)    NOT NULL,           # 출발지 이름
