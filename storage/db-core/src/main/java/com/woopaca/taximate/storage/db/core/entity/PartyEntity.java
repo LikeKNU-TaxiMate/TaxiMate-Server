@@ -3,8 +3,12 @@ package com.woopaca.taximate.storage.db.core.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Getter;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -40,6 +44,27 @@ public class PartyEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "party")
     private Set<ParticipationEntity> participationSet = Collections.emptySet();
+
+    public PartyEntity() {
+    }
+
+    @Builder
+    public PartyEntity(String title, String explanation, LocalDateTime departureTime, String origin, String destination,
+                       String originAddress, String destinationAddress, double originLatitude, double originLongitude,
+                       double destinationLatitude, double destinationLongitude, int maxParticipants) {
+        this.title = title;
+        this.explanation = explanation;
+        this.departureTime = departureTime;
+        this.origin = origin;
+        this.destination = destination;
+        this.originAddress = originAddress;
+        this.destinationAddress = destinationAddress;
+        this.maxParticipants = maxParticipants;
+
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        this.originLocation = geometryFactory.createPoint(new Coordinate(originLongitude, originLatitude));
+        this.destinationLocation = geometryFactory.createPoint(new Coordinate(destinationLongitude, destinationLatitude));
+    }
 
     public double getOriginLatitude() {
         return originLocation.getY();

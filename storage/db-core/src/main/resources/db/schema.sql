@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS `party`
 (
     `id`                   BIGINT          NOT NULL AUTO_INCREMENT,
-    `title`                VARCHAR(255)    NOT NULL,           # 팟 제목
-    `explanation`          VARCHAR(255),                       # 간단 설명
+    `title`                VARCHAR(30)     NOT NULL,           # 팟 제목
+    `explanation`          VARCHAR(500),                       # 간단 설명
     `departure_time`       DATETIME        NOT NULL,           # 출발 시간
-    `origin`               VARCHAR(255)    NOT NULL,           # 출발지 이름
-    `destination`          VARCHAR(255)    NOT NULL,           # 도착지 이름
-    `origin_address`       VARCHAR(255)    NOT NULL,           # 출발지 주소
-    `destination_address`  VARCHAR(255)    NOT NULL,           # 도착지 주소
+    `origin`               VARCHAR(40)     NOT NULL,           # 출발지 이름
+    `destination`          VARCHAR(40)     NOT NULL,           # 도착지 이름
+    `origin_address`       VARCHAR(80)     NOT NULL,           # 출발지 주소
+    `destination_address`  VARCHAR(80)     NOT NULL,           # 도착지 주소
     `origin_location`      POINT SRID 4326 NOT NULL,           # 출발지 좌표
     `destination_location` POINT SRID 4326 NOT NULL,           # 도착지 좌표
     `max_participants`     INT             NOT NULL,           # 최대 탑승 인원
@@ -21,14 +21,14 @@ CREATE TABLE IF NOT EXISTS `party`
 
 CREATE TABLE IF NOT EXISTS `user`
 (
-    `id`            BIGINT       NOT NULL AUTO_INCREMENT,
-    `email`         VARCHAR(255) NOT NULL,
-    `nickname`      VARCHAR(255) NOT NULL,
+    `id`            BIGINT      NOT NULL AUTO_INCREMENT,
+    `email`         VARCHAR(40) NOT NULL,
+    `nickname`      VARCHAR(10) NOT NULL,
     `profile_image` VARCHAR(1000),
-    `provider`      CHAR(6)      NOT NULL DEFAULT 'KAKAO',
-    `status`        CHAR(8)      NOT NULL DEFAULT 'ACTIVE',
-    `created_at`    DATETIME     NOT NULL,
-    `updated_at`    DATETIME     NOT NULL,
+    `provider`      CHAR(6)     NOT NULL DEFAULT 'KAKAO',
+    `status`        CHAR(8)     NOT NULL DEFAULT 'ACTIVE',
+    `created_at`    DATETIME    NOT NULL,
+    `updated_at`    DATETIME    NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE INDEX `uidx_email` (`email`)
 );

@@ -41,3 +41,15 @@ INSERT INTO user (email, nickname, profile_image, provider, status, created_at, 
 VALUES ('test2@gmail.com', '테스트2',
         'https://nimble-diagnostic-396.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fa9ae5549-d3e8-421c-92cd-18b28a929614%2FUntitled.jpeg?table=block&id=08821681-7c20-4adc-a973-438d0efac80e&spaceId=7b71d5da-04f4-4ed6-811a-0d74031064db&width=240&userId=&cache=v2',
         'KAKAO', 'ACTIVE', NOW(), NOW());
+
+INSERT INTO participation (role, status, user_id, party_id, created_at, updated_at)
+VALUES ('HOST', 'PARTICIPATING', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO participation (role, status, user_id, party_id, created_at, updated_at)
+VALUES ('HOST', 'PARTICIPATING', 1, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO participation (role, status, user_id, party_id, created_at, updated_at)
+VALUES ('HOST', 'PARTICIPATING', 2, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+INSERT INTO participation (role, status, user_id, party_id, created_at, updated_at)
+VALUES ('HOST', 'PARTICIPATING', 2, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

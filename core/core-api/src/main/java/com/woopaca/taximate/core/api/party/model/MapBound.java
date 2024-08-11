@@ -1,4 +1,4 @@
-package com.woopaca.taximate.core.api.party.controller.dto.request;
+package com.woopaca.taximate.core.api.party.model;
 
 import com.woopaca.taximate.core.api.common.error.exception.InvalidMapRangeException;
 

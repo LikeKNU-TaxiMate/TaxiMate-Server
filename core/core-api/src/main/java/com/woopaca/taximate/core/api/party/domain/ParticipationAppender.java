@@ -8,33 +8,28 @@ import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 import static com.woopaca.taximate.core.api.party.domain.Participation.ParticipationRole;
 
 @Component
-public class PartyFinder {
+public class ParticipationAppender {
 
-    private final PartyRepository partyRepository;
     private final ParticipationRepository participationRepository;
+    private final PartyRepository partyRepository;
 
-    public PartyFinder(PartyRepository partyRepository, ParticipationRepository participationRepository) {
-        this.partyRepository = partyRepository;
+    public ParticipationAppender(ParticipationRepository participationRepository, PartyRepository partyRepository) {
         this.participationRepository = participationRepository;
+        this.partyRepository = partyRepository;
     }
 
-    public Party findParty(Long partyId) {
+    public void appendHost(Long partyId, User user) {
         PartyEntity partyEntity = partyRepository.findById(partyId)
                 .orElseThrow(() -> new NonexistentPartyException(partyId));
-        return Party.fromEntity(partyEntity);
-    }
-
-    public List<Party> findHostingParties(User user) {
-        return participationRepository.findByUserIdAndRole(user.id(), ParticipationRole.HOST.name())
-                .stream()
-                .map(ParticipationEntity::getParty)
-                .map(Party::fromEntityExcludeParticipants)
-                .filter(Party::isProgress)
-                .toList();
+        ParticipationEntity participationEntity = ParticipationEntity.builder()
+                .role(ParticipationRole.HOST.name())
+                .userId(user.id())
+                .party(partyEntity)
+                .status(Participation.ParticipationStatus.PARTICIPATING.name())
+                .build();
+        participationRepository.save(participationEntity);
     }
 }
