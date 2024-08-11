@@ -1,5 +1,6 @@
 package com.woopaca.taximate.core.api.party.domain;
 
+import com.woopaca.taximate.core.api.local.domain.Address;
 import com.woopaca.taximate.core.api.party.controller.dto.request.CreatePartyRequest;
 import com.woopaca.taximate.core.api.party.domain.Participation.ParticipationStatus;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
@@ -18,6 +19,8 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                     String destination, String destinationAddress, Coordinate destinationLocation,
                     int maxParticipants, int views, LocalDateTime createdAt, Set<Participation> participationSet) {
 
+    public static final int MAX_TITLE_LENGTH = 30;
+    public static final int MAX_EXPLANATION_LENGTH = 500;
     public static final int MAX_PARTIES_COUNT = 3;
     public static final int MAX_PARTICIPANTS_COUNT = 4;
     public static final int MIN_PARTICIPANTS_COUNT = 2;
@@ -27,6 +30,17 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                 .stream()
                 .map(Participation::fromEntity)
                 .collect(Collectors.toSet());
+        return defaultBuilder(entity)
+                .participationSet(participationSet)
+                .build();
+    }
+
+    public static Party fromEntityExcludeParticipants(PartyEntity entity) {
+        return defaultBuilder(entity)
+                .build();
+    }
+
+    private static PartyBuilder defaultBuilder(PartyEntity entity) {
         return Party.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
@@ -46,9 +60,7 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                 ))
                 .maxParticipants(entity.getMaxParticipants())
                 .views(entity.getViews())
-                .createdAt(entity.getCreatedAt())
-                .participationSet(participationSet)
-                .build();
+                .createdAt(entity.getCreatedAt());
     }
 
     public static Party newParty(CreatePartyRequest request) {
@@ -85,5 +97,20 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
 
     public boolean isProgress() {
         return departureTime.isAfter(LocalDateTime.now().minusMinutes(30));
+    }
+
+    public Party allocateAddress(Address originAddress, Address destinationAddress) {
+        return Party.builder()
+                .title(title)
+                .explanation(explanation)
+                .departureTime(departureTime)
+                .origin(originAddress.name())
+                .originAddress(originAddress.fullAddress())
+                .originLocation(originLocation)
+                .destination(destinationAddress.name())
+                .destinationAddress(destinationAddress.fullAddress())
+                .destinationLocation(destinationLocation)
+                .maxParticipants(maxParticipants)
+                .build();
     }
 }
