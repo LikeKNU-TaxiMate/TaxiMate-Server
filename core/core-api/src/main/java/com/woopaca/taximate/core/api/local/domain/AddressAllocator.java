@@ -2,6 +2,7 @@ package com.woopaca.taximate.core.api.local.domain;
 
 import com.woopaca.taximate.core.api.local.api.KakaoLocalClient;
 import com.woopaca.taximate.core.api.party.domain.Party;
+import com.woopaca.taximate.core.api.party.model.Coordinate;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +14,11 @@ public class AddressAllocator {
         this.kakaoLocalClient = kakaoLocalClient;
     }
 
-    public void allocateAddress(Party party) {
-        // TODO 팟 출발지와 도착지 좌표를 이용해 주소 할당
+    public Party allocateAddress(Party party) {
+        Coordinate originLocation = party.originLocation();
+        Coordinate destinationLocation = party.destinationLocation();
+        Address originAddress = kakaoLocalClient.requestConvertCoordinate(originLocation);
+        Address destinationAddress = kakaoLocalClient.requestConvertCoordinate(destinationLocation);
+        return party.allocateAddress(originAddress, destinationAddress);
     }
 }
