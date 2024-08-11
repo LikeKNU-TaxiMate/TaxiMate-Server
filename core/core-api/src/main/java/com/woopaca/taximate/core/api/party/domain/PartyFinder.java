@@ -33,7 +33,7 @@ public class PartyFinder {
         return participationRepository.findByUserIdAndRole(user.id(), ParticipationRole.HOST.name())
                 .stream()
                 .map(ParticipationEntity::getParty)
-                .map(Party::fromEntity)
+                .map(Party::fromEntityExcludeParticipants)
                 .filter(Party::isProgress)
                 .toList();
     }
