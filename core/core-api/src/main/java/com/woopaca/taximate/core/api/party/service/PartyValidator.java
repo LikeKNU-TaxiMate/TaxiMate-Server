@@ -1,11 +1,17 @@
-package com.woopaca.taximate.core.api.party.domain;
+package com.woopaca.taximate.core.api.party.service;
 
+import com.woopaca.taximate.core.api.common.error.exception.ExplanationTooLongException;
 import com.woopaca.taximate.core.api.common.error.exception.HostingPartiesLimitException;
 import com.woopaca.taximate.core.api.common.error.exception.ParticipantsCountException;
+import com.woopaca.taximate.core.api.common.error.exception.PastDepartureTimeException;
+import com.woopaca.taximate.core.api.common.error.exception.TitleTooLongException;
+import com.woopaca.taximate.core.api.party.domain.Party;
+import com.woopaca.taximate.core.api.party.domain.PartyFinder;
 import com.woopaca.taximate.core.api.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -19,8 +25,26 @@ public class PartyValidator {
     }
 
     public void validateParty(Party party, User host) {
+        validateContents(party);
+        validateDepartureBeforeCurrentTime(party);
         validateParticipantsCount(party);
         validateMaxPartiesCount(host);
+    }
+
+    private void validateContents(Party party) {
+        if (party.title().length() > Party.MAX_TITLE_LENGTH) {
+            throw new TitleTooLongException(Party.MAX_TITLE_LENGTH);
+        }
+        if (party.explanation().length() > Party.MAX_EXPLANATION_LENGTH) {
+            throw new ExplanationTooLongException(Party.MAX_EXPLANATION_LENGTH);
+        }
+    }
+
+    private void validateDepartureBeforeCurrentTime(Party party) {
+        LocalDateTime departureTime = party.departureTime();
+        if (departureTime.isBefore(LocalDateTime.now())) {
+            throw new PastDepartureTimeException(departureTime);
+        }
     }
 
     private void validateParticipantsCount(Party party) {
@@ -35,7 +59,7 @@ public class PartyValidator {
     private void validateMaxPartiesCount(User user) {
         List<Party> hostingParties = partyFinder.findHostingParties(user);
         if (hostingParties.size() >= Party.MAX_PARTIES_COUNT) {
-            throw new HostingPartiesLimitException();
+            throw new HostingPartiesLimitException(Party.MAX_PARTIES_COUNT);
         }
     }
 }
