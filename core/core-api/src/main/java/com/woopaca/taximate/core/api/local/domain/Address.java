@@ -16,7 +16,10 @@ public record Address(String roadAddress, String address, String buildingName, S
     }
 
     public String name() {
-        return Objects.requireNonNullElse(buildingName, buildName());
+        if (StringUtils.hasText(buildingName)) {
+            return buildingName;
+        }
+        return buildName();
     }
 
     private String buildName() {
