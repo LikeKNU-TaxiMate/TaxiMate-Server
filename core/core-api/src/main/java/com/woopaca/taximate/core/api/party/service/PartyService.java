@@ -8,7 +8,6 @@ import com.woopaca.taximate.core.api.party.domain.PartyAppender;
 import com.woopaca.taximate.core.api.party.domain.PartyDetails;
 import com.woopaca.taximate.core.api.party.domain.PartyFinder;
 import com.woopaca.taximate.core.api.party.domain.PartyMapFinder;
-import com.woopaca.taximate.core.api.party.domain.PartyValidator;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
 import com.woopaca.taximate.core.api.party.model.MapBound;
 import com.woopaca.taximate.core.api.taxi.api.KakaoMobilityClient;
@@ -85,10 +84,10 @@ public class PartyService {
         User authenticatedUser = userFinder.findAuthenticatedUser();
         partyValidator.validateParty(newParty, authenticatedUser);
 
-        addressAllocator.allocateAddress(newParty);
+        Party createdParty = addressAllocator.allocateAddress(newParty);
 
-        Long newPartyId = partyAppender.appendNew(newParty);
-        participationAppender.appendHost(newParty, authenticatedUser);
+        Long newPartyId = partyAppender.appendNew(createdParty);
+        participationAppender.appendHost(newPartyId, authenticatedUser);
         return newPartyId;
     }
 }
