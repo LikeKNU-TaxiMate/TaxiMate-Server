@@ -2,17 +2,24 @@ package com.woopaca.taximate.core.api.party.controller;
 
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
-import com.woopaca.taximate.core.api.party.controller.dto.request.MapBound;
+import com.woopaca.taximate.core.api.party.controller.dto.request.CreatePartyRequest;
+import com.woopaca.taximate.core.api.party.controller.dto.response.CreatePartyResponse;
 import com.woopaca.taximate.core.api.party.controller.dto.response.PartiesResponse;
 import com.woopaca.taximate.core.api.party.controller.dto.response.PartyDetailsResponse;
 import com.woopaca.taximate.core.api.party.domain.Parties;
+import com.woopaca.taximate.core.api.party.domain.Party;
 import com.woopaca.taximate.core.api.party.domain.PartyDetails;
+import com.woopaca.taximate.core.api.party.model.MapBound;
 import com.woopaca.taximate.core.api.party.service.PartyService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,6 +48,15 @@ public class PartyController {
     public ApiResponse<PartyDetailsResponse> getDetailsInformation(@PathVariable Long partyId) {
         PartyDetails partyDetails = partyService.getPartyDetails(partyId);
         PartyDetailsResponse response = PartyDetailsResponse.from(partyDetails);
+        return ApiResults.success(response);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public ApiResponse<CreatePartyResponse> createParty(@Validated @RequestBody CreatePartyRequest request) {
+        Party newParty = Party.newParty(request);
+        Long partyId = partyService.createParty(newParty);
+        CreatePartyResponse response = new CreatePartyResponse(partyId);
         return ApiResults.success(response);
     }
 }
