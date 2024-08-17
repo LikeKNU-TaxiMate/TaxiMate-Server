@@ -28,7 +28,7 @@ public class PartyValidator {
         validateContents(party);
         validateDepartureBeforeCurrentTime(party);
         validateParticipantsCount(party);
-        validateMaxPartiesCount(host);
+        validateMaxParticipationCount(host);
     }
 
     private void validateContents(Party party) {
@@ -56,8 +56,8 @@ public class PartyValidator {
         }
     }
 
-    private void validateMaxPartiesCount(User user) {
-        List<Party> hostingParties = partyFinder.findHostingParties(user);
+    public void validateMaxParticipationCount(User user) {
+        List<Party> hostingParties = partyFinder.findParticipatingParties(user);
         if (hostingParties.size() >= Party.MAX_PARTIES_COUNT) {
             throw new HostingPartiesLimitException(Party.MAX_PARTIES_COUNT);
         }
