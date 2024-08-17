@@ -9,6 +9,7 @@ import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import org.springframework.stereotype.Component;
 
 import static com.woopaca.taximate.core.api.party.domain.Participation.ParticipationRole;
+import static com.woopaca.taximate.core.api.party.domain.Participation.ParticipationStatus;
 
 @Component
 public class ParticipationAppender {
@@ -28,7 +29,19 @@ public class ParticipationAppender {
                 .role(ParticipationRole.HOST.name())
                 .userId(user.id())
                 .party(partyEntity)
-                .status(Participation.ParticipationStatus.PARTICIPATING.name())
+                .status(ParticipationStatus.PARTICIPATING.name())
+                .build();
+        participationRepository.save(participationEntity);
+    }
+
+    public void appendParticipant(Party party, User user) {
+        PartyEntity partyEntity = partyRepository.findById(party.id())
+                .orElseThrow(() -> new NonexistentPartyException(party.id()));
+        ParticipationEntity participationEntity = ParticipationEntity.builder()
+                .role(ParticipationRole.PARTICIPANT.name())
+                .userId(user.id())
+                .party(partyEntity)
+                .status(ParticipationStatus.PARTICIPATING.name())
                 .build();
         participationRepository.save(participationEntity);
     }
