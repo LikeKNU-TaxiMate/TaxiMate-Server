@@ -1,0 +1,14 @@
+subprojects {
+    dependencies {
+        implementation project(':storage:db-core')
+        implementation project(':storage:db-nosql')
+        implementation project(':support:logging')
+
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+
+        implementation 'com.auth0:java-jwt:4.4.0'
+
+        testImplementation 'org.springframework.security:spring-security-test'
+    }
+}
