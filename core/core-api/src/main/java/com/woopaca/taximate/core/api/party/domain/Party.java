@@ -113,4 +113,10 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                 .maxParticipants(maxParticipants)
                 .build();
     }
+
+    public boolean isParticipated(User user) {
+        return participationSet.stream()
+                .filter(Participation::isParticipating)
+                .anyMatch(participation -> participation.userId().equals(user.id()));
+    }
 }

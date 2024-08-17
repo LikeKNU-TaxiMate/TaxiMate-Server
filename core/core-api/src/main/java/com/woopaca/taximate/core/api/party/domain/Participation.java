@@ -12,6 +12,10 @@ public record Participation(Long id, ParticipationRole role, ParticipationStatus
         return role == ParticipationRole.HOST;
     }
 
+    public boolean isParticipating() {
+        return status == ParticipationStatus.PARTICIPATING;
+    }
+
     public enum ParticipationRole {
 
         HOST,
