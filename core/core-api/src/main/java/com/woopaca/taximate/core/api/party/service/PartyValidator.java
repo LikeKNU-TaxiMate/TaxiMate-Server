@@ -7,6 +7,7 @@ import com.woopaca.taximate.core.api.common.error.exception.PartyAlreadyEndedExc
 import com.woopaca.taximate.core.api.common.error.exception.PartyAlreadyParticipatedException;
 import com.woopaca.taximate.core.api.common.error.exception.PastDepartureTimeException;
 import com.woopaca.taximate.core.api.common.error.exception.TitleTooLongException;
+import com.woopaca.taximate.core.api.party.domain.Participation;
 import com.woopaca.taximate.core.api.party.domain.Party;
 import com.woopaca.taximate.core.api.party.domain.PartyFinder;
 import com.woopaca.taximate.core.api.user.domain.User;
@@ -66,8 +67,8 @@ public class PartyValidator {
 
     private void validateMaxParticipationCount(User user) {
         List<Party> participatingParties = partyFinder.findParticipatingParties(user);
-        if (participatingParties.size() >= Party.MAX_PARTIES_COUNT) {
-            throw new ParticipationLimitException(Party.MAX_PARTIES_COUNT);
+        if (participatingParties.size() >= Participation.MAX_PARTICIPATING_PARTIES_COUNT) {
+            throw new ParticipationLimitException(Participation.MAX_PARTICIPATING_PARTIES_COUNT);
         }
     }
 
