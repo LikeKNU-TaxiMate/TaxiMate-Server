@@ -21,7 +21,6 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
 
     public static final int MAX_TITLE_LENGTH = 30;
     public static final int MAX_EXPLANATION_LENGTH = 500;
-    public static final int MAX_PARTIES_COUNT = 3;
     public static final int MAX_PARTICIPANTS_COUNT = 4;
     public static final int MIN_PARTICIPANTS_COUNT = 2;
 
@@ -112,5 +111,15 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                 .destinationLocation(destinationLocation)
                 .maxParticipants(maxParticipants)
                 .build();
+    }
+
+    public boolean isParticipated(User user) {
+        return participationSet.stream()
+                .filter(Participation::isParticipating)
+                .anyMatch(participation -> participation.userId().equals(user.id()));
+    }
+
+    public boolean isFull() {
+        return currentParticipants() >= maxParticipants;
     }
 }

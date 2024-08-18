@@ -14,14 +14,12 @@ import com.woopaca.taximate.core.api.taxi.api.KakaoMobilityClient;
 import com.woopaca.taximate.core.api.taxi.domain.Taxi;
 import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.core.api.user.domain.UserFinder;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Service
 public class PartyService {
 
@@ -78,11 +76,15 @@ public class PartyService {
         return new PartyDetails(party, host, taxi, authenticatedUser);
     }
 
-    // TODO 외부 API 호출 작업은 트랜잭션 분리 고려
+    /**
+     * 팟 생성
+     * @param newParty 생성할 팟 정보
+     * @return 생성된 팟 ID
+     */
     @Transactional
-    public Long createParty(Party newParty) {
+    public Long createParty(Party newParty) { // TODO 외부 API 호출 작업은 트랜잭션 분리 고려
         User authenticatedUser = userFinder.findAuthenticatedUser();
-        partyValidator.validateParty(newParty, authenticatedUser);
+        partyValidator.validateCreateParty(newParty, authenticatedUser);
 
         Party createdParty = addressAllocator.allocateAddress(newParty);
 

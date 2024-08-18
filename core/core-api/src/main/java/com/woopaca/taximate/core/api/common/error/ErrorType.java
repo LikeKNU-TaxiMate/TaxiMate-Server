@@ -14,12 +14,16 @@ public enum ErrorType {
     NONEXISTENT_USER("", HttpStatus.NOT_FOUND),
 
     PARTICIPANTS_COUNT("", HttpStatus.BAD_REQUEST),
-    HOSTING_PARTIES_LIMIT("", HttpStatus.BAD_REQUEST),
+    PARTICIPATION_LIMIT("", HttpStatus.BAD_REQUEST),
 
     TITLE_TOO_LONG("", HttpStatus.BAD_REQUEST),
     EXPLANATION_TOO_LONG("", HttpStatus.BAD_REQUEST),
     NONEXISTENT_ADDRESS("", HttpStatus.BAD_REQUEST),
-    PAST_DEPARTURE_TIME("", HttpStatus.BAD_REQUEST);
+    PAST_DEPARTURE_TIME("", HttpStatus.BAD_REQUEST),
+
+    PARTY_ALREADY_ENDED("", HttpStatus.BAD_REQUEST),
+    PARTY_ALREADY_PARTICIPATED("", HttpStatus.BAD_REQUEST),
+    PARTICIPANTS_FULL("", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;
     private final HttpStatus httpStatus;

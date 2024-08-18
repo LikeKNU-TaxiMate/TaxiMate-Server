@@ -11,5 +11,5 @@ import java.util.List;
 public interface ParticipationRepository extends JpaRepository<ParticipationEntity, Long> {
 
     @EntityGraph(attributePaths = {"party"})
-    List<ParticipationEntity> findByUserIdAndRole(Long userId, String role);
+    List<ParticipationEntity> findByUserId(Long userId);
 }

@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.woopaca.taximate.core.api.party.domain.Participation.ParticipationRole;
-
 @Component
 public class PartyFinder {
 
@@ -29,8 +27,8 @@ public class PartyFinder {
         return Party.fromEntity(partyEntity);
     }
 
-    public List<Party> findHostingParties(User user) {
-        return participationRepository.findByUserIdAndRole(user.id(), ParticipationRole.HOST.name())
+    public List<Party> findParticipatingParties(User user) {
+        return participationRepository.findByUserId(user.id())
                 .stream()
                 .map(ParticipationEntity::getParty)
                 .map(Party::fromEntityExcludeParticipants)
