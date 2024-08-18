@@ -19,9 +19,13 @@ public class UserFinder {
     }
 
     public User findAuthenticatedUser() {
-        return (User) SecurityContextHolder.getContext()
+        Object principal = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
+        if (String.valueOf(principal).equals("anonymousUser")) {
+            return User.GUEST;
+        }
+        return (User) principal;
     }
 
     public User findUser(Long userId) {
@@ -33,6 +37,6 @@ public class UserFinder {
 
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .map(userEntity -> User.of(userEntity, false));
+                .map(userEntity -> User.of(userEntity, true));
     }
 }
