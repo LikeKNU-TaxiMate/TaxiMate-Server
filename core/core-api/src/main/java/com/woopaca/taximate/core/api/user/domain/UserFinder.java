@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class UserFinder {
@@ -28,5 +29,10 @@ public class UserFinder {
                 .orElseThrow(() -> new NonexistentUserException(userId));
         User authenticatedUser = findAuthenticatedUser();
         return User.of(userEntity, Objects.equals(userId, authenticatedUser.id()));
+    }
+
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(userEntity -> User.of(userEntity, false));
     }
 }
