@@ -22,7 +22,8 @@ public enum ErrorType {
     PAST_DEPARTURE_TIME("", HttpStatus.BAD_REQUEST),
 
     PARTY_ALREADY_ENDED("", HttpStatus.BAD_REQUEST),
-    PARTY_ALREADY_PARTICIPATED("", HttpStatus.BAD_REQUEST);
+    PARTY_ALREADY_PARTICIPATED("", HttpStatus.BAD_REQUEST),
+    PARTICIPANTS_FULL("", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;
     private final HttpStatus httpStatus;
