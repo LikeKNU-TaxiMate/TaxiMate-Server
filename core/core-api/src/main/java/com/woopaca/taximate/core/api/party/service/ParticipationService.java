@@ -5,6 +5,7 @@ import com.woopaca.taximate.core.api.party.domain.Party;
 import com.woopaca.taximate.core.api.party.domain.PartyFinder;
 import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.core.api.user.domain.UserFinder;
+import com.woopaca.taximate.core.message.event.ParticipationEventProducer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,12 +16,14 @@ public class ParticipationService {
     private final PartyFinder partyFinder;
     private final PartyValidator partyValidator;
     private final ParticipationAppender participationAppender;
+    private final ParticipationEventProducer participationEventProducer;
 
-    public ParticipationService(UserFinder userFinder, PartyFinder partyFinder, PartyValidator partyValidator, ParticipationAppender participationAppender) {
+    public ParticipationService(UserFinder userFinder, PartyFinder partyFinder, PartyValidator partyValidator, ParticipationAppender participationAppender, ParticipationEventProducer participationEventProducer) {
         this.userFinder = userFinder;
         this.partyFinder = partyFinder;
         this.partyValidator = partyValidator;
         this.participationAppender = participationAppender;
+        this.participationEventProducer = participationEventProducer;
     }
 
     /**
@@ -34,7 +37,8 @@ public class ParticipationService {
         Party party = partyFinder.findParty(partyId);
         partyValidator.validateParticipateParty(party, authenticatedUser);
         participationAppender.appendParticipant(party, authenticatedUser);
-        // TODO 팟 참여 이벤트 발행
+
+        participationEventProducer.publishParticipateEvent(partyId, authenticatedUser.id());
         return partyId;
     }
 }
