@@ -2,6 +2,7 @@ package com.woopaca.taximate.core.api.party.service;
 
 import com.woopaca.taximate.core.api.common.error.exception.ExplanationTooLongException;
 import com.woopaca.taximate.core.api.common.error.exception.ParticipantsCountException;
+import com.woopaca.taximate.core.api.common.error.exception.ParticipantsFullException;
 import com.woopaca.taximate.core.api.common.error.exception.ParticipationLimitException;
 import com.woopaca.taximate.core.api.common.error.exception.PartyAlreadyEndedException;
 import com.woopaca.taximate.core.api.common.error.exception.PartyAlreadyParticipatedException;
@@ -38,6 +39,7 @@ public class PartyValidator {
         validateProgress(party);
         validateAlreadyParticipated(party, participant);
         validateMaxParticipationCount(participant);
+        validateMaxParticipantsCount(party);
     }
 
     private void validateContents(Party party) {
@@ -81,6 +83,12 @@ public class PartyValidator {
     private void validateAlreadyParticipated(Party party, User participant) {
         if (party.isParticipated(participant)) {
             throw new PartyAlreadyParticipatedException(party.id(), participant.id());
+        }
+    }
+
+    private void validateMaxParticipantsCount(Party party) {
+        if (party.isFull()) {
+            throw new ParticipantsFullException(party.maxParticipants(), party.id());
         }
     }
 }

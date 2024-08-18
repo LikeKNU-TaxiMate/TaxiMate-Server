@@ -118,4 +118,8 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
                 .filter(Participation::isParticipating)
                 .anyMatch(participation -> participation.userId().equals(user.id()));
     }
+
+    public boolean isFull() {
+        return currentParticipants() >= maxParticipants;
+    }
 }
