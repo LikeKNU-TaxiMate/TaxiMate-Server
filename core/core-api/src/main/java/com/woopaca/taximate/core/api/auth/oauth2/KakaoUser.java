@@ -21,6 +21,11 @@ public record KakaoUser(KakaoAccount kakaoAccount) implements OAuth2User {
         return kakaoAccount.profile.nickname;
     }
 
+    @Override
+    public String provider() {
+        return "KAKAO";
+    }
+
     record KakaoAccount(Profile profile, String email) {
     }
 

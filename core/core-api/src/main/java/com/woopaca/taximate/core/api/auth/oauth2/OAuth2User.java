@@ -7,4 +7,6 @@ public interface OAuth2User {
     String profileImageUrl();
 
     String nickname();
+
+    String provider();
 }
