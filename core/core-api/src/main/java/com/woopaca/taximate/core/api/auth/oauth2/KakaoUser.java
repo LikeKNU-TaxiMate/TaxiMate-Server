@@ -16,10 +16,15 @@ public record KakaoUser(KakaoAccount kakaoAccount) implements OAuth2User {
         return kakaoAccount.profile.profileImageUrl;
     }
 
+    @Override
+    public String nickname() {
+        return kakaoAccount.profile.nickname;
+    }
+
     record KakaoAccount(Profile profile, String email) {
     }
 
     @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)
-    record Profile(String profileImageUrl) {
+    record Profile(String profileImageUrl, String nickname) {
     }
 }
