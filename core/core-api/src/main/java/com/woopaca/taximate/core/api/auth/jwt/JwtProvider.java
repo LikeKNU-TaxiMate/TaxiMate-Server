@@ -39,4 +39,9 @@ public class JwtProvider {
                 .withSubject(subject)
                 .sign(algorithm);
     }
+
+    public String verify(String accessToken) {
+        return jwtVerifier.verify(accessToken)
+                .getSubject();
+    }
 }

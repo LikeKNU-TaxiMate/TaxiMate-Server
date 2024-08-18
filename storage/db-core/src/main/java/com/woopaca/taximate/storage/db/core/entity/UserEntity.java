@@ -2,6 +2,7 @@ package com.woopaca.taximate.storage.db.core.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
@@ -19,4 +20,16 @@ public class UserEntity extends BaseEntity {
 
     @Column(columnDefinition = "CHAR(8) DEFAULT 'ACTIVE'")
     private String status;
+
+    public UserEntity() {
+    }
+
+    @Builder
+    public UserEntity(String email, String nickname, String profileImage, String provider, String status) {
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.provider = provider;
+        this.status = status;
+    }
 }
