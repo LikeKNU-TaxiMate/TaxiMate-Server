@@ -15,18 +15,18 @@ public class PartyAppender {
 
     public Long appendNew(Party party) {
         PartyEntity partyEntity = PartyEntity.builder()
-                .title(party.title())
-                .explanation(party.explanation())
-                .departureTime(party.departureTime())
-                .origin(party.origin())
-                .originAddress(party.originAddress())
-                .originLatitude(party.originLocation().latitude())
-                .originLongitude(party.originLocation().longitude())
-                .destination(party.destination())
-                .destinationAddress(party.destinationAddress())
-                .destinationLatitude(party.destinationLocation().latitude())
-                .destinationLongitude(party.destinationLocation().longitude())
-                .maxParticipants(party.maxParticipants())
+                .title(party.getTitle())
+                .explanation(party.getExplanation())
+                .departureTime(party.getDepartureTime())
+                .origin(party.getOrigin())
+                .originAddress(party.getOriginAddress())
+                .originLatitude(party.getOriginLocation().latitude())
+                .originLongitude(party.getOriginLocation().longitude())
+                .destination(party.getDestination())
+                .destinationAddress(party.getDestinationAddress())
+                .destinationLatitude(party.getDestinationLocation().latitude())
+                .destinationLongitude(party.getDestinationLocation().longitude())
+                .maxParticipants(party.getMaxParticipants())
                 .build();
         PartyEntity savedPartyEntity = partyRepository.save(partyEntity);
         return savedPartyEntity.getId();

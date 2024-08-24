@@ -9,18 +9,18 @@ import lombok.Getter;
 @Getter
 @Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public final class User {
+public class User {
 
     public static final User GUEST = new User(-1L, "guest", "guest", null, null, AccountStatus.ACTIVE, false);
 
     @EqualsAndHashCode.Include
-    private final Long id;
-    private final String email;
-    private final String nickname;
-    private final String profileImage;
-    private final OAuth2Provider provider;
-    private final AccountStatus status;
-    private final boolean isCurrentUser;
+    private Long id;
+    private String email;
+    private String nickname;
+    private String profileImage;
+    private OAuth2Provider provider;
+    private AccountStatus status;
+    private boolean isCurrentUser;
 
     public User(Long id, String email, String nickname, String profileImage, OAuth2Provider provider,
                 AccountStatus status, boolean isCurrentUser) {

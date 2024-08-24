@@ -35,8 +35,8 @@ public class ParticipationAppender {
     }
 
     public void appendParticipant(Party party, User user) {
-        PartyEntity partyEntity = partyRepository.findById(party.id())
-                .orElseThrow(() -> new NonexistentPartyException(party.id()));
+        PartyEntity partyEntity = partyRepository.findById(party.getId())
+                .orElseThrow(() -> new NonexistentPartyException(party.getId()));
         ParticipationEntity participationEntity = ParticipationEntity.builder()
                 .role(ParticipationRole.PARTICIPANT.name())
                 .userId(user.getId())

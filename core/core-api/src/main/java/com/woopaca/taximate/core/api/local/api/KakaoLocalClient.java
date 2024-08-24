@@ -1,6 +1,6 @@
 package com.woopaca.taximate.core.api.local.api;
 
-import com.woopaca.taximate.core.api.local.domain.Address;
+import com.woopaca.taximate.core.api.local.model.Address;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

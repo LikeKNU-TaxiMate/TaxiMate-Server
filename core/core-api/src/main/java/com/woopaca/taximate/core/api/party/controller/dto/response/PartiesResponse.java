@@ -12,14 +12,14 @@ public record PartiesResponse(
 
     public static PartiesResponse from(Party party) {
         return PartiesResponse.builder()
-                .id(party.id())
-                .title(party.title())
-                .departureTime(party.departureTime().toString())
-                .origin(party.origin())
-                .destination(party.destination())
-                .maxParticipants(party.maxParticipants())
+                .id(party.getId())
+                .title(party.getTitle())
+                .departureTime(party.getDepartureTime().toString())
+                .origin(party.getOrigin())
+                .destination(party.getDestination())
+                .maxParticipants(party.getMaxParticipants())
                 .currentParticipants(party.currentParticipants())
-                .originLocation(party.originLocation())
+                .originLocation(party.getOriginLocation())
                 .build();
     }
 }

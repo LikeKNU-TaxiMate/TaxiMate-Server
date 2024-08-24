@@ -43,27 +43,27 @@ public class PartyValidator {
     }
 
     private void validateContents(Party party) {
-        if (party.title().length() > Party.MAX_TITLE_LENGTH) {
+        if (party.getTitle().length() > Party.MAX_TITLE_LENGTH) {
             throw new TitleTooLongException(Party.MAX_TITLE_LENGTH);
         }
-        if (party.explanation().length() > Party.MAX_EXPLANATION_LENGTH) {
+        if (party.getExplanation().length() > Party.MAX_EXPLANATION_LENGTH) {
             throw new ExplanationTooLongException(Party.MAX_EXPLANATION_LENGTH);
         }
     }
 
     private void validateDepartureBeforeCurrentTime(Party party) {
-        LocalDateTime departureTime = party.departureTime();
+        LocalDateTime departureTime = party.getDepartureTime();
         if (departureTime.isBefore(LocalDateTime.now())) {
             throw new PastDepartureTimeException(departureTime);
         }
     }
 
     private void validateParticipantsCount(Party party) {
-        if (party.maxParticipants() > Party.MAX_PARTICIPANTS_COUNT) {
-            throw new ParticipantsCountException(party.maxParticipants());
+        if (party.getMaxParticipants() > Party.MAX_PARTICIPANTS_COUNT) {
+            throw new ParticipantsCountException(party.getMaxParticipants());
         }
-        if (party.maxParticipants() < Party.MIN_PARTICIPANTS_COUNT) {
-            throw new ParticipantsCountException(party.maxParticipants());
+        if (party.getMaxParticipants() < Party.MIN_PARTICIPANTS_COUNT) {
+            throw new ParticipantsCountException(party.getMaxParticipants());
         }
     }
 
@@ -76,19 +76,19 @@ public class PartyValidator {
 
     private void validateProgress(Party party) {
         if (!party.isProgress()) {
-            throw new PartyAlreadyEndedException(party.id());
+            throw new PartyAlreadyEndedException(party.getId());
         }
     }
 
     private void validateAlreadyParticipated(Party party, User participant) {
         if (party.isParticipated(participant)) {
-            throw new PartyAlreadyParticipatedException(party.id(), participant.getId());
+            throw new PartyAlreadyParticipatedException(party.getId(), participant.getId());
         }
     }
 
     private void validateMaxParticipantsCount(Party party) {
         if (party.isFull()) {
-            throw new ParticipantsFullException(party.maxParticipants(), party.id());
+            throw new ParticipantsFullException(party.getMaxParticipants(), party.getId());
         }
     }
 }

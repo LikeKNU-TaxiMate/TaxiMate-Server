@@ -1,4 +1,4 @@
-package com.woopaca.taximate.core.api.local.domain;
+package com.woopaca.taximate.core.api.local.model;
 
 import org.springframework.util.StringUtils;
 
