@@ -1,28 +1,65 @@
 package com.woopaca.taximate.core.api.party.domain;
 
-import com.woopaca.taximate.core.api.local.domain.Address;
+import com.woopaca.taximate.core.api.local.model.Address;
 import com.woopaca.taximate.core.api.party.controller.dto.request.CreatePartyRequest;
 import com.woopaca.taximate.core.api.party.domain.Participation.ParticipationStatus;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
 import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Getter
 @Builder
-public record Party(Long id, String title, String explanation, LocalDateTime departureTime,
-                    String origin, String originAddress, Coordinate originLocation,
-                    String destination, String destinationAddress, Coordinate destinationLocation,
-                    int maxParticipants, int views, LocalDateTime createdAt, Set<Participation> participationSet) {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Party {
 
     public static final int MAX_TITLE_LENGTH = 30;
     public static final int MAX_EXPLANATION_LENGTH = 500;
     public static final int MAX_PARTICIPANTS_COUNT = 4;
     public static final int MIN_PARTICIPANTS_COUNT = 2;
+
+    @EqualsAndHashCode.Include
+    private Long id;
+    private String title;
+    private String explanation;
+    private LocalDateTime departureTime;
+    private String origin;
+    private String originAddress;
+    private Coordinate originLocation;
+    private String destination;
+    private String destinationAddress;
+    private Coordinate destinationLocation;
+    private int maxParticipants;
+    private int views;
+    private LocalDateTime createdAt;
+    private Set<Participation> participationSet;
+
+    public Party(Long id, String title, String explanation, LocalDateTime departureTime,
+                 String origin, String originAddress, Coordinate originLocation,
+                 String destination, String destinationAddress, Coordinate destinationLocation,
+                 int maxParticipants, int views, LocalDateTime createdAt, Set<Participation> participationSet) {
+        this.id = id;
+        this.title = title;
+        this.explanation = explanation;
+        this.departureTime = departureTime;
+        this.origin = origin;
+        this.originAddress = originAddress;
+        this.originLocation = originLocation;
+        this.destination = destination;
+        this.destinationAddress = destinationAddress;
+        this.destinationLocation = destinationLocation;
+        this.maxParticipants = maxParticipants;
+        this.views = views;
+        this.createdAt = createdAt;
+        this.participationSet = participationSet;
+    }
 
     public static Party fromEntity(PartyEntity entity) {
         Set<Participation> participationSet = entity.getParticipationSet()
@@ -82,15 +119,15 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
         return participationSet.stream()
                 .filter(Participation::isHost)
                 .findAny()
-                .map(Participation::userId)
+                .map(Participation::getUserId)
                 .orElse(-1L);
     }
 
     public ParticipationStatus participationStatusOf(User user) {
         return participationSet.stream()
-                .filter(participation -> Objects.equals(participation.userId(), user.id()))
+                .filter(participation -> Objects.equals(participation.getUserId(), user.getId()))
                 .findAny()
-                .map(Participation::status)
+                .map(Participation::getStatus)
                 .orElse(ParticipationStatus.NONE);
     }
 
@@ -99,24 +136,17 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
     }
 
     public Party allocateAddress(Address originAddress, Address destinationAddress) {
-        return Party.builder()
-                .title(title)
-                .explanation(explanation)
-                .departureTime(departureTime)
-                .origin(originAddress.name())
-                .originAddress(originAddress.fullAddress())
-                .originLocation(originLocation)
-                .destination(destinationAddress.name())
-                .destinationAddress(destinationAddress.fullAddress())
-                .destinationLocation(destinationLocation)
-                .maxParticipants(maxParticipants)
-                .build();
+        this.origin = originAddress.name();
+        this.originAddress = originAddress.fullAddress();
+        this.destination = destinationAddress.name();
+        this.destinationAddress = destinationAddress.fullAddress();
+        return this;
     }
 
     public boolean isParticipated(User user) {
         return participationSet.stream()
                 .filter(Participation::isParticipating)
-                .anyMatch(participation -> participation.userId().equals(user.id()));
+                .anyMatch(participation -> participation.getUserId().equals(user.getId()));
     }
 
     public boolean isFull() {

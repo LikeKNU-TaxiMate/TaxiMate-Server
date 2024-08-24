@@ -18,28 +18,28 @@ public record PartyDetailsResponse(Long id, String title, String departureTime, 
                                    String createdAt, HostResponse host, TaxiResponse taxi) {
 
     public static PartyDetailsResponse from(PartyDetails partyDetails) {
-        ParticipationStatus status = partyDetails.party()
-                .participationStatusOf(partyDetails.authenticatedUser());
-        return PartyDetailsResponse.of(partyDetails.party(), partyDetails.host(), partyDetails.taxi(), status);
+        ParticipationStatus status = partyDetails.getParty()
+                .participationStatusOf(partyDetails.getAuthenticatedUser());
+        return PartyDetailsResponse.of(partyDetails.getParty(), partyDetails.getHost(), partyDetails.getTaxi(), status);
     }
 
     public static PartyDetailsResponse of(Party party, User user, Taxi taxi, ParticipationStatus status) {
         return PartyDetailsResponse.builder()
-                .id(party.id())
-                .title(party.title())
-                .departureTime(party.departureTime().toString())
-                .explanation(party.explanation())
-                .origin(party.origin())
-                .originAddress(party.originAddress())
-                .originLocation(party.originLocation())
-                .destination(party.destination())
-                .destinationAddress(party.destinationAddress())
-                .destinationLocation(party.destinationLocation())
-                .maxParticipants(party.maxParticipants())
+                .id(party.getId())
+                .title(party.getTitle())
+                .departureTime(party.getDepartureTime().toString())
+                .explanation(party.getExplanation())
+                .origin(party.getOrigin())
+                .originAddress(party.getOriginAddress())
+                .originLocation(party.getOriginLocation())
+                .destination(party.getDestination())
+                .destinationAddress(party.getDestinationAddress())
+                .destinationLocation(party.getDestinationLocation())
+                .maxParticipants(party.getMaxParticipants())
                 .currentParticipants(party.currentParticipants())
-                .views(party.views())
+                .views(party.getViews())
                 .status(status.name())
-                .createdAt(party.createdAt().toString())
+                .createdAt(party.getCreatedAt().toString())
                 .host(HostResponse.from(user))
                 .taxi(TaxiResponse.from(taxi))
                 .build();
@@ -48,14 +48,14 @@ public record PartyDetailsResponse(Long id, String title, String departureTime, 
     record HostResponse(Long id, String nickname, String profileImage, boolean isMe) {
 
         public static HostResponse from(User user) {
-            return new HostResponse(user.id(), user.nickname(), user.profileImage(), user.isCurrentUser());
+            return new HostResponse(user.getId(), user.getNickname(), user.getProfileImage(), user.isCurrentUser());
         }
     }
 
     record TaxiResponse(List<Coordinate> route, int fare, int duration) {
 
         public static TaxiResponse from(Taxi taxi) {
-            return new TaxiResponse(taxi.route(), taxi.fare(), taxi.duration());
+            return new TaxiResponse(taxi.getRoute(), taxi.getFare(), taxi.getDuration());
         }
     }
 }

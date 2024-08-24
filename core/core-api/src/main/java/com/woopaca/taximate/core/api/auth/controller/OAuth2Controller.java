@@ -8,6 +8,8 @@ import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
 import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.core.api.user.service.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,11 +32,18 @@ public class OAuth2Controller {
     }
 
     @GetMapping("/kakao")
-    public ApiResponse<TokensResponse> kakaoLogin(@RequestParam("code") String code) {
+    public ApiResponse<TokensResponse> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) {
         KakaoUser kakaoUser = kakaoOAuth2Service.authenticate(code);
         User user = userService.registerOAuth2User(kakaoUser);
-        String accessToken = jwtProvider.generateAccessToken(user.email());
-        String refreshToken = jwtProvider.generateRefreshToken(user.email());
-        return ApiResults.success(new TokensResponse(accessToken, refreshToken));
+        String accessToken = jwtProvider.generateAccessToken(user.getEmail());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getEmail());
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(60 * 60 * 24 * 14);
+        response.addCookie(refreshTokenCookie);
+
+        return ApiResults.success(new TokensResponse(accessToken));
     }
 }

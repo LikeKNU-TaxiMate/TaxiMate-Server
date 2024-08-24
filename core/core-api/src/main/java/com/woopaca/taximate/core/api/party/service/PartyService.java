@@ -72,7 +72,7 @@ public class PartyService {
         User authenticatedUser = userFinder.findAuthenticatedUser();
         User host = userFinder.findUser(party.hostId());
 
-        Taxi taxi = kakaoMobilityClient.requestTaxi(party.originLocation(), party.destinationLocation());
+        Taxi taxi = kakaoMobilityClient.requestTaxi(party.getOriginLocation(), party.getDestinationLocation());
         return new PartyDetails(party, host, taxi, authenticatedUser);
     }
 

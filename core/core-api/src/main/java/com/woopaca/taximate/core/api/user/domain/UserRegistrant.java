@@ -15,10 +15,10 @@ public class UserRegistrant {
 
     public User register(User newUser) {
         UserEntity userEntity = UserEntity.builder()
-                .email(newUser.email())
-                .nickname(newUser.nickname())
-                .profileImage(newUser.profileImage())
-                .provider(newUser.provider().name())
+                .email(newUser.getEmail())
+                .nickname(newUser.getNickname())
+                .profileImage(newUser.getProfileImage())
+                .provider(newUser.getProvider().name())
                 .status(User.AccountStatus.ACTIVE.name())
                 .build();
         UserEntity registeredUser = userRepository.save(userEntity);
