@@ -3,12 +3,35 @@ package com.woopaca.taximate.core.api.user.domain;
 import com.woopaca.taximate.core.api.auth.oauth2.OAuth2User;
 import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
+@Getter
 @Builder
-public record User(Long id, String email, String nickname, String profileImage, OAuth2Provider provider,
-                   AccountStatus status, boolean isCurrentUser) {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public final class User {
 
     public static final User GUEST = new User(-1L, "guest", "guest", null, null, AccountStatus.ACTIVE, false);
+
+    @EqualsAndHashCode.Include
+    private final Long id;
+    private final String email;
+    private final String nickname;
+    private final String profileImage;
+    private final OAuth2Provider provider;
+    private final AccountStatus status;
+    private final boolean isCurrentUser;
+
+    public User(Long id, String email, String nickname, String profileImage, OAuth2Provider provider,
+                AccountStatus status, boolean isCurrentUser) {
+        this.id = id;
+        this.email = email;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.provider = provider;
+        this.status = status;
+        this.isCurrentUser = isCurrentUser;
+    }
 
     public static User of(UserEntity entity, boolean isCurrentUser) {
         return User.builder()

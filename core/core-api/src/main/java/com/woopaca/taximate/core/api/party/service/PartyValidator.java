@@ -82,7 +82,7 @@ public class PartyValidator {
 
     private void validateAlreadyParticipated(Party party, User participant) {
         if (party.isParticipated(participant)) {
-            throw new PartyAlreadyParticipatedException(party.id(), participant.id());
+            throw new PartyAlreadyParticipatedException(party.id(), participant.getId());
         }
     }
 

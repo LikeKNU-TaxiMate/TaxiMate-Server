@@ -32,7 +32,7 @@ public class UserFinder {
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new NonexistentUserException(userId));
         User authenticatedUser = findAuthenticatedUser();
-        return User.of(userEntity, Objects.equals(userId, authenticatedUser.id()));
+        return User.of(userEntity, Objects.equals(userId, authenticatedUser.getId()));
     }
 
     public Optional<User> findUserByEmail(String email) {

@@ -28,7 +28,7 @@ public class PartyFinder {
     }
 
     public List<Party> findParticipatingParties(User user) {
-        return participationRepository.findByUserId(user.id())
+        return participationRepository.findByUserId(user.getId())
                 .stream()
                 .map(ParticipationEntity::getParty)
                 .map(Party::fromEntityExcludeParticipants)

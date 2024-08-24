@@ -27,7 +27,7 @@ public class ParticipationAppender {
                 .orElseThrow(() -> new NonexistentPartyException(partyId));
         ParticipationEntity participationEntity = ParticipationEntity.builder()
                 .role(ParticipationRole.HOST.name())
-                .userId(user.id())
+                .userId(user.getId())
                 .party(partyEntity)
                 .status(ParticipationStatus.PARTICIPATING.name())
                 .build();
@@ -39,7 +39,7 @@ public class ParticipationAppender {
                 .orElseThrow(() -> new NonexistentPartyException(party.id()));
         ParticipationEntity participationEntity = ParticipationEntity.builder()
                 .role(ParticipationRole.PARTICIPANT.name())
-                .userId(user.id())
+                .userId(user.getId())
                 .party(partyEntity)
                 .status(ParticipationStatus.PARTICIPATING.name())
                 .build();

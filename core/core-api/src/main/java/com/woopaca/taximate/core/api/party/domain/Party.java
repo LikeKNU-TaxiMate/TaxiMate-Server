@@ -88,7 +88,7 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
 
     public ParticipationStatus participationStatusOf(User user) {
         return participationSet.stream()
-                .filter(participation -> Objects.equals(participation.userId(), user.id()))
+                .filter(participation -> Objects.equals(participation.userId(), user.getId()))
                 .findAny()
                 .map(Participation::status)
                 .orElse(ParticipationStatus.NONE);
@@ -116,7 +116,7 @@ public record Party(Long id, String title, String explanation, LocalDateTime dep
     public boolean isParticipated(User user) {
         return participationSet.stream()
                 .filter(Participation::isParticipating)
-                .anyMatch(participation -> participation.userId().equals(user.id()));
+                .anyMatch(participation -> participation.userId().equals(user.getId()));
     }
 
     public boolean isFull() {

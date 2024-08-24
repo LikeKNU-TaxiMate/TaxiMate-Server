@@ -48,7 +48,7 @@ public record PartyDetailsResponse(Long id, String title, String departureTime, 
     record HostResponse(Long id, String nickname, String profileImage, boolean isMe) {
 
         public static HostResponse from(User user) {
-            return new HostResponse(user.id(), user.nickname(), user.profileImage(), user.isCurrentUser());
+            return new HostResponse(user.getId(), user.getNickname(), user.getProfileImage(), user.isCurrentUser());
         }
     }
 
