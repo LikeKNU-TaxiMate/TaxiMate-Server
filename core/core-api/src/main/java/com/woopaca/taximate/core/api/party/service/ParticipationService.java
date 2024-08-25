@@ -34,7 +34,7 @@ public class ParticipationService {
     @Transactional
     public Long participateParty(Long partyId) { // TODO 동시성 문제 발생 가능성 고려
         User authenticatedUser = userFinder.findAuthenticatedUser();
-        Party party = partyFinder.findParty(partyId);
+        Party party = partyFinder.findPartyWithLock(partyId);
         partyValidator.validateParticipateParty(party, authenticatedUser);
         participationAppender.appendParticipant(party, authenticatedUser);
 
