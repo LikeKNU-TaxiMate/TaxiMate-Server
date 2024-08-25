@@ -12,4 +12,6 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
 
     @EntityGraph(attributePaths = {"party"})
     List<ParticipationEntity> findByUserId(Long userId);
+
+    List<ParticipationEntity> findByPartyId(Long partyId);
 }
