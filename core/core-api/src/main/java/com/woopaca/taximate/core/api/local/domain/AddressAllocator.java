@@ -15,11 +15,11 @@ public class AddressAllocator {
         this.kakaoLocalClient = kakaoLocalClient;
     }
 
-    public Party allocateAddress(Party party) {
+    public void allocateAddress(Party party) {
         Coordinate originLocation = party.getOriginLocation();
         Coordinate destinationLocation = party.getDestinationLocation();
         Address originAddress = kakaoLocalClient.requestConvertCoordinate(originLocation);
         Address destinationAddress = kakaoLocalClient.requestConvertCoordinate(destinationLocation);
-        return party.allocateAddress(originAddress, destinationAddress);
+        party.allocateAddress(originAddress, destinationAddress);
     }
 }

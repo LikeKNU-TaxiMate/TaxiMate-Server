@@ -86,9 +86,9 @@ public class PartyService {
         User authenticatedUser = userFinder.findAuthenticatedUser();
         partyValidator.validateCreateParty(newParty, authenticatedUser);
 
-        Party createdParty = addressAllocator.allocateAddress(newParty);
+        addressAllocator.allocateAddress(newParty);
 
-        Long newPartyId = partyAppender.appendNew(createdParty);
+        Long newPartyId = partyAppender.appendNew(newParty);
         participationAppender.appendHost(newPartyId, authenticatedUser);
         return newPartyId;
     }
