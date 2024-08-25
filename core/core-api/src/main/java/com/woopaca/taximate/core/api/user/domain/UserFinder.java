@@ -4,6 +4,7 @@ import com.woopaca.taximate.core.api.common.error.exception.NonexistentUserExcep
 import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import com.woopaca.taximate.storage.db.core.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -25,12 +26,18 @@ public class UserFinder {
         if (String.valueOf(principal).equals("anonymousUser")) {
             return User.GUEST;
         }
+
+        if (UserDetails.class.isAssignableFrom(principal.getClass())) {
+            UserDetails userDetails = (UserDetails) principal;
+            return findUserByEmail(userDetails.getUsername())
+                    .orElseThrow(NonexistentUserException::new);
+        }
         return (User) principal;
     }
 
     public User findUser(Long userId) {
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new NonexistentUserException(userId));
+                .orElseThrow(NonexistentUserException::new);
         User authenticatedUser = findAuthenticatedUser();
         return User.of(userEntity, Objects.equals(userId, authenticatedUser.getId()));
     }
