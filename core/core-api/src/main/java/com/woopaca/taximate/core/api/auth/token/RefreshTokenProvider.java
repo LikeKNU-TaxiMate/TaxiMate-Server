@@ -38,7 +38,7 @@ public class RefreshTokenProvider {
         if (!StringUtils.hasText(email)) {
             throw new InvalidRefreshTokenException();
         }
-        keyValueRepository.remove(refreshToken);
+        keyValueRepository.remove(key);
         return email;
     }
 
