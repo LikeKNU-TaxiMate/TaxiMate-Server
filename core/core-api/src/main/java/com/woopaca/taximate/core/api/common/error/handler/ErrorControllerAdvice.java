@@ -10,6 +10,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import static com.woopaca.taximate.core.api.common.model.ApiResults.ErrorResponse;
 
@@ -97,6 +98,21 @@ public class ErrorControllerAdvice {
         String message = exception.getMessage();
         log.warn(message, exception);
         ErrorResponse errorResponse = ApiResults.error(message, "");
+        return ResponseEntity.badRequest()
+                .body(errorResponse);
+    }
+
+    /**
+     * 메소드 인자 타입 불일치 예외 처리
+     * @param exception {@link MethodArgumentTypeMismatchException} 예외
+     * @return {@link ErrorResponse}
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+        String message = exception.getMessage();
+        String name = exception.getName();
+        log.warn(message, exception);
+        ErrorResponse errorResponse = ApiResults.error(String.join(": ", message, name), "");
         return ResponseEntity.badRequest()
                 .body(errorResponse);
     }
