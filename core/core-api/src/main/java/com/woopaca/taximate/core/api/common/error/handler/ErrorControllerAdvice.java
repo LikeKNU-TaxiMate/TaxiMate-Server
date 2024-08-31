@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -113,6 +114,20 @@ public class ErrorControllerAdvice {
         String name = exception.getName();
         log.warn(message, exception);
         ErrorResponse errorResponse = ApiResults.error(String.join(": ", message, name), "");
+        return ResponseEntity.badRequest()
+                .body(errorResponse);
+    }
+
+    /**
+     * 요청 쿠키 누락 예외 처리
+     * @param exception {@link MissingRequestCookieException} 예외
+     * @return {@link ErrorResponse}
+     */
+    @ExceptionHandler(MissingRequestCookieException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestCookieException(MissingRequestCookieException exception) {
+        String message = exception.getMessage();
+        log.warn(message, exception);
+        ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.badRequest()
                 .body(errorResponse);
     }
