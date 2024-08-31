@@ -1,8 +1,10 @@
 package com.woopaca.taximate.core.api.auth.controller;
 
 import com.woopaca.taximate.core.api.auth.controller.dto.response.TokensResponse;
-import com.woopaca.taximate.core.api.auth.jwt.JwtProvider;
+import com.woopaca.taximate.core.api.auth.controller.utils.RefreshTokenCookies;
+import com.woopaca.taximate.core.api.auth.model.Tokens;
 import com.woopaca.taximate.core.api.auth.oauth2.KakaoUser;
+import com.woopaca.taximate.core.api.auth.service.AuthService;
 import com.woopaca.taximate.core.api.auth.service.KakaoOAuth2Service;
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
@@ -23,27 +25,23 @@ public class OAuth2Controller {
 
     private final KakaoOAuth2Service kakaoOAuth2Service;
     private final UserService userService;
-    private final JwtProvider jwtProvider;
+    private final AuthService authService;
 
-    public OAuth2Controller(KakaoOAuth2Service kakaoOAuth2Service, UserService userService, JwtProvider jwtProvider) {
+    public OAuth2Controller(KakaoOAuth2Service kakaoOAuth2Service, UserService userService, AuthService authService) {
         this.kakaoOAuth2Service = kakaoOAuth2Service;
         this.userService = userService;
-        this.jwtProvider = jwtProvider;
+        this.authService = authService;
     }
 
     @GetMapping("/kakao")
     public ApiResponse<TokensResponse> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) {
         KakaoUser kakaoUser = kakaoOAuth2Service.authenticate(code);
         User user = userService.registerOAuth2User(kakaoUser);
-        String accessToken = jwtProvider.generateAccessToken(user.getEmail());
-        String refreshToken = jwtProvider.generateRefreshToken(user.getEmail());
+        Tokens tokens = authService.issueTokensFor(user);
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(60 * 60 * 24 * 14);
+        Cookie refreshTokenCookie = RefreshTokenCookies.generateCookie(tokens.refreshToken());
         response.addCookie(refreshTokenCookie);
 
-        return ApiResults.success(new TokensResponse(accessToken));
+        return ApiResults.success(new TokensResponse(tokens.accessToken()));
     }
 }
