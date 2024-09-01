@@ -14,6 +14,7 @@ import com.woopaca.taximate.core.api.taxi.api.KakaoMobilityClient;
 import com.woopaca.taximate.core.api.taxi.domain.Taxi;
 import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.core.api.user.domain.UserFinder;
+import com.woopaca.taximate.core.api.user.domain.UserLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,9 @@ public class PartyService {
     private final AddressAllocator addressAllocator;
     private final ParticipationAppender participationAppender;
     private final PartyAppender partyAppender;
+    private final UserLock userLock;
 
-    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, UserFinder userFinder, KakaoMobilityClient kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationAppender participationAppender, PartyAppender partyAppender) {
+    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, UserFinder userFinder, KakaoMobilityClient kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationAppender participationAppender, PartyAppender partyAppender, UserLock userLock) {
         this.partyMapFinder = partyMapFinder;
         this.partyFinder = partyFinder;
         this.userFinder = userFinder;
@@ -41,6 +43,7 @@ public class PartyService {
         this.addressAllocator = addressAllocator;
         this.participationAppender = participationAppender;
         this.partyAppender = partyAppender;
+        this.userLock = userLock;
     }
 
     /**
@@ -82,8 +85,9 @@ public class PartyService {
      * @return 생성된 팟 ID
      */
     @Transactional
-    public Long createParty(Party newParty) { // TODO 외부 API 호출 작업은 트랜잭션 분리 고려
+    public Long createParty(Party newParty) {
         User authenticatedUser = userFinder.findAuthenticatedUser();
+        userLock.lock(authenticatedUser);
         partyValidator.validateCreateParty(newParty, authenticatedUser);
 
         addressAllocator.allocateAddress(newParty);
