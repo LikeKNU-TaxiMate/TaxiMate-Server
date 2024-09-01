@@ -3,10 +3,13 @@ package com.woopaca.taximate.core.api.local.api;
 import com.woopaca.taximate.core.api.local.model.Address;
 import com.woopaca.taximate.core.api.party.model.Coordinate;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Component
@@ -20,7 +23,8 @@ public class KakaoLocalClient {
         this.restClient = restClient;
     }
 
-    public Address requestConvertCoordinate(Coordinate coordinate) {
+    @Async
+    public CompletableFuture<Address> requestConvertCoordinateAsynchronous(Coordinate coordinate) {
         try {
             KakaoAddress address = restClient.get()
                     .uri(UriComponentsBuilder.fromUriString(kakaoLocalProperties.getCoordinateToAddressUrl())
@@ -32,15 +36,15 @@ public class KakaoLocalClient {
                     .retrieve()
                     .body(KakaoAddress.class);
             if (address == null) {
-                return Address.empty();
+                return CompletableFuture.completedFuture(Address.empty());
             }
 
-            return new Address(address.roadAddress(), address.address(), address.buildingName(),
-                    address.region3DepthName(), address.mainAddressNumber(), address.subAddressNumber());
+            return CompletableFuture.completedFuture(new Address(address.roadAddress(), address.address(), address.buildingName(),
+                    address.region3DepthName(), address.mainAddressNumber(), address.subAddressNumber()));
         } catch (HttpStatusCodeException exception) {
-            log.warn("카카오 로컬 좌표->주소 변환 요청 오류", exception);
+            log.warn("카카오 로컬 좌표 -> 주소 변환 요청 오류", exception);
             //TODO Handle kakao local request failure
-            throw exception;
+            return CompletableFuture.failedFuture(exception);
         }
     }
 }

@@ -27,6 +27,12 @@ public class PartyFinder {
         return Party.fromEntity(partyEntity);
     }
 
+    public Party findPartyWithLock(Long partyId) {
+        PartyEntity partyEntity = partyRepository.findByIdForUpdate(partyId)
+                .orElseThrow(() -> new NonexistentPartyException(partyId));
+        return Party.fromEntity(partyEntity);
+    }
+
     public List<Party> findParticipatingParties(User user) {
         return participationRepository.findByUserId(user.getId())
                 .stream()
