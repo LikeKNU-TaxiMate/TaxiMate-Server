@@ -1,6 +1,7 @@
 package com.woopaca.taximate.storage.db.nosql.repository;
 
 import java.time.Duration;
+import java.util.Map;
 
 public interface KeyValueRepository {
 
@@ -35,4 +36,10 @@ public interface KeyValueRepository {
      * @param key {@code null}이 아닌 문자열
      */
     void remove(String key);
+
+    /**
+     * 모든 키-값 조회
+     * @return {@code null}일 수 없음
+     */
+    Map<String, String> getAll();
 }

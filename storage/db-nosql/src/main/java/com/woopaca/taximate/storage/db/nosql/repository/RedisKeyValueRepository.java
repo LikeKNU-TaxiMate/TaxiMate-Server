@@ -7,6 +7,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Repository
@@ -45,5 +50,20 @@ public class RedisKeyValueRepository implements KeyValueRepository {
     public void remove(String key) {
         Assert.notNull(key, "key는 null일 수 없습니다.");
         redisTemplate.delete(key);
+    }
+
+    @Override
+    public Map<String, String> getAll() {
+        Set<String> keys = redisTemplate.opsForValue()
+                .getOperations()
+                .keys("refresh_token:*");
+        if (Objects.isNull(keys)) {
+            return Collections.emptyMap();
+        }
+        return Objects.requireNonNull(keys).stream()
+                .collect(Collectors.toMap(key -> key, key -> {
+                    String value = redisTemplate.opsForValue().get(key);
+                    return Objects.requireNonNullElse(value, "");
+                }));
     }
 }
