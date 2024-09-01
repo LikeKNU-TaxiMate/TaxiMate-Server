@@ -22,6 +22,7 @@ public class AuthService {
     }
 
     public Tokens issueTokensFor(User user) {
+        refreshTokenProvider.expireRefreshToken(user);
         String accessToken = jwtProvider.issueAccessToken(user);
         String refreshToken = refreshTokenProvider.issueRefreshToken(user);
         return new Tokens(accessToken, refreshToken);

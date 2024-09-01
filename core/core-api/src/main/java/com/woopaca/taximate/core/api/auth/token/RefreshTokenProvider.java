@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
@@ -40,6 +42,20 @@ public class RefreshTokenProvider {
         }
         keyValueRepository.remove(key);
         return email;
+    }
+
+    /**
+     * refresh token 만료 ({@code user}의 refresh token을 만료)
+     * @param user {@code null}이 아닌 사용자
+     */
+    public void expireRefreshToken(User user) {
+        String email = user.getEmail();
+        keyValueRepository.getAll()
+                .entrySet()
+                .stream()
+                .filter(entry -> Objects.equals(entry.getValue(), email))
+                .map(Map.Entry::getKey)
+                .forEach(keyValueRepository::remove);
     }
 
     private String generateRefreshToken() {
