@@ -1,8 +1,9 @@
-package com.woopaca.taximate.core.api.auth.jwt;
+package com.woopaca.taximate.core.api.auth.token;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.woopaca.taximate.core.api.user.domain.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -22,21 +23,13 @@ public class JwtProvider {
                 .build();
     }
 
-    public String generateAccessToken(String subject) {
-        return generate(subject, jwtProperties.getAccessTokenExpiry());
-    }
-
-    public String generateRefreshToken(String subject) {
-        return generate(subject, jwtProperties.getRefreshTokenExpiry());
-    }
-
-    private String generate(String subject, long expiry) {
+    public String issueAccessToken(User principal) {
         Date currentDate = new Date();
         return JWT.create()
                 .withIssuer(jwtProperties.getIssuer())
                 .withIssuedAt(currentDate)
-                .withExpiresAt(currentDate.toInstant().plusSeconds(expiry))
-                .withSubject(subject)
+                .withExpiresAt(currentDate.toInstant().plusSeconds(jwtProperties.getAccessTokenExpiry()))
+                .withSubject(principal.getEmail())
                 .sign(algorithm);
     }
 

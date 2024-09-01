@@ -1,6 +1,6 @@
 package com.woopaca.taximate.core.api.auth.filter;
 
-import com.woopaca.taximate.core.api.auth.jwt.JwtProvider;
+import com.woopaca.taximate.core.api.auth.token.JwtProvider;
 import com.woopaca.taximate.core.api.user.domain.User;
 import com.woopaca.taximate.core.api.user.domain.UserFinder;
 import jakarta.servlet.FilterChain;

@@ -23,7 +23,9 @@ public enum ErrorType {
 
     PARTY_ALREADY_ENDED("", HttpStatus.BAD_REQUEST),
     PARTY_ALREADY_PARTICIPATED("", HttpStatus.BAD_REQUEST),
-    PARTICIPANTS_FULL("", HttpStatus.BAD_REQUEST);
+    PARTICIPANTS_FULL("", HttpStatus.BAD_REQUEST),
+
+    INVALID_REFRESH_TOKEN("", HttpStatus.UNAUTHORIZED);
 
     private final String errorCode;
     private final HttpStatus httpStatus;

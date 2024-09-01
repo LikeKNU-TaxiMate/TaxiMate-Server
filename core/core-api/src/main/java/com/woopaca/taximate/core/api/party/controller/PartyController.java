@@ -11,7 +11,6 @@ import com.woopaca.taximate.core.api.party.domain.Party;
 import com.woopaca.taximate.core.api.party.domain.PartyDetails;
 import com.woopaca.taximate.core.api.party.model.MapBound;
 import com.woopaca.taximate.core.api.party.service.PartyService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Slf4j
 @RequestMapping("/api/v1/parties")
 @RestController
 public class PartyController {

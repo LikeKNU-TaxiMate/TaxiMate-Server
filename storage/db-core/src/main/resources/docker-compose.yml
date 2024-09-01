@@ -1,0 +1,23 @@
+name: taxi-mate
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: taxi-mate-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: jcw!1530
+      MYSQL_DATABASE: taxi_mate
+      MYSQL_USER: jcw1031
+      MYSQL_PASSWORD: jcw!1530
+    ports:
+      - "3306:3306"
+    cpus: 1
+    mem_limit: 1024m
+
+  redis:
+    image: redis:latest
+    container_name: taxi-mate-redis
+    ports:
+      - "6379:6379"
+    cpus: 1
+    mem_limit: 128m

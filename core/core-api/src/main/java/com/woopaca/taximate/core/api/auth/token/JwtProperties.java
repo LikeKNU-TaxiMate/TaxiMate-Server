@@ -1,4 +1,4 @@
-package com.woopaca.taximate.core.api.auth.jwt;
+package com.woopaca.taximate.core.api.auth.token;
 
 import lombok.Getter;
 import lombok.Setter;
