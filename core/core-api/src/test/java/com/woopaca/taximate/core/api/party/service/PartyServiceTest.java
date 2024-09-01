@@ -69,7 +69,7 @@ class PartyServiceTest {
     class createParty_메서드는 {
 
         @Test
-        void 동시() throws InterruptedException {
+        void 한_사용자가_동시에_많은_팟생성_요청을_해도_최대_개수를_초과하지_않아야_한다() throws InterruptedException {
             int threadCount = 2;
             CountDownLatch countDownLatch = new CountDownLatch(threadCount);
             ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
