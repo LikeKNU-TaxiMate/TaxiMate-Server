@@ -9,3 +9,9 @@ dependencies {
 
     testImplementation 'io.rest-assured:rest-assured'
 }
+
+tasks.bootJar {
+    if (project.hasProperty('profile')) {
+        archiveFileName.set("TaxiMate-${profile}.jar")
+    }
+}
