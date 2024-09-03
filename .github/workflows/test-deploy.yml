@@ -55,3 +55,5 @@ jobs:
           --deployment-config-name CodeDeployDefault.AllAtOnce
           --deployment-group-name TaxiMate-develop-deployment-group
           --s3-location bucket=taxi-mate-develop-bucket,key=archive/$GITHUB_SHA.zip,bundleType=zip
+
+# 테스트
