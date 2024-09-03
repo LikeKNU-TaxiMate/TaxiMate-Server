@@ -2,6 +2,7 @@ package com.woopaca.taximate.core.api.auth.oauth2;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.woopaca.taximate.core.domain.auth.OAuth2User;
 import org.springframework.util.StringUtils;
 
 @JsonNaming(value = PropertyNamingStrategies.SnakeCaseStrategy.class)

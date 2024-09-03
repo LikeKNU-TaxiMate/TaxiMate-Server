@@ -1,5 +1,6 @@
 package com.woopaca.taximate.core.api.auth.oauth2;
 
+import com.woopaca.taximate.core.domain.auth.OAuth2Client;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -27,7 +28,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
      * @see <a href="https://developers.kakao.com/docs/latest/ko/kakaologin/rest-api">카카오 로그인 REST API</a>
      */
     @Override
-    public OAuth2Token requestToken(String authorizationCode) {
+    public KakaoToken requestToken(String authorizationCode) {
         MultiValueMap<String, Object> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("grant_type", "authorization_code");
         requestBody.add("client_id", kakaoOAuth2Properties.getApiKey());
@@ -40,7 +41,7 @@ public class KakaoOAuth2Client implements OAuth2Client {
                     .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                     .body(requestBody)
                     .retrieve()
-                    .body(OAuth2Token.class);
+                    .body(KakaoToken.class);
         } catch (HttpStatusCodeException exception) {
             log.warn("카카오 OAuth 2.0 토큰 요청 오류", exception);
             //TODO Handle kakao token request failure

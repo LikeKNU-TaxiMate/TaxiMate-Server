@@ -3,7 +3,7 @@ package com.woopaca.taximate.core.api.local.api;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.woopaca.taximate.core.api.common.error.exception.NonexistentAddressException;
+import com.woopaca.taximate.core.domain.error.exception.NonexistentAddressException;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;

@@ -1,15 +1,15 @@
 package com.woopaca.taximate.core.api.auth.controller;
 
-import com.woopaca.taximate.core.api.auth.controller.dto.response.TokensResponse;
-import com.woopaca.taximate.core.api.auth.controller.utils.RefreshTokenCookies;
-import com.woopaca.taximate.core.api.auth.model.Tokens;
-import com.woopaca.taximate.core.api.auth.oauth2.KakaoUser;
-import com.woopaca.taximate.core.api.auth.service.AuthService;
-import com.woopaca.taximate.core.api.auth.service.KakaoOAuth2Service;
+import com.woopaca.taximate.core.api.auth.dto.response.TokensResponse;
+import com.woopaca.taximate.core.api.auth.utils.RefreshTokenCookies;
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
-import com.woopaca.taximate.core.api.user.domain.User;
-import com.woopaca.taximate.core.api.user.service.UserService;
+import com.woopaca.taximate.core.domain.auth.OAuth2User;
+import com.woopaca.taximate.core.domain.auth.model.Tokens;
+import com.woopaca.taximate.core.domain.auth.service.AuthService;
+import com.woopaca.taximate.core.domain.auth.service.KakaoOAuth2Service;
+import com.woopaca.taximate.core.domain.user.User;
+import com.woopaca.taximate.core.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class OAuth2Controller {
 
     @GetMapping("/kakao")
     public ApiResponse<TokensResponse> kakaoLogin(@RequestParam("code") String code, HttpServletResponse response) {
-        KakaoUser kakaoUser = kakaoOAuth2Service.authenticate(code);
+        OAuth2User kakaoUser = kakaoOAuth2Service.authenticate(code);
         User user = userService.registerOAuth2User(kakaoUser);
         Tokens tokens = authService.issueTokensFor(user);
 

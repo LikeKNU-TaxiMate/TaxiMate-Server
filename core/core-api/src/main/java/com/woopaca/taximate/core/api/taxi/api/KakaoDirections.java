@@ -1,6 +1,6 @@
 package com.woopaca.taximate.core.api.taxi.api;
 
-import com.woopaca.taximate.core.api.party.model.Coordinate;
+import com.woopaca.taximate.core.domain.party.model.Coordinate;
 
 import java.util.List;
 

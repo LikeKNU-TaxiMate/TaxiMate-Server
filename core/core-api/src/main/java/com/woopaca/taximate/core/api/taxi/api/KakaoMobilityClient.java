@@ -1,7 +1,8 @@
 package com.woopaca.taximate.core.api.taxi.api;
 
-import com.woopaca.taximate.core.api.party.model.Coordinate;
-import com.woopaca.taximate.core.api.taxi.domain.Taxi;
+import com.woopaca.taximate.core.domain.party.KakaoMobilityClientProxy;
+import com.woopaca.taximate.core.domain.party.model.Coordinate;
+import com.woopaca.taximate.core.domain.taxi.Taxi;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import java.util.Collections;
 
 @Slf4j
 @Component
-public class KakaoMobilityClient {
+public class KakaoMobilityClient implements KakaoMobilityClientProxy {
 
     private final RestClient restClient;
     private final KakaoMobilityProperties kakaoMobilityProperties;
@@ -30,6 +31,7 @@ public class KakaoMobilityClient {
      * @return 택시 이동 경로 및 요금•시간
      * @see <a href="https://developers.kakaomobility.com/docs/navi-api/directions/">카카오모빌리티 길찾기 REST API</a>
      */
+    @Override
     public Taxi requestTaxi(Coordinate origin, Coordinate destination) {
         try {
             KakaoDirections directions = restClient.get()

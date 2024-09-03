@@ -1,7 +1,9 @@
 rootProject.name = 'TaxiMate'
 
 include 'core:core-api'
+include 'core:core-domain'
+include 'core:core-security'
+include 'core:core-message'
 include 'storage:db-core'
 include 'storage:db-nosql'
 include 'support:logging'
-include 'core:core-message'

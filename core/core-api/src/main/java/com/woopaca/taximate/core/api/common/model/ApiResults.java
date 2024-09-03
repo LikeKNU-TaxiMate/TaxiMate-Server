@@ -1,7 +1,7 @@
 package com.woopaca.taximate.core.api.common.model;
 
-import com.woopaca.taximate.core.api.common.error.ErrorType;
-import com.woopaca.taximate.core.api.common.error.exception.BusinessException;
+import com.woopaca.taximate.core.domain.error.ErrorType;
+import com.woopaca.taximate.core.domain.error.exception.BusinessException;
 
 public record ApiResults() {
 

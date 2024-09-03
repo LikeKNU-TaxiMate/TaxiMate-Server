@@ -1,7 +1,8 @@
 package com.woopaca.taximate.core.api.local.api;
 
-import com.woopaca.taximate.core.api.local.model.Address;
-import com.woopaca.taximate.core.api.party.model.Coordinate;
+import com.woopaca.taximate.core.domain.local.KakaoLocalClientProxy;
+import com.woopaca.taximate.core.domain.local.model.Address;
+import com.woopaca.taximate.core.domain.party.model.Coordinate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Component
-public class KakaoLocalClient {
+public class KakaoLocalClient implements KakaoLocalClientProxy {
 
     private final RestClient restClient;
     private final KakaoLocalProperties kakaoLocalProperties;
@@ -24,6 +25,7 @@ public class KakaoLocalClient {
     }
 
     @Async
+    @Override
     public CompletableFuture<Address> requestConvertCoordinateAsynchronous(Coordinate coordinate) {
         try {
             KakaoAddress address = restClient.get()

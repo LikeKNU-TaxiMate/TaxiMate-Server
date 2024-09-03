@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':storage:db-core')
+    implementation project(':storage:db-nosql')
+}
