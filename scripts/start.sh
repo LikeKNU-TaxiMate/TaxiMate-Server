@@ -9,10 +9,12 @@ START_LOG="$DEPLOY_PATH/start.log"
 
 NOW=$(date +%c)
 
-echo "[$NOW] Copy $JAR" >> $START_LOG
+echo "[$NOW] Copy $ROOT_PATH" >> $START_LOG
 cp $DEPLOY_PATH/core/core-api/build/libs/*.jar $ROOT_PATH
 
 JAR=$(find $ROOT_PATH -name "*.jar" | head -n 1)
+
+sleep 3
 
 echo "[$NOW] Run $JAR" >> $START_LOG
 nohup java -jar $JAR --spring.profiles.active=develop > $APP_LOG 2> $ERROR_LOG &
