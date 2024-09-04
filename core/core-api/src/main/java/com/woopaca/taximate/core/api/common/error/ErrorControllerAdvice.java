@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.concurrent.CompletionException;
@@ -146,6 +147,26 @@ public class ErrorControllerAdvice {
         ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.status(exception.getStatusCode())
                 .body(errorResponse);
+    }
+
+    /**
+     * CompletableFuture 예외 처리
+     * @param exception {@link CompletionException} 예외
+     * @return {@link ErrorResponse}
+     */
+    @ExceptionHandler(CompletionException.class)
+    public ResponseEntity<ErrorResponse> handleCompletionException(CompletionException exception) {
+        Throwable cause = exception.getCause();
+        if (cause instanceof BusinessException) {
+            return handleBusinessException((BusinessException) cause);
+        }
+        if (cause instanceof HttpStatusCodeException) {
+            return handleHttpStatusCodeException((HttpStatusCodeException) cause);
+        }
+        if (cause instanceof RestClientException) {
+            return handleException((RestClientException) cause);
+        }
+        return handleException(exception);
     }
 
     /**
