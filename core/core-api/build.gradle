@@ -2,10 +2,21 @@ bootJar.enabled = true
 jar.enabled = false
 
 dependencies {
-    implementation project(':core:core-message')
+    implementation project(':core:core-domain')
+    implementation project(':core:core-security')
+
+    testImplementation project(':core:core-domain')
+    testImplementation project(':core:core-security')
+    testImplementation project(':core:core-message')
+    testImplementation project(':storage:db-core')
+    testImplementation project(':storage:db-nosql')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+}
 
-    testImplementation 'io.rest-assured:rest-assured'
+test {
+    useJUnitPlatform()
 }

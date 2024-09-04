@@ -2,8 +2,8 @@ package com.woopaca.taximate.core.api.party.controller;
 
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
-import com.woopaca.taximate.core.api.party.controller.dto.response.ParticipatePartyResponse;
-import com.woopaca.taximate.core.api.party.service.ParticipationService;
+import com.woopaca.taximate.core.api.party.dto.response.ParticipatePartyResponse;
+import com.woopaca.taximate.core.domain.party.service.ParticipationService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

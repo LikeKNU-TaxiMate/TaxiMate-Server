@@ -2,15 +2,15 @@ package com.woopaca.taximate.core.api.party.controller;
 
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
-import com.woopaca.taximate.core.api.party.controller.dto.request.CreatePartyRequest;
-import com.woopaca.taximate.core.api.party.controller.dto.response.CreatePartyResponse;
-import com.woopaca.taximate.core.api.party.controller.dto.response.PartiesResponse;
-import com.woopaca.taximate.core.api.party.controller.dto.response.PartyDetailsResponse;
-import com.woopaca.taximate.core.api.party.domain.Parties;
-import com.woopaca.taximate.core.api.party.domain.Party;
-import com.woopaca.taximate.core.api.party.domain.PartyDetails;
-import com.woopaca.taximate.core.api.party.model.MapBound;
-import com.woopaca.taximate.core.api.party.service.PartyService;
+import com.woopaca.taximate.core.api.party.dto.request.CreatePartyRequest;
+import com.woopaca.taximate.core.api.party.dto.response.CreatePartyResponse;
+import com.woopaca.taximate.core.api.party.dto.response.PartiesResponse;
+import com.woopaca.taximate.core.api.party.dto.response.PartyDetailsResponse;
+import com.woopaca.taximate.core.domain.party.Parties;
+import com.woopaca.taximate.core.domain.party.Party;
+import com.woopaca.taximate.core.domain.party.PartyDetails;
+import com.woopaca.taximate.core.domain.party.model.MapBound;
+import com.woopaca.taximate.core.domain.party.service.PartyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +52,7 @@ public class PartyController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ApiResponse<CreatePartyResponse> createParty(@Validated @RequestBody CreatePartyRequest request) {
-        Party newParty = Party.newParty(request);
+        Party newParty = request.toDomain();
         Long partyId = partyService.createParty(newParty);
         CreatePartyResponse response = new CreatePartyResponse(partyId);
         return ApiResults.success(response);
