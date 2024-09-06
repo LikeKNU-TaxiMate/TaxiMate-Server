@@ -5,6 +5,7 @@ import com.woopaca.taximate.core.domain.fixture.ParticipationFixtures;
 import com.woopaca.taximate.core.domain.fixture.PartyFixtures;
 import com.woopaca.taximate.core.domain.fixture.UserFixtures;
 import com.woopaca.taximate.core.domain.local.AddressAllocator;
+import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
@@ -67,7 +68,7 @@ class PartyServiceTest {
 
         @Test
         void 한_사용자가_동시에_많은_팟생성_요청을_해도_최대_개수를_초과하지_않아야_한다() throws InterruptedException {
-            int threadCount = 2;
+            int threadCount = Participation.MAX_PARTICIPATING_PARTIES_COUNT - 1;
             CountDownLatch countDownLatch = new CountDownLatch(threadCount);
             ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
 
@@ -86,7 +87,7 @@ class PartyServiceTest {
             countDownLatch.await();
             executorService.shutdown();
 
-            assertThat(partyRepository.count()).isEqualTo(3);
+            assertThat(partyRepository.count()).isEqualTo(Participation.MAX_PARTICIPATING_PARTIES_COUNT);
         }
 
         private void setSecurityContext() {
