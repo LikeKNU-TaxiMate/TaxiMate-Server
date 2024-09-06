@@ -2,11 +2,12 @@ package com.woopaca.taximate.core.api.party.controller;
 
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.api.common.model.ApiResults.ApiResponse;
+import com.woopaca.taximate.core.api.party.dto.request.ParticipatePartyRequest;
 import com.woopaca.taximate.core.api.party.dto.response.ParticipatePartyResponse;
 import com.woopaca.taximate.core.domain.party.service.ParticipationService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/api/v1/participation")
@@ -20,8 +21,8 @@ public class ParticipationController {
     }
 
     @PostMapping
-    public ApiResponse<ParticipatePartyResponse> participateParty(@RequestParam("partyId") Long partyId) {
-        Long participatedPartyId = participationService.participateParty(partyId);
+    public ApiResponse<ParticipatePartyResponse> participateParty(@RequestBody ParticipatePartyRequest request) {
+        Long participatedPartyId = participationService.participateParty(request.partyId());
         return ApiResults.success(new ParticipatePartyResponse(participatedPartyId));
     }
 }
