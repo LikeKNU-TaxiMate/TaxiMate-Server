@@ -60,7 +60,7 @@ public class RedisKeyValueRepository implements KeyValueRepository {
         if (Objects.isNull(keys)) {
             return Collections.emptyMap();
         }
-        return Objects.requireNonNull(keys).stream()
+        return keys.stream()
                 .collect(Collectors.toMap(key -> key, key -> {
                     String value = redisTemplate.opsForValue().get(key);
                     return Objects.requireNonNullElse(value, "");
