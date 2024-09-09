@@ -33,6 +33,7 @@ public class KakaoMobilityClient implements KakaoMobilityClientProxy {
      */
     @Override
     public Taxi requestTaxi(Coordinate origin, Coordinate destination) {
+        // TODO circuit breaker를 적용해 실패 시 기본값을 반환하도록 리팩토링
         try {
             KakaoDirections directions = restClient.get()
                     .uri(UriComponentsBuilder.fromUriString(kakaoMobilityProperties.getDirectionsUrl())
