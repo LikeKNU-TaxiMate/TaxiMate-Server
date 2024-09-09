@@ -7,5 +7,5 @@ import java.util.concurrent.CompletableFuture;
 
 public interface KakaoLocalClientProxy {
 
-    CompletableFuture<Address> requestConvertCoordinateAsynchronous(Coordinate coordinate);
+    CompletableFuture<Address> requestConvertCoordinate(Coordinate coordinate);
 }

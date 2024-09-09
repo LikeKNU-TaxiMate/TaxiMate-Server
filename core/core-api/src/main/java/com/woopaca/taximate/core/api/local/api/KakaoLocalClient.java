@@ -26,7 +26,7 @@ public class KakaoLocalClient implements KakaoLocalClientProxy {
 
     @Async
     @Override
-    public CompletableFuture<Address> requestConvertCoordinateAsynchronous(Coordinate coordinate) {
+    public CompletableFuture<Address> requestConvertCoordinate(Coordinate coordinate) {
         try {
             KakaoAddress address = restClient.get()
                     .uri(UriComponentsBuilder.fromUriString(kakaoLocalProperties.getCoordinateToAddressUrl())
