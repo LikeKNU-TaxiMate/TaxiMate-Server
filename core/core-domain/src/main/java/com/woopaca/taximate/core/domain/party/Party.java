@@ -112,6 +112,9 @@ public class Party {
     }
 
     public ParticipationStatus participationStatusOf(User user) {
+        if (!isProgress()) {
+            return ParticipationStatus.TERMINATED;
+        }
         return participationSet.stream()
                 .filter(participation -> Objects.equals(participation.getUserId(), user.getId()))
                 .findAny()
