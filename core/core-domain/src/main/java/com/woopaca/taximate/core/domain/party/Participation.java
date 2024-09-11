@@ -1,6 +1,7 @@
 package com.woopaca.taximate.core.domain.party;
 
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -16,6 +17,7 @@ public class Participation {
     private ParticipationStatus status;
     private Long userId;
 
+    @Builder
     public Participation(Long id, ParticipationRole role, ParticipationStatus status, Long userId) {
         this.id = id;
         this.role = role;
