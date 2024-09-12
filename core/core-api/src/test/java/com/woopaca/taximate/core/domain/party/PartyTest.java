@@ -1,10 +1,10 @@
 package com.woopaca.taximate.core.domain.party;
 
 import com.woopaca.taximate.core.domain.fixture.AddressFixtures;
+import com.woopaca.taximate.core.domain.fixture.ParticipationFixtures;
 import com.woopaca.taximate.core.domain.fixture.PartyFixtures;
 import com.woopaca.taximate.core.domain.fixture.UserFixtures;
 import com.woopaca.taximate.core.domain.local.model.Address;
-import com.woopaca.taximate.core.domain.party.Participation.ParticipationRole;
 import com.woopaca.taximate.core.domain.party.Participation.ParticipationStatus;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
@@ -48,10 +48,7 @@ class PartyTest {
         void 팟_호스트의_아이디를_반환한다() {
             //given
             final long expectedHostId = 1L;
-            Participation hostParticipation = Participation.builder()
-                    .role(ParticipationRole.HOST)
-                    .userId(expectedHostId)
-                    .build();
+            Participation hostParticipation = ParticipationFixtures.createHostParticipationOf(expectedHostId);
             Party party = Party.builder()
                     .participationSet(Set.of(hostParticipation))
                     .build();
@@ -72,11 +69,7 @@ class PartyTest {
             //given
             final long userId = 1L;
             User user = UserFixtures.createUser(userId);
-            Participation participation = Participation.builder()
-                    .role(ParticipationRole.PARTICIPANT)
-                    .status(ParticipationStatus.PARTICIPATING)
-                    .userId(userId)
-                    .build();
+            Participation participation = ParticipationFixtures.createParticipantParticipationOf(userId);
             Party party = Party.builder()
                     .departureTime(LocalDateTime.now())
                     .participationSet(Set.of(participation))
@@ -111,11 +104,7 @@ class PartyTest {
             //given
             final long userId = 1L;
             User user = UserFixtures.createUser(userId);
-            Participation participation = Participation.builder()
-                    .role(ParticipationRole.PARTICIPANT)
-                    .status(ParticipationStatus.PARTICIPATING)
-                    .userId(userId)
-                    .build();
+            Participation participation = ParticipationFixtures.createParticipantParticipationOf(userId);
             Party party = Party.builder()
                     .departureTime(LocalDateTime.now().minusMinutes(31))
                     .participationSet(Set.of(participation))
