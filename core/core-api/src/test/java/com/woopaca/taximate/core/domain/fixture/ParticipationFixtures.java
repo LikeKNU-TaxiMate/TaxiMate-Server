@@ -18,4 +18,11 @@ public final class ParticipationFixtures {
                 .status(ParticipationStatus.PARTICIPATING.name())
                 .build();
     }
+
+    public static ParticipationEntity createParticipationEntity() {
+        return ParticipationEntity.builder()
+                .role(ParticipationRole.PARTICIPANT.name())
+                .status(ParticipationStatus.PARTICIPATING.name())
+                .build();
+    }
 }
