@@ -38,6 +38,13 @@ public final class PartyFixtures {
         return partyBuilder().build();
     }
 
+    public static PartyEntity createTerminatedPartyEntity() {
+        return partyEntityBuilder()
+                .maxParticipants(TEST_MAX_PARTICIPANTS)
+                .departureTime(LocalDateTime.now().minusMinutes(30))
+                .build();
+    }
+
     private static PartyEntity.PartyEntityBuilder partyEntityBuilder() {
         return PartyEntity.builder()
                 .title(TEST_TITLE)
