@@ -93,7 +93,7 @@ class ParticipationServiceConcurrencyTest extends ConcurrencyTest {
             }
 
             private void setSecurityContextForUser(int index) {
-                AuthenticatedUserHolder.setAuthenticatedUser(User.of(userEntities.get(index), true));
+                AuthenticatedUserHolder.setAuthenticatedUser(User.fromEntity(userEntities.get(index)));
             }
         }
     }

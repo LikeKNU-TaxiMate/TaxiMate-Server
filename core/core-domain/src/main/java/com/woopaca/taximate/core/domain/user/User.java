@@ -31,7 +31,7 @@ public class User {
         this.status = status;
     }
 
-    public static User of(UserEntity entity, boolean isCurrentUser) {
+    public static User fromEntity(UserEntity entity) {
         return User.builder()
                 .id(entity.getId())
                 .email(entity.getEmail())

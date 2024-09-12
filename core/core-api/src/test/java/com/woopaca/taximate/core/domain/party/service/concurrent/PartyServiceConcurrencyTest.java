@@ -78,7 +78,7 @@ class PartyServiceConcurrencyTest extends ConcurrencyTest {
         }
 
         private void setSecurityContext() {
-            AuthenticatedUserHolder.setAuthenticatedUser(User.of(userEntity, true));
+            AuthenticatedUserHolder.setAuthenticatedUser(User.fromEntity(userEntity));
         }
     }
 }

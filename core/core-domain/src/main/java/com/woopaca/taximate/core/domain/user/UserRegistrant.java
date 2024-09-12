@@ -22,6 +22,6 @@ public class UserRegistrant {
                 .status(User.AccountStatus.ACTIVE.name())
                 .build();
         UserEntity registeredUser = userRepository.save(userEntity);
-        return User.of(registeredUser, true);
+        return User.fromEntity(registeredUser);
     }
 }
