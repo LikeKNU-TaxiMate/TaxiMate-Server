@@ -195,17 +195,19 @@ class PartyTest {
             Party party = Party.fromEntity(partyEntity);
 
             //then
-            assertThat(party.getTitle()).isEqualTo(PartyFixtures.TEST_TITLE);
-            assertThat(party.getExplanation()).isEqualTo(PartyFixtures.TEST_EXPLANATION);
-            assertThat(party.getDepartureTime()).isNotNull();
-            assertThat(party.getOrigin()).isEqualTo(PartyFixtures.TEST_ORIGIN);
-            assertThat(party.getOriginAddress()).isEqualTo(PartyFixtures.TEST_ORIGIN_ADDRESS);
-            assertThat(party.getOriginLocation()).isEqualTo(PartyFixtures.TEST_ORIGIN_LOCATION);
-            assertThat(party.getDestination()).isEqualTo(PartyFixtures.TEST_DESTINATION);
-            assertThat(party.getDestinationAddress()).isEqualTo(PartyFixtures.TEST_DESTINATION_ADDRESS);
-            assertThat(party.getDestinationLocation()).isEqualTo(PartyFixtures.TEST_DESTINATION_LOCATION);
-            assertThat(party.getMaxParticipants()).isEqualTo(PartyFixtures.TEST_MAX_PARTICIPANTS);
-            assertThat(party.getViews()).isEqualTo(0);
+            assertThat(party.getTitle()).isEqualTo(partyEntity.getTitle());
+            assertThat(party.getExplanation()).isEqualTo(partyEntity.getExplanation());
+            assertThat(party.getDepartureTime()).isEqualTo(partyEntity.getDepartureTime());
+            assertThat(party.getOrigin()).isEqualTo(partyEntity.getOrigin());
+            assertThat(party.getOriginAddress()).isEqualTo(partyEntity.getOriginAddress());
+            assertThat(party.getOriginLocation().latitude()).isEqualTo(partyEntity.getOriginLatitude());
+            assertThat(party.getOriginLocation().longitude()).isEqualTo(partyEntity.getOriginLongitude());
+            assertThat(party.getDestination()).isEqualTo(partyEntity.getDestination());
+            assertThat(party.getDestinationAddress()).isEqualTo(partyEntity.getDestinationAddress());
+            assertThat(party.getDestinationLocation().latitude()).isEqualTo(partyEntity.getDestinationLatitude());
+            assertThat(party.getDestinationLocation().longitude()).isEqualTo(partyEntity.getDestinationLongitude());
+            assertThat(party.getMaxParticipants()).isEqualTo(partyEntity.getMaxParticipants());
+            assertThat(party.getViews()).isEqualTo(partyEntity.getViews());
             assertThat(party.getParticipationSet()).isEmpty();
         }
     }
@@ -222,17 +224,19 @@ class PartyTest {
             Party party = Party.fromEntityExcludeParticipants(partyEntity);
 
             //then
-            assertThat(party.getTitle()).isEqualTo(PartyFixtures.TEST_TITLE);
-            assertThat(party.getExplanation()).isEqualTo(PartyFixtures.TEST_EXPLANATION);
-            assertThat(party.getDepartureTime()).isNotNull();
-            assertThat(party.getOrigin()).isEqualTo(PartyFixtures.TEST_ORIGIN);
-            assertThat(party.getOriginAddress()).isEqualTo(PartyFixtures.TEST_ORIGIN_ADDRESS);
-            assertThat(party.getOriginLocation()).isEqualTo(PartyFixtures.TEST_ORIGIN_LOCATION);
-            assertThat(party.getDestination()).isEqualTo(PartyFixtures.TEST_DESTINATION);
-            assertThat(party.getDestinationAddress()).isEqualTo(PartyFixtures.TEST_DESTINATION_ADDRESS);
-            assertThat(party.getDestinationLocation()).isEqualTo(PartyFixtures.TEST_DESTINATION_LOCATION);
-            assertThat(party.getMaxParticipants()).isEqualTo(PartyFixtures.TEST_MAX_PARTICIPANTS);
-            assertThat(party.getViews()).isEqualTo(0);
+            assertThat(party.getTitle()).isEqualTo(partyEntity.getTitle());
+            assertThat(party.getExplanation()).isEqualTo(partyEntity.getExplanation());
+            assertThat(party.getDepartureTime()).isEqualTo(partyEntity.getDepartureTime());
+            assertThat(party.getOrigin()).isEqualTo(partyEntity.getOrigin());
+            assertThat(party.getOriginAddress()).isEqualTo(partyEntity.getOriginAddress());
+            assertThat(party.getOriginLocation().latitude()).isEqualTo(partyEntity.getOriginLatitude());
+            assertThat(party.getOriginLocation().longitude()).isEqualTo(partyEntity.getOriginLongitude());
+            assertThat(party.getDestination()).isEqualTo(partyEntity.getDestination());
+            assertThat(party.getDestinationAddress()).isEqualTo(partyEntity.getDestinationAddress());
+            assertThat(party.getDestinationLocation().latitude()).isEqualTo(partyEntity.getDestinationLatitude());
+            assertThat(party.getDestinationLocation().longitude()).isEqualTo(partyEntity.getDestinationLongitude());
+            assertThat(party.getMaxParticipants()).isEqualTo(partyEntity.getMaxParticipants());
+            assertThat(party.getViews()).isEqualTo(partyEntity.getViews());
             assertThat(party.getParticipationSet()).isNull();
         }
     }
