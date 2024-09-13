@@ -18,8 +18,8 @@ public class AddressAllocator {
     public void allocateAddress(Party party) {
         Coordinate originLocation = party.getOriginLocation();
         Coordinate destinationLocation = party.getDestinationLocation();
-        kakaoLocalClient.requestConvertCoordinateAsynchronous(originLocation)
-                .thenCombine(kakaoLocalClient.requestConvertCoordinateAsynchronous(destinationLocation), party::allocateAddress)
+        kakaoLocalClient.requestConvertCoordinate(originLocation)
+                .thenCombine(kakaoLocalClient.requestConvertCoordinate(destinationLocation), party::allocateAddress)
                 .join();
     }
 }

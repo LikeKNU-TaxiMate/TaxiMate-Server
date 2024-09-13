@@ -14,10 +14,12 @@ CREATE TABLE IF NOT EXISTS `party`
     `views`                INT             NOT NULL DEFAULT 0, # 조회수
     `created_at`           DATETIME        NOT NULL,           # 생성 시간
     `updated_at`           DATETIME        NOT NULL,           # 수정 시간
-    PRIMARY KEY (`id`),
-    SPATIAL INDEX `sidx_origin_location` (`origin_location`),
-    SPATIAL INDEX `sidx_destination_location` (`destination_location`)
+    PRIMARY KEY (`id`)
 );
+
+CREATE SPATIAL INDEX `sidx_origin_location` ON `party` (`origin_location`);
+
+CREATE SPATIAL INDEX `sidx_destination_location` ON `party` (`destination_location`);
 
 CREATE TABLE IF NOT EXISTS `user`
 (
@@ -29,9 +31,10 @@ CREATE TABLE IF NOT EXISTS `user`
     `status`        CHAR(8)     NOT NULL DEFAULT 'ACTIVE',
     `created_at`    DATETIME    NOT NULL,
     `updated_at`    DATETIME    NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `uidx_email` (`email`)
+    PRIMARY KEY (`id`)
 );
+
+CREATE UNIQUE INDEX `uidx_email` ON `user` (`email`);
 
 CREATE TABLE IF NOT EXISTS `participation`
 (
@@ -44,3 +47,7 @@ CREATE TABLE IF NOT EXISTS `participation`
     `updated_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`)
 );
+
+CREATE INDEX `idx_party_id` ON `participation` (`party_id`);
+
+CREATE INDEX `idx_user_id` ON `participation` (`user_id`);

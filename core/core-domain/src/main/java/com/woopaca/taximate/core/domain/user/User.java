@@ -1,5 +1,6 @@
 package com.woopaca.taximate.core.domain.user;
 
+import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
 import com.woopaca.taximate.core.domain.auth.OAuth2User;
 import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.Getter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
-    public static final User GUEST = new User(-1L, "guest", "guest", null, null, AccountStatus.ACTIVE, false);
+    public static final User GUEST = new User(-1L, "guest", "guest", null, null, AccountStatus.ACTIVE);
 
     @EqualsAndHashCode.Include
     private Long id;
@@ -20,20 +21,17 @@ public class User {
     private String profileImage;
     private OAuth2Provider provider;
     private AccountStatus status;
-    private boolean isCurrentUser;
 
-    public User(Long id, String email, String nickname, String profileImage, OAuth2Provider provider,
-                AccountStatus status, boolean isCurrentUser) {
+    public User(Long id, String email, String nickname, String profileImage, OAuth2Provider provider, AccountStatus status) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.provider = provider;
         this.status = status;
-        this.isCurrentUser = isCurrentUser;
     }
 
-    public static User of(UserEntity entity, boolean isCurrentUser) {
+    public static User fromEntity(UserEntity entity) {
         return User.builder()
                 .id(entity.getId())
                 .email(entity.getEmail())
@@ -41,7 +39,6 @@ public class User {
                 .profileImage(entity.getProfileImage())
                 .provider(OAuth2Provider.valueOf(entity.getProvider()))
                 .status(AccountStatus.valueOf(entity.getStatus()))
-                .isCurrentUser(isCurrentUser)
                 .build();
     }
 
@@ -52,8 +49,12 @@ public class User {
                 .profileImage(oAuth2User.profileImageUrl())
                 .provider(OAuth2Provider.valueOf(oAuth2User.provider()))
                 .status(AccountStatus.ACTIVE)
-                .isCurrentUser(true)
                 .build();
+    }
+
+    public boolean isCurrentUser() {
+        User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
+        return authenticatedUser != null && authenticatedUser.equals(this);
     }
 
     public enum AccountStatus {

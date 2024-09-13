@@ -1,4 +1,4 @@
-package com.woopaca.taximate.core.domain.party.service;
+package com.woopaca.taximate.core.domain.party.service.concurrent;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
 import com.woopaca.taximate.core.domain.fixture.ParticipationFixtures;
@@ -7,6 +7,7 @@ import com.woopaca.taximate.core.domain.fixture.UserFixtures;
 import com.woopaca.taximate.core.domain.local.AddressAllocator;
 import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.Party;
+import com.woopaca.taximate.core.domain.party.service.PartyService;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
@@ -16,22 +17,19 @@ import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import com.woopaca.taximate.storage.db.core.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.stream.IntStream;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@SpringBootTest
-class PartyServiceTest {
+@DisplayName("PartyService 동시성 테스트")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+class PartyServiceConcurrencyTest extends ConcurrencyTest {
 
     @Autowired
     private PartyService partyService;
@@ -68,30 +66,19 @@ class PartyServiceTest {
 
         @Test
         void 한_사용자가_동시에_많은_팟생성_요청을_해도_최대_개수를_초과하지_않아야_한다() throws InterruptedException {
-            int threadCount = Participation.MAX_PARTICIPATING_PARTIES_COUNT - 1;
-            CountDownLatch countDownLatch = new CountDownLatch(threadCount);
-            ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+            int executionCount = Participation.MAX_PARTICIPATING_PARTIES_COUNT - 1;
 
-            IntStream.rangeClosed(1, threadCount)
-                    .forEach(i -> executorService.submit(() -> {
-                        try {
-                            setSecurityContext();
-                            Party party = PartyFixtures.createParty();
-                            partyService.createParty(party);
-                        } catch (Exception e) {
-                            log.error("Error: ", e);
-                        } finally {
-                            countDownLatch.countDown();
-                        }
-                    }));
-            countDownLatch.await();
-            executorService.shutdown();
+            executeTasksInParallel(index -> {
+                setSecurityContext();
+                Party party = PartyFixtures.createParty();
+                partyService.createParty(party);
+            }, executionCount);
 
             assertThat(partyRepository.count()).isEqualTo(Participation.MAX_PARTICIPATING_PARTIES_COUNT);
         }
 
         private void setSecurityContext() {
-            AuthenticatedUserHolder.setAuthenticatedUser(User.of(userEntity, true));
+            AuthenticatedUserHolder.setAuthenticatedUser(User.fromEntity(userEntity));
         }
     }
 }

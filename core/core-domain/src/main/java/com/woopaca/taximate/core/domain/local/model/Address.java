@@ -1,9 +1,11 @@
 package com.woopaca.taximate.core.domain.local.model;
 
+import lombok.Builder;
 import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
+@Builder
 public record Address(String roadAddress, String address, String buildingName, String region3DepthName,
                       String mainAddressNumber, String subAddressNumber) {
 
