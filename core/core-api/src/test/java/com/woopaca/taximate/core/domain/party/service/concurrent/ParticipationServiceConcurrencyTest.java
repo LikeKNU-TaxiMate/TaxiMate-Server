@@ -1,9 +1,11 @@
 package com.woopaca.taximate.core.domain.party.service.concurrent;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
+import com.woopaca.taximate.core.domain.context.DatabaseCleaner;
 import com.woopaca.taximate.core.domain.fixture.ParticipationFixtures;
 import com.woopaca.taximate.core.domain.fixture.PartyFixtures;
 import com.woopaca.taximate.core.domain.fixture.UserFixtures;
+import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.service.ParticipationService;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
@@ -13,6 +15,7 @@ import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import com.woopaca.taximate.storage.db.core.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -40,6 +43,8 @@ class ParticipationServiceConcurrencyTest extends ConcurrencyTest {
     private PartyRepository partyRepository;
     @Autowired
     private ParticipationRepository participationRepository;
+    @Autowired
+    private DatabaseCleaner databaseCleaner;
 
     private static final int MAX_PARTICIPANTS = 4;
     private static final int USERS_SIZE = MAX_PARTICIPANTS + 1;
@@ -52,6 +57,11 @@ class ParticipationServiceConcurrencyTest extends ConcurrencyTest {
         userEntities = createAndSaveUsers();
         partyEntity = createAndSaveParty();
         createAndSaveInitialParticipation();
+    }
+
+    @AfterEach
+    void tearDown() {
+        databaseCleaner.clear();
     }
 
     private List<UserEntity> createAndSaveUsers() {
@@ -91,10 +101,56 @@ class ParticipationServiceConcurrencyTest extends ConcurrencyTest {
                         .findByPartyId(partyEntity.getId());
                 assertThat(participationEntities).hasSize(MAX_PARTICIPANTS);
             }
+        }
 
-            private void setSecurityContextForUser(int index) {
-                AuthenticatedUserHolder.setAuthenticatedUser(User.fromEntity(userEntities.get(index)));
+        @Nested
+        class 한_사용자가_동시에_여러_팟에_참여하는_경우 {
+
+            private static final int CONCURRENT_PARTICIPATE_REQUESTS = Participation.MAX_PARTICIPATING_PARTIES_COUNT + 1;
+
+            private final List<PartyEntity> partyEntities = new ArrayList<>();
+
+            @Test
+            void 최대_참여_팟_개수를_초과하지_않아야_한다() throws InterruptedException {
+                IntStream.rangeClosed(1, CONCURRENT_PARTICIPATE_REQUESTS)
+                        .forEach(i -> {
+                            PartyEntity partyEntity = PartyFixtures.createPartyEntity();
+                            PartyEntity savedPartyEntity = partyRepository.save(partyEntity);
+                            partyEntities.add(savedPartyEntity);
+                        });
+
+                int userIndex = 0;
+                executeTasksInParallel(index -> {
+                    setSecurityContextForUser(userIndex);
+                    participationService.participateParty(partyEntities.get(index).getId());
+                }, CONCURRENT_PARTICIPATE_REQUESTS);
+
+                List<ParticipationEntity> participationEntities = participationRepository
+                        .findByUserId(userEntities.get(userIndex).getId());
+                assertThat(participationEntities).hasSize(Participation.MAX_PARTICIPATING_PARTIES_COUNT);
             }
+        }
+
+        @Nested
+        class 한_사용자가_한_팟에_여러_참여_요청을_하는_경우 {
+
+            private static final int CONCURRENT_PARTICIPATE_REQUESTS = USERS_SIZE;
+
+            @Test
+            void 최대_참여_인원을_초과하지_않아야_한다() throws InterruptedException {
+                executeTasksInParallel(index -> {
+                    setSecurityContextForUser(0);
+                    participationService.participateParty(partyEntity.getId());
+                }, CONCURRENT_PARTICIPATE_REQUESTS);
+
+                List<ParticipationEntity> participationEntities = participationRepository
+                        .findByPartyId(partyEntity.getId());
+                assertThat(participationEntities).hasSize(1);
+            }
+        }
+
+        private void setSecurityContextForUser(int index) {
+            AuthenticatedUserHolder.setAuthenticatedUser(User.fromEntity(userEntities.get(index)));
         }
     }
 }
