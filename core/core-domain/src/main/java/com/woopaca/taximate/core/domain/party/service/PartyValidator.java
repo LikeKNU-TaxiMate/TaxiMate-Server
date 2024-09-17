@@ -39,7 +39,7 @@ public class PartyValidator {
         validateProgress(party);
         validateAlreadyParticipated(party, participant);
         validateMaxParticipationCount(participant);
-        validateMaxParticipantsCount(party);
+        validateParticipantsFull(party);
     }
 
     private void validateContents(Party party) {
@@ -86,7 +86,7 @@ public class PartyValidator {
         }
     }
 
-    private void validateMaxParticipantsCount(Party party) {
+    private void validateParticipantsFull(Party party) {
         if (party.isFull()) {
             throw new ParticipantsFullException(party.getMaxParticipants(), party.getId());
         }
