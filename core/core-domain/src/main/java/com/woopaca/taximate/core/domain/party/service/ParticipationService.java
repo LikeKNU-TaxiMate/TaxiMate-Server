@@ -6,6 +6,7 @@ import com.woopaca.taximate.core.domain.party.ParticipationAppender;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
 import com.woopaca.taximate.core.domain.user.User;
+import com.woopaca.taximate.core.domain.user.UserLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +17,14 @@ public class ParticipationService {
     private final PartyValidator partyValidator;
     private final ParticipationAppender participationAppender;
     private final ParticipationEventProducer participationEventProducer;
+    private final UserLock userLock;
 
-    public ParticipationService(PartyFinder partyFinder, PartyValidator partyValidator, ParticipationAppender participationAppender, ParticipationEventProducer participationEventProducer) {
+    public ParticipationService(PartyFinder partyFinder, PartyValidator partyValidator, ParticipationAppender participationAppender, ParticipationEventProducer participationEventProducer, UserLock userLock) {
         this.partyFinder = partyFinder;
         this.partyValidator = partyValidator;
         this.participationAppender = participationAppender;
         this.participationEventProducer = participationEventProducer;
+        this.userLock = userLock;
     }
 
     /**
@@ -32,6 +35,7 @@ public class ParticipationService {
     @Transactional
     public Long participateParty(Long partyId) {
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
+        userLock.lock(authenticatedUser);
         Party party = partyFinder.findPartyWithLock(partyId);
         partyValidator.validateParticipateParty(party, authenticatedUser);
         participationAppender.appendParticipant(party, authenticatedUser);
