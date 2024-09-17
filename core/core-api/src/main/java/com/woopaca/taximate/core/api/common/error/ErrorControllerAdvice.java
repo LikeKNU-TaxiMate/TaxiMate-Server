@@ -3,6 +3,7 @@ package com.woopaca.taximate.core.api.common.error;
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.domain.error.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.concurrent.CompletionException;
 
@@ -167,6 +170,34 @@ public class ErrorControllerAdvice {
             return handleException((RestClientException) cause);
         }
         return handleException(exception);
+    }
+
+    /**
+     * 핸들러 없음 예외 처리
+     * @param exception {@link NoHandlerFoundException} 예외
+     * @return {@link ErrorResponse}
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException exception) {
+        String message = exception.getMessage();
+        log.warn(message, exception);
+        ErrorResponse errorResponse = ApiResults.error(message, "");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
+    }
+
+    /**
+     * 리소스 없음 예외 처리
+     * @param exception {@link NoResourceFoundException} 예외
+     * @return {@link ErrorResponse}
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException exception) {
+        String message = exception.getMessage();
+        log.warn(message, exception);
+        ErrorResponse errorResponse = ApiResults.error(message, "");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(errorResponse);
     }
 
     /**
