@@ -33,6 +33,13 @@ public final class PartyFixtures {
                 .build();
     }
 
+    public static PartyEntity createPartyEntityWith(Coordinate coordinate) {
+        return partyEntityBuilder()
+                .originLatitude(coordinate.latitude())
+                .originLongitude(coordinate.longitude())
+                .build();
+    }
+
     public static Party createParty() {
         return partyBuilder().build();
     }
