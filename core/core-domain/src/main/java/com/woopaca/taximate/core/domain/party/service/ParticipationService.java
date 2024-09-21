@@ -2,6 +2,7 @@ package com.woopaca.taximate.core.domain.party.service;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
 import com.woopaca.taximate.core.domain.event.ParticipationEventProducer;
+import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.ParticipationAppender;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
@@ -34,9 +35,9 @@ public class ParticipationService {
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
         Party party = partyFinder.findPartyWithLock(partyId);
         partyValidator.validateParticipateParty(party, authenticatedUser);
-        participationAppender.appendParticipant(party, authenticatedUser);
+        Participation participation = participationAppender.appendParticipant(party, authenticatedUser);
 
-        participationEventProducer.publishParticipateEvent(partyId, authenticatedUser.getId());
+        participationEventProducer.publishParticipateEvent(partyId, authenticatedUser, participation.getParticipatedAt());
         return partyId;
     }
 }

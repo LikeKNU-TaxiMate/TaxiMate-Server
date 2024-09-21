@@ -34,7 +34,7 @@ public class ParticipationAppender {
         participationRepository.save(participationEntity);
     }
 
-    public void appendParticipant(Party party, User user) {
+    public Participation appendParticipant(Party party, User user) {
         PartyEntity partyEntity = partyRepository.findById(party.getId())
                 .orElseThrow(() -> new NonexistentPartyException(party.getId()));
         ParticipationEntity participationEntity = ParticipationEntity.builder()
@@ -43,6 +43,7 @@ public class ParticipationAppender {
                 .party(partyEntity)
                 .status(ParticipationStatus.PARTICIPATING.name())
                 .build();
-        participationRepository.save(participationEntity);
+        ParticipationEntity savedParticipationEntity = participationRepository.save(participationEntity);
+        return Participation.fromEntity(savedParticipationEntity);
     }
 }
