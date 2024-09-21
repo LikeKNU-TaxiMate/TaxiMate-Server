@@ -5,6 +5,8 @@ dependencies {
     implementation project(':core:core-domain')
     implementation project(':core:core-security')
 
+    runtimeOnly project(':core:core-message')
+
     testImplementation project(':core:core-domain')
     testImplementation project(':core:core-security')
     testImplementation project(':core:core-message')
