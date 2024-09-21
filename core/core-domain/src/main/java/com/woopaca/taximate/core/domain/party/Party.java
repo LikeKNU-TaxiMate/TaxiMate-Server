@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
-@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Party {
 
@@ -40,6 +39,7 @@ public class Party {
     private LocalDateTime createdAt;
     private Set<Participation> participationSet;
 
+    @Builder
     public Party(Long id, String title, String explanation, LocalDateTime departureTime,
                  String origin, String originAddress, Coordinate originLocation,
                  String destination, String destinationAddress, Coordinate destinationLocation,
