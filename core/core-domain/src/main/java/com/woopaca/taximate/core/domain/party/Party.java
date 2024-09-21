@@ -98,8 +98,10 @@ public class Party {
                 .createdAt(entity.getCreatedAt());
     }
 
-    public int currentParticipants() {
-        return participationSet.size();
+    public int currentParticipantsCount() {
+        return (int) participationSet.stream()
+                .filter(Participation::isParticipating)
+                .count();
     }
 
     public Long hostId() {
@@ -141,6 +143,6 @@ public class Party {
     }
 
     public boolean isFull() {
-        return currentParticipants() >= maxParticipants;
+        return currentParticipantsCount() >= maxParticipants;
     }
 }

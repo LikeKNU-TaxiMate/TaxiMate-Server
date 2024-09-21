@@ -18,7 +18,7 @@ public record PartiesResponse(
                 .origin(party.getOrigin())
                 .destination(party.getDestination())
                 .maxParticipants(party.getMaxParticipants())
-                .currentParticipants(party.currentParticipants())
+                .currentParticipants(party.currentParticipantsCount())
                 .originLocation(party.getOriginLocation())
                 .build();
     }
