@@ -44,10 +44,10 @@ public class PartyValidator {
 
     private void validateContents(Party party) {
         if (party.getTitle().length() > Party.MAX_TITLE_LENGTH) {
-            throw new TitleTooLongException(Party.MAX_TITLE_LENGTH);
+            throw new TitleTooLongException();
         }
         if (party.getExplanation().length() > Party.MAX_EXPLANATION_LENGTH) {
-            throw new ExplanationTooLongException(Party.MAX_EXPLANATION_LENGTH);
+            throw new ExplanationTooLongException();
         }
     }
 
@@ -70,7 +70,7 @@ public class PartyValidator {
     private void validateMaxParticipationCount(User user) {
         List<Party> participatingParties = partyFinder.findParticipatingParties(user);
         if (participatingParties.size() >= Participation.MAX_PARTICIPATING_PARTIES_COUNT) {
-            throw new ParticipationLimitException(Participation.MAX_PARTICIPATING_PARTIES_COUNT);
+            throw new ParticipationLimitException();
         }
     }
 
