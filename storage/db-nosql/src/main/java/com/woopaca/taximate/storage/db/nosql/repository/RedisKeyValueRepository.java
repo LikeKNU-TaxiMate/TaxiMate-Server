@@ -53,10 +53,10 @@ public class RedisKeyValueRepository implements KeyValueRepository {
     }
 
     @Override
-    public Map<String, String> getAll() {
+    public Map<String, String> getAll(String pattern) {
         Set<String> keys = redisTemplate.opsForValue()
                 .getOperations()
-                .keys("refresh_token:*");
+                .keys(pattern);
         if (Objects.isNull(keys)) {
             return Collections.emptyMap();
         }

@@ -50,7 +50,7 @@ public class RefreshTokenProvider {
      */
     public void expireRefreshToken(User user) {
         String email = user.getEmail();
-        keyValueRepository.getAll()
+        keyValueRepository.getAll("refresh_token:*")
                 .entrySet()
                 .stream()
                 .filter(entry -> Objects.equals(entry.getValue(), email))
