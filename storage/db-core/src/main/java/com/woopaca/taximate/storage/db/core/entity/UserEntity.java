@@ -21,15 +21,18 @@ public class UserEntity extends BaseEntity {
     @Column(columnDefinition = "CHAR(8) DEFAULT 'ACTIVE'")
     private String status;
 
+    private String pushNotificationToken;
+
     public UserEntity() {
     }
 
     @Builder
-    public UserEntity(String email, String nickname, String profileImage, String provider, String status) {
+    public UserEntity(String email, String nickname, String profileImage, String provider, String status, String pushNotificationToken) {
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.provider = provider;
         this.status = status;
+        this.pushNotificationToken = pushNotificationToken;
     }
 }

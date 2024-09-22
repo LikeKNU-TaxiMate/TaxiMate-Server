@@ -23,14 +23,15 @@ CREATE SPATIAL INDEX `sidx_destination_location` ON `party` (`destination_locati
 
 CREATE TABLE IF NOT EXISTS `user`
 (
-    `id`            BIGINT      NOT NULL AUTO_INCREMENT,
-    `email`         VARCHAR(40) NOT NULL,
-    `nickname`      VARCHAR(10) NOT NULL,
-    `profile_image` VARCHAR(1000),
-    `provider`      CHAR(6)     NOT NULL DEFAULT 'KAKAO',
-    `status`        CHAR(8)     NOT NULL DEFAULT 'ACTIVE',
-    `created_at`    DATETIME    NOT NULL,
-    `updated_at`    DATETIME    NOT NULL,
+    `id`                      BIGINT      NOT NULL AUTO_INCREMENT,
+    `email`                   VARCHAR(40) NOT NULL,
+    `nickname`                VARCHAR(10) NOT NULL,
+    `profile_image`           VARCHAR(1000),
+    `provider`                CHAR(6)     NOT NULL DEFAULT 'KAKAO',
+    `status`                  CHAR(8)     NOT NULL DEFAULT 'ACTIVE',
+    `push_notification_token` VARCHAR(45),
+    `created_at`              DATETIME    NOT NULL,
+    `updated_at`              DATETIME    NOT NULL,
     PRIMARY KEY (`id`)
 );
 
