@@ -5,5 +5,5 @@ import com.woopaca.taximate.core.domain.user.User;
 
 import java.time.LocalDateTime;
 
-public record ParticipateEvent(Party party, User participant, LocalDateTime participatedAt) {
+public record LeaveEvent(Party party, User leaver, LocalDateTime leftAt) {
 }

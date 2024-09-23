@@ -37,7 +37,7 @@ public class ParticipationService {
         partyValidator.validateParticipateParty(party, authenticatedUser);
         Participation participation = participationAppender.appendParticipant(party, authenticatedUser);
 
-        participationEventProducer.publishParticipateEvent(partyId, authenticatedUser, participation.getParticipatedAt());
+        participationEventProducer.publishParticipateEvent(party, authenticatedUser, participation.getParticipatedAt());
         return partyId;
     }
 }
