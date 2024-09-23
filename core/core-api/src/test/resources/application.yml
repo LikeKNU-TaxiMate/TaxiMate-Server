@@ -13,10 +13,11 @@ spring:
       ddl-auto: create
 
 logging:
+  config: classpath:logback/logback-spring.xml
   level:
     org.hibernate.SQL: debug
     org.hibernate.orm.jdbc.bind: trace
-    com.woopaca.taxipod: debug
+    com.woopaca.taximate: debug
 
 jwt:
   issuer: test-issuer
