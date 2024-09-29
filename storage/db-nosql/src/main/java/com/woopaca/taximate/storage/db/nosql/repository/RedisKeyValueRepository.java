@@ -1,6 +1,6 @@
 package com.woopaca.taximate.storage.db.nosql.repository;
 
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Slf4j
+@Profile("!test")
 @Repository
 public class RedisKeyValueRepository implements KeyValueRepository {
 

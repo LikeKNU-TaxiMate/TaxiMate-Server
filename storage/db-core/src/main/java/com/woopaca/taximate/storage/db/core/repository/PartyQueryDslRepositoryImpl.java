@@ -1,7 +1,5 @@
 package com.woopaca.taximate.storage.db.core.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
 import jakarta.persistence.LockModeType;
@@ -39,13 +37,10 @@ public class PartyQueryDslRepositoryImpl implements PartyQueryDslRepository {
                 new Coordinate(minLongitude, maxLatitude),
                 new Coordinate(minLongitude, minLatitude)
         });
-        BooleanExpression contains = Expressions.booleanTemplate(
-                "ST_Contains({0}, {1})", polygon, partyEntity.originLocation
-        );
         return queryFactory.select(partyEntity)
                 .from(partyEntity)
                 .leftJoin(partyEntity.participationSet, participationEntity).fetchJoin()
-                .where(contains.and(partyEntity.departureTime.after(after)))
+                .where(partyEntity.originLocation.within(polygon).and(partyEntity.departureTime.after(after)))
                 .orderBy(partyEntity.departureTime.asc())
                 .fetch();
     }

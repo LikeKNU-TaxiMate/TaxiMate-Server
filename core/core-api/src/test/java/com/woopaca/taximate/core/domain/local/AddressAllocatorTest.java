@@ -4,6 +4,8 @@ import com.woopaca.taximate.core.domain.fixture.AddressFixtures;
 import com.woopaca.taximate.core.domain.fixture.PartyFixtures;
 import com.woopaca.taximate.core.domain.local.model.Address;
 import com.woopaca.taximate.core.domain.party.Party;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,6 +20,7 @@ import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AddressAllocatorTest {
 
     @InjectMocks

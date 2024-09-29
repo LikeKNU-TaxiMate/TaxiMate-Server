@@ -24,7 +24,6 @@ public final class PartyFixtures {
 
     public static PartyEntity createPartyEntity() {
         return partyEntityBuilder()
-                .maxParticipants(TEST_MAX_PARTICIPANTS)
                 .build();
     }
 
@@ -34,13 +33,25 @@ public final class PartyFixtures {
                 .build();
     }
 
+    public static PartyEntity createPartyEntityWith(Coordinate coordinate) {
+        return partyEntityBuilder()
+                .originLatitude(coordinate.latitude())
+                .originLongitude(coordinate.longitude())
+                .build();
+    }
+
     public static Party createParty() {
         return partyBuilder().build();
     }
 
     public static PartyEntity createTerminatedPartyEntity() {
         return partyEntityBuilder()
-                .maxParticipants(TEST_MAX_PARTICIPANTS)
+                .departureTime(LocalDateTime.now().minusMinutes(30))
+                .build();
+    }
+
+    public static Party createTerminatedParty() {
+        return partyBuilder()
                 .departureTime(LocalDateTime.now().minusMinutes(30))
                 .build();
     }
@@ -57,7 +68,8 @@ public final class PartyFixtures {
                 .originLatitude(TEST_ORIGIN_LOCATION.latitude())
                 .originLongitude(TEST_ORIGIN_LOCATION.longitude())
                 .destinationLatitude(TEST_DESTINATION_LOCATION.latitude())
-                .destinationLongitude(TEST_DESTINATION_LOCATION.longitude());
+                .destinationLongitude(TEST_DESTINATION_LOCATION.longitude())
+                .maxParticipants(TEST_MAX_PARTICIPANTS);
     }
 
     private static Party.PartyBuilder partyBuilder() {

@@ -7,6 +7,8 @@ import com.woopaca.taximate.core.domain.fixture.UserFixtures;
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
 import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PartyFinderTest {
 
     @InjectMocks
@@ -51,7 +54,7 @@ class PartyFinderTest {
         }
 
         @Test
-        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외를_던진다() {
+        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외가_발생한다() {
             // given
             final long nonexistentId = -1L;
             when(partyRepository.findById(nonexistentId)).thenReturn(Optional.empty());
@@ -79,7 +82,7 @@ class PartyFinderTest {
         }
 
         @Test
-        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외를_던진다() {
+        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외가_발생한다() {
             // given
             final long nonexistentId = -1L;
             when(partyRepository.findByIdForUpdate(nonexistentId)).thenReturn(Optional.empty());

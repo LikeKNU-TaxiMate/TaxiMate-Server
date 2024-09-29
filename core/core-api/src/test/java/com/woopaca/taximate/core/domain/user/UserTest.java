@@ -5,6 +5,8 @@ import com.woopaca.taximate.core.domain.fixture.UserFixtures;
 import com.woopaca.taximate.core.domain.user.User.AccountStatus;
 import com.woopaca.taximate.core.domain.user.User.OAuth2Provider;
 import com.woopaca.taximate.storage.db.core.entity.UserEntity;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserTest {
 
     @Nested

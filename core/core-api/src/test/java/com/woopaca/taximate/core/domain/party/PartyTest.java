@@ -8,6 +8,8 @@ import com.woopaca.taximate.core.domain.local.model.Address;
 import com.woopaca.taximate.core.domain.party.Participation.ParticipationStatus;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +19,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PartyTest {
 
     @Nested
