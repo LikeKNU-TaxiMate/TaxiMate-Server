@@ -54,7 +54,7 @@ class PartyFinderTest {
         }
 
         @Test
-        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외를_던진다() {
+        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외가_발생한다() {
             // given
             final long nonexistentId = -1L;
             when(partyRepository.findById(nonexistentId)).thenReturn(Optional.empty());
@@ -82,7 +82,7 @@ class PartyFinderTest {
         }
 
         @Test
-        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외를_던진다() {
+        void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외가_발생한다() {
             // given
             final long nonexistentId = -1L;
             when(partyRepository.findByIdForUpdate(nonexistentId)).thenReturn(Optional.empty());
