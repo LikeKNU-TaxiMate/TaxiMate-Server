@@ -35,7 +35,7 @@ public class MockKeyValueRepository implements KeyValueRepository {
     }
 
     @Override
-    public Map<String, String> getAll() {
+    public Map<String, String> getAll(String pattern) {
         return keyValueMap;
     }
 }

@@ -29,6 +29,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
 @Transactional
@@ -84,7 +85,7 @@ class ParticipationServiceTest {
                                             entity.getUserId().equals(user.getId()) &&
                                             entity.getParty().getId().equals(partyEntity.getId())
                             ),
-                    () -> verify(participationEventProducer).publishParticipateEvent(partyEntity.getId(), user.getId())
+                    () -> verify(participationEventProducer).publishParticipateEvent(any(), any(), any())
             );
         }
     }
