@@ -41,5 +41,5 @@ public interface KeyValueRepository {
      * 모든 키-값 조회
      * @return {@code null}일 수 없음
      */
-    Map<String, String> getAll();
+    Map<String, String> getAll(String pattern);
 }

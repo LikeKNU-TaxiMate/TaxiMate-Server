@@ -36,7 +36,7 @@ public record PartyDetailsResponse(Long id, String title, String departureTime, 
                 .destinationAddress(party.getDestinationAddress())
                 .destinationLocation(party.getDestinationLocation())
                 .maxParticipants(party.getMaxParticipants())
-                .currentParticipants(party.currentParticipants())
+                .currentParticipants(party.currentParticipantsCount())
                 .views(party.getViews())
                 .status(status.name())
                 .createdAt(party.getCreatedAt().toString())

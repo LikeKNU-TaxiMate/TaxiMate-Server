@@ -23,21 +23,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PartyTest {
 
     @Nested
-    class currentParticipants_메서드는 {
+    class currentParticipantsCount_메서드는 {
 
         @Test
-        void 팟_참여자_수를_반환한다() {
+        void 현재_참여_중인_참여자_수를_반환한다() {
             //given
             Set<Participation> participationSet = Set.of(
-                    Participation.builder().id(1L).build(),
-                    Participation.builder().id(2L).build()
+                    Participation.builder().id(1L).status(ParticipationStatus.PARTICIPATING).build(),
+                    Participation.builder().id(2L).status(ParticipationStatus.PARTICIPATING).build(),
+                    Participation.builder().id(3L).status(ParticipationStatus.LEFT).build()
             );
             Party party = Party.builder()
                     .participationSet(participationSet)
                     .build();
 
             //when
-            int currentParticipants = party.currentParticipants();
+            int currentParticipants = party.currentParticipantsCount();
 
             //then
             assertThat(currentParticipants).isEqualTo(2);

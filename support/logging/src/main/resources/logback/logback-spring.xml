@@ -9,7 +9,7 @@
         value="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%22.22thread] %-5level | %50.50logger{50} | %msg%n" />
     <property name="DEFAULT_DIR" value="TaxiMate" />
 
-    <springProfile name="local">
+    <springProfile name="local,test">
         <include resource="logback/console-appender.xml" />
         <root level="INFO">
             <appender-ref ref="CONSOLE" />
@@ -26,6 +26,5 @@
             <appender-ref ref="FILE-WARN" />
             <appender-ref ref="FILE-ERROR" />
         </root>
-
     </springProfile>
 </configuration>

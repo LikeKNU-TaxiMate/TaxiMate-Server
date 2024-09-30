@@ -24,6 +24,8 @@ public enum ErrorType {
     PARTY_ALREADY_PARTICIPATED("", ErrorHttpStatus.BAD_REQUEST),
     PARTICIPANTS_FULL("", ErrorHttpStatus.BAD_REQUEST),
 
+    MESSAGE_TOO_LONG("", ErrorHttpStatus.BAD_REQUEST),
+
     INVALID_REFRESH_TOKEN("", ErrorHttpStatus.UNAUTHORIZED);
 
     private final String errorCode;

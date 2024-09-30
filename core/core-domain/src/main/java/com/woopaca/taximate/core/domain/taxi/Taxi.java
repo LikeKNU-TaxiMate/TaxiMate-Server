@@ -17,4 +17,8 @@ public class Taxi {
         this.fare = fare;
         this.duration = duration;
     }
+
+    public static Taxi fake() {
+        return new Taxi(List.of(), 0, 0);
+    }
 }

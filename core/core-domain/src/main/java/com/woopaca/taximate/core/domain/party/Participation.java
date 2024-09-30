@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Participation {
@@ -15,18 +17,26 @@ public class Participation {
     private Long id;
     private ParticipationRole role;
     private ParticipationStatus status;
+    private LocalDateTime participatedAt;
     private Long userId;
 
     @Builder
-    public Participation(Long id, ParticipationRole role, ParticipationStatus status, Long userId) {
+    public Participation(Long id, ParticipationRole role, ParticipationStatus status, LocalDateTime participatedAt, Long userId) {
         this.id = id;
         this.role = role;
         this.status = status;
+        this.participatedAt = participatedAt;
         this.userId = userId;
     }
 
     public static Participation fromEntity(ParticipationEntity entity) {
-        return new Participation(entity.getId(), ParticipationRole.valueOf(entity.getRole()), ParticipationStatus.valueOf(entity.getStatus()), entity.getUserId());
+        return Participation.builder()
+                .id(entity.getId())
+                .role(ParticipationRole.valueOf(entity.getRole()))
+                .status(ParticipationStatus.valueOf(entity.getStatus()))
+                .participatedAt(entity.getCreatedAt())
+                .userId(entity.getUserId())
+                .build();
     }
 
     public boolean isHost() {
@@ -48,6 +58,7 @@ public class Participation {
         NONE,
         PARTICIPATING,
         TERMINATED,
+        LEFT,
         WARNED,
         BANNED
     }

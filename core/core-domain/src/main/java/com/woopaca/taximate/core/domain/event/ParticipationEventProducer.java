@@ -1,10 +1,14 @@
 package com.woopaca.taximate.core.domain.event;
 
-import lombok.extern.slf4j.Slf4j;
+import com.woopaca.taximate.core.domain.event.dto.LeaveEvent;
+import com.woopaca.taximate.core.domain.event.dto.ParticipateEvent;
+import com.woopaca.taximate.core.domain.party.Party;
+import com.woopaca.taximate.core.domain.user.User;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+import java.time.LocalDateTime;
+
 @Component
 public class ParticipationEventProducer {
 
@@ -14,9 +18,13 @@ public class ParticipationEventProducer {
         this.eventPublisher = eventPublisher;
     }
 
-    public void publishParticipateEvent(Long partyId, Long userId) {
-        // TODO 팟 참여 이벤트 발행
-        ParticipateEvent participateEvent = new ParticipateEvent(partyId, userId);
-        eventPublisher.publishEvent(participateEvent);
+    public void publishParticipateEvent(Party party, User user, LocalDateTime participatedAt) {
+        ParticipateEvent event = new ParticipateEvent(party, user, participatedAt);
+        eventPublisher.publishEvent(event);
+    }
+
+    public void publishLeaveEvent(Party party, User user, LocalDateTime leftAt) {
+        LeaveEvent event = new LeaveEvent(party, user, leftAt);
+        eventPublisher.publishEvent(event);
     }
 }

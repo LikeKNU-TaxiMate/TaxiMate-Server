@@ -10,8 +10,6 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Collections;
-
 @Slf4j
 @Component
 public class KakaoMobilityClient implements KakaoMobilityClientProxy {
@@ -33,7 +31,6 @@ public class KakaoMobilityClient implements KakaoMobilityClientProxy {
      */
     @Override
     public Taxi requestTaxi(Coordinate origin, Coordinate destination) {
-        // TODO circuit breaker를 적용해 실패 시 기본값을 반환하도록 리팩토링
         try {
             KakaoDirections directions = restClient.get()
                     .uri(UriComponentsBuilder.fromUriString(kakaoMobilityProperties.getDirectionsUrl())
@@ -45,14 +42,13 @@ public class KakaoMobilityClient implements KakaoMobilityClientProxy {
                     .retrieve()
                     .body(KakaoDirections.class);
             if (directions == null) {
-                return new Taxi(Collections.emptyList(), 0, 0);
+                return Taxi.fake();
             }
-
             return new Taxi(directions.route(), directions.fare(), directions.duration());
         } catch (HttpStatusCodeException exception) {
             log.warn("카카오 모빌리티 길찾기 요청 오류", exception);
             //TODO Handle kakao mobility request failure
-            throw exception;
+            return Taxi.fake();
         }
     }
 }
