@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Participation {
 
-    public static final int MAX_PARTICIPATING_PARTIES_COUNT = 3;
+    public static final int MAX_PARTICIPATING_PARTIES_COUNT = 20;
 
     @EqualsAndHashCode.Include
     private Long id;

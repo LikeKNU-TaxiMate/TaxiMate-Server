@@ -15,6 +15,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByEmail(String email);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select u from com.woopaca.taximate.storage.db.core.entity.UserEntity u where u.id = :id")
+    @Query("""
+            SELECT u 
+            FROM com.woopaca.taximate.storage.db.core.entity.UserEntity u 
+            WHERE u.id = :id
+            """)
     void acquireExclusiveLock(Long id);
 }

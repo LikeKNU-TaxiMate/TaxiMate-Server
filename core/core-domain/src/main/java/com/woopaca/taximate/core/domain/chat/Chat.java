@@ -55,4 +55,15 @@ public class Chat {
                 .party(party)
                 .build();
     }
+
+    public static Chat empty() {
+        return Chat.builder()
+                .build();
+    }
+
+    public void updateId(long id) {
+        if (this.id == null) {
+            this.id = id;
+        }
+    }
 }
