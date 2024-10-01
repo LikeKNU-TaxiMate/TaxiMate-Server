@@ -18,7 +18,7 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
     List<ParticipationEntity> findByPartyId(Long partyId);
 
     @Query("""
-            SELECT p.id
+            SELECT p.party.id
             FROM com.woopaca.taximate.storage.db.core.entity.ParticipationEntity p
             WHERE p.userId = :userId
             """)
