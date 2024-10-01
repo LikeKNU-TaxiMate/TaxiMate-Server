@@ -25,7 +25,7 @@ public class Chat {
 
     @Builder
     public Chat(Long id, String message, MessageType type, LocalDateTime sentAt, User sender, Party party) {
-        if (message.length() > MAX_MESSAGE_LENGTH) {
+        if (message != null && message.length() > MAX_MESSAGE_LENGTH) {
             throw new ChatMessageTooLongException();
         }
 

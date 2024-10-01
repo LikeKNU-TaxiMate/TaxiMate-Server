@@ -35,9 +35,10 @@ public class ChatDataBase {
     public List<Chat> readChat(User user, Party party) {
         List<Chat> chats = map.get(party);
         UserPartyKey userPartyKey = new UserPartyKey(user.getId(), party.getId());
-        if (chats != null && !chats.isEmpty()) {
-            readHistory.put(userPartyKey, chats.get(chats.size() - 1).getId());
+        if (chats == null) {
+            return Collections.emptyList();
         }
+        readHistory.put(userPartyKey, chats.get(chats.size() - 1).getId());
         return chats;
     }
 
