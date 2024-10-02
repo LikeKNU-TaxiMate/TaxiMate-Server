@@ -22,7 +22,7 @@ public class ChatService {
     }
 
     public void sendStandardMessage(Long partyId, User sender, String message) {
-        Party party = partyFinder.findParty(partyId);
+        Party party = partyFinder.findPartyWithParticipation(partyId);
         Chat chat = Chat.standardMessage(party, sender, message);
         chatEventProducer.publishChatEvent(chat);
         messageNotifier.notify(chat);
