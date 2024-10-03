@@ -51,7 +51,7 @@ public class ChatApiController {
     @GetMapping("/{partyId}")
     public ApiResponse<ChatResponse> chatList(@PathVariable("partyId") Long partyId) {
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
-        Party party = partyFinder.findParty(partyId);
+        Party party = partyFinder.findPartyWithParticipation(partyId);
         List<ChatListResponse> chatListResponses = chatDataBase.readChat(authenticatedUser, party)
                 .stream()
                 .map(ChatListResponse::from)
