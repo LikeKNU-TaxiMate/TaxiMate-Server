@@ -3,6 +3,7 @@ package com.woopaca.taximate.core.domain.chat;
 import com.woopaca.taximate.core.domain.error.exception.ChatMessageTooLongException;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.user.User;
+import com.woopaca.taximate.storage.db.core.entity.ChatEntity;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class Chat {
         }
 
         this.id = id;
-        this.message = message;
+        this.message = message.trim();
         this.type = type;
         this.sentAt = sentAt;
         this.sender = sender;
@@ -53,6 +54,14 @@ public class Chat {
                 .type(MessageType.SYSTEM)
                 .sentAt(sentAt)
                 .party(party)
+                .build();
+    }
+
+    public ChatEntity toEntity() {
+        return ChatEntity.builder()
+                .message(message)
+                .userId(sender.getId())
+                .partyId(party.getId())
                 .build();
     }
 }
