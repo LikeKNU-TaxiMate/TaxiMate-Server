@@ -38,8 +38,8 @@ public class PartyValidator {
     public void validateParticipateParty(Party party, User participant) {
         validateProgress(party);
         validateAlreadyParticipated(party, participant);
-        validateMaxParticipationCount(participant);
         validateParticipantsFull(party);
+        validateMaxParticipationCount(participant);
     }
 
     private void validateContents(Party party) {

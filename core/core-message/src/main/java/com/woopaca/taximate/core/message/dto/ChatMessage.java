@@ -12,13 +12,6 @@ public record ChatMessage(Long partyId, String partyTitle, String message, Messa
                           Sender sender) {
 
     public static ChatMessage from(Chat chat) {
-        if (chat.getParty() == null) {
-            return ChatMessage.builder()
-                    .message(chat.getMessage())
-                    .createdAt(chat.getSentAt())
-                    .build();
-        }
-
         return ChatMessage.builder()
                 .partyId(chat.getParty().getId())
                 .partyTitle(chat.getParty().getTitle())

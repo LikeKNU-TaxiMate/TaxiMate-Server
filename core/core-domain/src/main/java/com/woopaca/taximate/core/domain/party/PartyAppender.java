@@ -13,7 +13,7 @@ public class PartyAppender {
         this.partyRepository = partyRepository;
     }
 
-    public Long appendNew(Party party) {
+    public Party appendNew(Party party) {
         PartyEntity partyEntity = PartyEntity.builder()
                 .title(party.getTitle())
                 .explanation(party.getExplanation())
@@ -29,6 +29,6 @@ public class PartyAppender {
                 .maxParticipants(party.getMaxParticipants())
                 .build();
         PartyEntity savedPartyEntity = partyRepository.save(partyEntity);
-        return savedPartyEntity.getId();
+        return Party.fromEntity(savedPartyEntity);
     }
 }

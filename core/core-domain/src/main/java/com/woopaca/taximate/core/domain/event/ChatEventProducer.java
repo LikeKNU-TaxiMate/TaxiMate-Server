@@ -16,7 +16,7 @@ public class ChatEventProducer {
         this.eventPublisher = eventPublisher;
     }
 
-    public void publishChatEvent(Chat chat) { // TODO consumer는 이벤트를 받아 DB에 채팅을 저장하는 로직 수행
+    public void publishChatEvent(Chat chat) {
         ChatEvent event = new ChatEvent(chat);
         eventPublisher.publishEvent(event);
     }

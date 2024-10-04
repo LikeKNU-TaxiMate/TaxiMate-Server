@@ -1,7 +1,6 @@
 package com.woopaca.taximate.storage.db.core.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,13 +8,11 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Entity(name = "party")
 public class PartyEntity extends BaseEntity {

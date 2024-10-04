@@ -2,6 +2,7 @@ package com.woopaca.taximate.core.domain.chat.service;
 
 import com.woopaca.taximate.core.domain.chat.Chat;
 import com.woopaca.taximate.core.domain.chat.MessageNotifier;
+import com.woopaca.taximate.core.domain.error.exception.NotParticipatedPartyException;
 import com.woopaca.taximate.core.domain.event.ChatEventProducer;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
@@ -23,6 +24,9 @@ public class ChatService {
 
     public void sendStandardMessage(Long partyId, User sender, String message) {
         Party party = partyFinder.findParty(partyId);
+        if (!party.isParticipated(sender)) {
+            throw new NotParticipatedPartyException();
+        }
         Chat chat = Chat.standardMessage(party, sender, message);
         chatEventProducer.publishChatEvent(chat);
         messageNotifier.notify(chat);

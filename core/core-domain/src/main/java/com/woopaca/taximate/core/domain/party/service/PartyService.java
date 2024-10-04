@@ -1,8 +1,10 @@
 package com.woopaca.taximate.core.domain.party.service;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
+import com.woopaca.taximate.core.domain.event.ParticipationEventProducer;
 import com.woopaca.taximate.core.domain.local.AddressAllocator;
 import com.woopaca.taximate.core.domain.party.KakaoMobilityClientProxy;
+import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.ParticipationAppender;
 import com.woopaca.taximate.core.domain.party.Parties;
 import com.woopaca.taximate.core.domain.party.Party;
@@ -34,8 +36,9 @@ public class PartyService {
     private final ParticipationAppender participationAppender;
     private final PartyAppender partyAppender;
     private final UserLock userLock;
+    private final ParticipationEventProducer participationEventProducer;
 
-    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, UserFinder userFinder, KakaoMobilityClientProxy kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationAppender participationAppender, PartyAppender partyAppender, UserLock userLock) {
+    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, UserFinder userFinder, KakaoMobilityClientProxy kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationAppender participationAppender, PartyAppender partyAppender, UserLock userLock, ParticipationEventProducer participationEventProducer) {
         this.partyMapFinder = partyMapFinder;
         this.partyFinder = partyFinder;
         this.userFinder = userFinder;
@@ -45,6 +48,7 @@ public class PartyService {
         this.participationAppender = participationAppender;
         this.partyAppender = partyAppender;
         this.userLock = userLock;
+        this.participationEventProducer = participationEventProducer;
     }
 
     /**
@@ -93,8 +97,10 @@ public class PartyService {
 
         addressAllocator.allocateAddress(newParty);
 
-        Long newPartyId = partyAppender.appendNew(newParty);
-        participationAppender.appendHost(newPartyId, authenticatedUser);
-        return newPartyId;
+        Party party = partyAppender.appendNew(newParty);
+        Participation participation = participationAppender.appendHost(party, authenticatedUser);
+
+        participationEventProducer.publishParticipateEvent(party, authenticatedUser, participation.getParticipatedAt());
+        return party.getId();
     }
 }
