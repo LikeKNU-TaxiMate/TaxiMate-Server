@@ -52,3 +52,27 @@ CREATE TABLE IF NOT EXISTS `participation`
 CREATE INDEX `idx_party_id` ON `participation` (`party_id`);
 
 CREATE INDEX `idx_user_id` ON `participation` (`user_id`);
+
+CREATE TABLE IF NOT EXISTS `chat`
+(
+    `id`         BIGINT       NOT NULL AUTO_INCREMENT,
+    `message`    VARCHAR(500) NOT NULL,
+    `user_id`    BIGINT,
+    `party_id`   BIGINT       NOT NULL,
+    `created_at` DATETIME     NOT NULL,
+    `updated_at` DATETIME     NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE INDEX `idx_party_id` ON `chat` (`party_id`);
+
+CREATE TABLE IF NOT EXISTS `chat_read`
+(
+    `id`           BIGINT NOT NULL AUTO_INCREMENT,
+    `user_id`      BIGINT NOT NULL,
+    `party_id`     BIGINT NOT NULL,
+    `last_chat_id` BIGINT NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE INDEX `idx_user_id_party_id` ON `chat_read` (`user_id`, `party_id`);
