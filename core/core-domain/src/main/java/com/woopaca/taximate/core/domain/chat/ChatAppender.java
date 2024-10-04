@@ -15,9 +15,8 @@ public class ChatAppender {
         this.chatRepository = chatRepository;
     }
 
-    public Chat appendNew(Chat chat) {
+    public void appendNew(Chat chat) {
         ChatEntity chatEntity = chat.toEntity();
-        ChatEntity savedChatEntity = chatRepository.save(chatEntity);
-        return chat.newChat(savedChatEntity.getId(), chat);
+        chatRepository.save(chatEntity);
     }
 }

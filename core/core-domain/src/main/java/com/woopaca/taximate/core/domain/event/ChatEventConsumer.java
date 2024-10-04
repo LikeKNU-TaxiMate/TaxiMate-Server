@@ -20,15 +20,16 @@ public class ChatEventConsumer {
 
     @EventListener
     public void handleChatEvent(ChatEvent chatEvent) {
-        Chat newChat = chatAppender.appendNew(chatEvent.chat());
-        if (newChat.isParticipateMessage()) {
-            chatReadRecorder.createReadHistory(newChat);
+        Chat chat = chatEvent.chat();
+        chatAppender.appendNew(chat);
+        if (chat.isParticipateMessage()) {
+            chatReadRecorder.createReadHistory(chat);
             return;
         }
-        if (newChat.isLeaveMessage()) {
-            chatReadRecorder.removeReadHistory(newChat);
+        if (chat.isLeaveMessage()) {
+            chatReadRecorder.removeReadHistory(chat);
             return;
         }
-        chatReadRecorder.recordReadHistory(newChat);
+        chatReadRecorder.recordReadHistory(chat);
     }
 }
