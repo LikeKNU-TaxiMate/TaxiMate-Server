@@ -22,12 +22,6 @@ public class PartyFinder {
     }
 
     public Party findParty(Long partyId) {
-        PartyEntity partyEntity = partyRepository.findById(partyId)
-                .orElseThrow(() -> new NonexistentPartyException(partyId));
-        return Party.fromEntity(partyEntity);
-    }
-
-    public Party findPartyWithParticipation(Long partyId) {
         PartyEntity partyEntity = partyRepository.findByIdWithParticipation(partyId)
                 .orElseThrow(() -> new NonexistentPartyException(partyId));
         return Party.fromEntity(partyEntity);
