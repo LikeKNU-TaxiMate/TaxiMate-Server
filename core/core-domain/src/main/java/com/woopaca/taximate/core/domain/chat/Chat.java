@@ -60,7 +60,7 @@ public class Chat {
     public ChatEntity toEntity() {
         return ChatEntity.builder()
                 .message(message)
-                .userId(sender.getId())
+                .userId(sender != null ? sender.getId() : null)
                 .partyId(party.getId())
                 .build();
     }
