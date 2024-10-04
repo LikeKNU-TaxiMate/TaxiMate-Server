@@ -41,4 +41,15 @@ public class PartyFinder {
                 .filter(Party::isProgress)
                 .toList();
     }
+
+    public List<Party> findAllParticipatedParty(User user) {
+        List<Long> ids = participationRepository.findByUserId(user.getId())
+                .stream()
+                .map(entity -> entity.getParty().getId())
+                .toList();
+        return partyRepository.findByIdIn(ids)
+                .stream()
+                .map(Party::fromEntity)
+                .toList();
+    }
 }
