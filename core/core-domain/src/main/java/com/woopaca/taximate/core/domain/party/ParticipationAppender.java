@@ -22,16 +22,17 @@ public class ParticipationAppender {
         this.partyRepository = partyRepository;
     }
 
-    public void appendHost(Long partyId, User user) {
-        PartyEntity partyEntity = partyRepository.findById(partyId)
-                .orElseThrow(() -> new NonexistentPartyException(partyId));
+    public Participation appendHost(Party party, User user) {
+        PartyEntity partyEntity = partyRepository.findById(party.getId())
+                .orElseThrow(() -> new NonexistentPartyException(party.getId()));
         ParticipationEntity participationEntity = ParticipationEntity.builder()
                 .role(ParticipationRole.HOST.name())
                 .userId(user.getId())
                 .party(partyEntity)
                 .status(ParticipationStatus.PARTICIPATING.name())
                 .build();
-        participationRepository.save(participationEntity);
+        ParticipationEntity savedParticipationEntity = participationRepository.save(participationEntity);
+        return Participation.fromEntity(savedParticipationEntity);
     }
 
     public Participation appendParticipant(Party party, User user) {
