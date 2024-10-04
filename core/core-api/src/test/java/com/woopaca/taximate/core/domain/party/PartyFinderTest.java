@@ -44,7 +44,7 @@ class PartyFinderTest {
         void 팟_ID로_팟을_찾아서_반환한다() {
             // given
             final long partyId = 1L;
-            when(partyRepository.findById(partyId)).thenReturn(Optional.of(PartyFixtures.createPartyEntity()));
+            when(partyRepository.findByIdWithParticipation(partyId)).thenReturn(Optional.of(PartyFixtures.createPartyEntity()));
 
             // when
             Party party = partyFinder.findParty(partyId);
@@ -57,7 +57,7 @@ class PartyFinderTest {
         void 존재하지_않는_팟_ID로_팟을_찾을_경우_예외가_발생한다() {
             // given
             final long nonexistentId = -1L;
-            when(partyRepository.findById(nonexistentId)).thenReturn(Optional.empty());
+            when(partyRepository.findByIdWithParticipation(nonexistentId)).thenReturn(Optional.empty());
 
             // when & then
             assertThatThrownBy(() -> partyFinder.findParty(nonexistentId))
