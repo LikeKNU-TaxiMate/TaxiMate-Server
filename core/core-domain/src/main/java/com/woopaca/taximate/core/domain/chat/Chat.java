@@ -1,5 +1,6 @@
 package com.woopaca.taximate.core.domain.chat;
 
+import com.woopaca.taximate.core.domain.chat.id.IdGenerator;
 import com.woopaca.taximate.core.domain.error.exception.ChatMessageTooLongException;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.user.User;
@@ -27,12 +28,12 @@ public class Chat {
     private Party party;
 
     @Builder
-    public Chat(Long id, String message, MessageType type, LocalDateTime sentAt, User sender, Party party) {
+    public Chat(String message, MessageType type, LocalDateTime sentAt, User sender, Party party) {
         if (message.length() > MAX_MESSAGE_LENGTH) {
             throw new ChatMessageTooLongException();
         }
 
-        this.id = id;
+        this.id = IdGenerator.generateId();
         this.message = message.trim();
         this.type = type;
         this.sentAt = sentAt;
@@ -70,6 +71,7 @@ public class Chat {
 
     public ChatEntity toEntity() {
         ChatEntity.ChatEntityBuilder chatEntityBuilder = ChatEntity.builder()
+                .id(id)
                 .message(message)
                 .type(type.name())
                 .partyId(party.getId());
@@ -77,17 +79,6 @@ public class Chat {
             chatEntityBuilder.userId(sender.getId());
         }
         return chatEntityBuilder.build();
-    }
-
-    public Chat newChat(Long id, Chat chat) {
-        return Chat.builder()
-                .id(id)
-                .message(chat.message)
-                .type(chat.type)
-                .sentAt(chat.sentAt)
-                .sender(chat.sender)
-                .party(chat.party)
-                .build();
     }
 
     public boolean isParticipateMessage() {
