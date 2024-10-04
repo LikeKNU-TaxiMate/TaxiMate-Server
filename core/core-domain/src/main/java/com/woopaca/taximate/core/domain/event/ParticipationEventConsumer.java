@@ -15,8 +15,8 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 public class ParticipationEventConsumer {
 
-    private static final String PARTICIPATE_MESSAGE = "%s님이 참여하였습니다.";
-    private static final String LEAVE_MESSAGE = "%s님이 나갔습니다.";
+    private static final String PARTICIPATE_MESSAGE = "%s님이 팟에 참여하였습니다.";
+    private static final String LEAVE_MESSAGE = "%s님이 팟을 나갔습니다.";
 
     private final ChatEventProducer chatEventProducer;
     private final MessageNotifier messageNotifier;
