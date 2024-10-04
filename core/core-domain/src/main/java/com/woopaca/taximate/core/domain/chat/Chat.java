@@ -51,27 +51,50 @@ public class Chat {
     }
 
     public static Chat participateMessage(Party party, User participant, LocalDateTime participatedAt) {
-        return systemMessage(party, String.format(PARTICIPATE_MESSAGE, participant.getNickname()), participatedAt);
+        return systemMessage(party, participant, String.format(PARTICIPATE_MESSAGE, participant.getNickname()), participatedAt);
     }
 
     public static Chat leaveMessage(Party party, User leaver, LocalDateTime leftAt) {
-        return systemMessage(party, String.format(LEAVE_MESSAGE, leaver.getNickname()), leftAt);
+        return systemMessage(party, leaver, String.format(LEAVE_MESSAGE, leaver.getNickname()), leftAt);
     }
 
-    private static Chat systemMessage(Party party, String message, LocalDateTime sentAt) {
+    private static Chat systemMessage(Party party, User sender, String message, LocalDateTime sentAt) {
         return Chat.builder()
                 .message(message)
                 .type(MessageType.SYSTEM)
                 .sentAt(sentAt)
+                .sender(sender)
                 .party(party)
                 .build();
     }
 
     public ChatEntity toEntity() {
-        return ChatEntity.builder()
+        ChatEntity.ChatEntityBuilder chatEntityBuilder = ChatEntity.builder()
                 .message(message)
-                .userId(sender != null ? sender.getId() : null)
-                .partyId(party.getId())
+                .type(type.name())
+                .partyId(party.getId());
+        if (sender != null) {
+            chatEntityBuilder.userId(sender.getId());
+        }
+        return chatEntityBuilder.build();
+    }
+
+    public Chat newChat(Long id, Chat chat) {
+        return Chat.builder()
+                .id(id)
+                .message(chat.message)
+                .type(chat.type)
+                .sentAt(chat.sentAt)
+                .sender(chat.sender)
+                .party(chat.party)
                 .build();
+    }
+
+    public boolean isParticipateMessage() {
+        return type.equals(MessageType.SYSTEM) && message.contains(String.format(PARTICIPATE_MESSAGE, ""));
+    }
+
+    public boolean isLeaveMessage() {
+        return type.equals(MessageType.SYSTEM) && message.contains(String.format(LEAVE_MESSAGE, ""));
     }
 }
