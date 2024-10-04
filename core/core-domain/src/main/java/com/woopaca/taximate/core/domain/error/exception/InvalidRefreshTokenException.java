@@ -8,5 +8,6 @@ public class InvalidRefreshTokenException extends BusinessException {
 
     public InvalidRefreshTokenException() {
         super(MESSAGE, ErrorType.INVALID_REFRESH_TOKEN);
+        setStackTrace(new StackTraceElement[]{});
     }
 }
