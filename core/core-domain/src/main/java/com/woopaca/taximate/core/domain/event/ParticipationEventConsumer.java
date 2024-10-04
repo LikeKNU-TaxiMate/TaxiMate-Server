@@ -15,9 +15,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 public class ParticipationEventConsumer {
 
-    private static final String PARTICIPATE_MESSAGE = "%s님이 팟에 참여했습니다.";
-    private static final String LEAVE_MESSAGE = "%s님이 팟을 나갔습니다.";
-
     private final ChatEventProducer chatEventProducer;
     private final MessageNotifier messageNotifier;
 
@@ -30,21 +27,19 @@ public class ParticipationEventConsumer {
     @TransactionalEventListener
     public void handleParticipateEvent(ParticipateEvent participateEvent) {
         User participant = participateEvent.participant();
-        String message = String.format(PARTICIPATE_MESSAGE, participant.getNickname());
         Party party = participateEvent.party();
-        Chat systemMessage = Chat.systemMessage(party, message, participateEvent.participatedAt());
-        chatEventProducer.publishChatEvent(systemMessage);
-        messageNotifier.notify(systemMessage);
+        Chat participateMessage = Chat.participateMessage(party, participant, participateEvent.participatedAt());
+        chatEventProducer.publishChatEvent(participateMessage);
+        messageNotifier.notify(participateMessage);
     }
 
     @Async
     @TransactionalEventListener
     public void handleLeaveEvent(LeaveEvent leaveEvent) {
         User leaver = leaveEvent.leaver();
-        String message = String.format(LEAVE_MESSAGE, leaver.getNickname());
         Party party = leaveEvent.party();
-        Chat systemMessage = Chat.systemMessage(party, message, leaveEvent.leftAt());
-        chatEventProducer.publishChatEvent(systemMessage);
-        messageNotifier.notify(systemMessage);
+        Chat leaveMessage = Chat.leaveMessage(party, leaver, leaveEvent.leftAt());
+        chatEventProducer.publishChatEvent(leaveMessage);
+        messageNotifier.notify(leaveMessage);
     }
 }

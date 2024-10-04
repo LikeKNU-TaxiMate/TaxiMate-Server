@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 public class Chat {
 
     public static final int MAX_MESSAGE_LENGTH = 500;
+    public static final String PARTICIPATE_MESSAGE = "%s님이 팟에 참여했습니다.";
+    public static final String LEAVE_MESSAGE = "%s님이 팟을 나갔습니다.";
 
     @EqualsAndHashCode.Include
     private Long id;
@@ -48,7 +50,15 @@ public class Chat {
                 .build();
     }
 
-    public static Chat systemMessage(Party party, String message, LocalDateTime sentAt) {
+    public static Chat participateMessage(Party party, User participant, LocalDateTime participatedAt) {
+        return systemMessage(party, String.format(PARTICIPATE_MESSAGE, participant.getNickname()), participatedAt);
+    }
+
+    public static Chat leaveMessage(Party party, User leaver, LocalDateTime leftAt) {
+        return systemMessage(party, String.format(LEAVE_MESSAGE, leaver.getNickname()), leftAt);
+    }
+
+    private static Chat systemMessage(Party party, String message, LocalDateTime sentAt) {
         return Chat.builder()
                 .message(message)
                 .type(MessageType.SYSTEM)
