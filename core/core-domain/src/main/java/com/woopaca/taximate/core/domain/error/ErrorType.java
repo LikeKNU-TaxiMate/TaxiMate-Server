@@ -26,7 +26,9 @@ public enum ErrorType {
 
     MESSAGE_TOO_LONG("", ErrorHttpStatus.BAD_REQUEST),
 
-    INVALID_REFRESH_TOKEN("", ErrorHttpStatus.UNAUTHORIZED);
+    INVALID_REFRESH_TOKEN("", ErrorHttpStatus.UNAUTHORIZED),
+
+    NOT_PARTICIPATED_PARTY("", ErrorHttpStatus.FORBIDDEN);
 
     private final String errorCode;
     private final ErrorHttpStatus errorHttpStatus;
@@ -41,7 +43,8 @@ public enum ErrorType {
 
         BAD_REQUEST(400, "Bad Request"),
         UNAUTHORIZED(401, "Unauthorized"),
-        NOT_FOUND(404, "Not Found");
+        NOT_FOUND(404, "Not Found"),
+        FORBIDDEN(403, "Forbidden");
 
         private final int value;
         private final String reasonPhrase;
