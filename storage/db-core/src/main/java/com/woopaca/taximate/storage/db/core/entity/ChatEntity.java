@@ -10,6 +10,8 @@ public class ChatEntity extends BaseEntity {
 
     private String message;
 
+    private String type;
+
     private Long userId;
 
     private Long partyId;
@@ -18,8 +20,9 @@ public class ChatEntity extends BaseEntity {
     }
 
     @Builder
-    public ChatEntity(String message, Long userId, Long partyId) {
+    public ChatEntity(String message, String type, Long userId, Long partyId) {
         this.message = message;
+        this.type = type;
         this.userId = userId;
         this.partyId = partyId;
     }
