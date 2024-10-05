@@ -125,7 +125,7 @@ public class Party {
     }
 
     public boolean isProgress() {
-        return departureTime.isAfter(LocalDateTime.now().minusMinutes(30));
+        return departureTime.isAfter(LocalDateTime.now().minusMinutes(10));
     }
 
     public Party allocateAddress(Address originAddress, Address destinationAddress) {
