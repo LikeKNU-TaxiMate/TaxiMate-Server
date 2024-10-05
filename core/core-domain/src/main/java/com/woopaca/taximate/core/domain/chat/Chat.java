@@ -5,6 +5,7 @@ import com.woopaca.taximate.core.domain.error.exception.ChatMessageTooLongExcept
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.ChatEntity;
+import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,12 +29,12 @@ public class Chat {
     private Party party;
 
     @Builder
-    public Chat(String message, MessageType type, LocalDateTime sentAt, User sender, Party party) {
+    public Chat(Long id, String message, MessageType type, LocalDateTime sentAt, User sender, Party party) {
         if (message.length() > MAX_MESSAGE_LENGTH) {
             throw new ChatMessageTooLongException();
         }
 
-        this.id = IdGenerator.generateId();
+        this.id = id;
         this.message = message.trim();
         this.type = type;
         this.sentAt = sentAt;
@@ -43,6 +44,7 @@ public class Chat {
 
     public static Chat standardMessage(Party party, User sender, String message) {
         return Chat.builder()
+                .id(IdGenerator.generateId())
                 .message(message)
                 .type(MessageType.MESSAGE)
                 .sentAt(LocalDateTime.now())
@@ -61,6 +63,7 @@ public class Chat {
 
     private static Chat systemMessage(Party party, User sender, String message, LocalDateTime sentAt) {
         return Chat.builder()
+                .id(IdGenerator.generateId())
                 .message(message)
                 .type(MessageType.SYSTEM)
                 .sentAt(sentAt)
@@ -69,16 +72,34 @@ public class Chat {
                 .build();
     }
 
-    public ChatEntity toEntity() {
-        ChatEntity.ChatEntityBuilder chatEntityBuilder = ChatEntity.builder()
+    public static Chat empty(Party party) {
+        return Chat.builder()
+                .message("")
+                .type(MessageType.MESSAGE)
+                .party(party)
+                .build();
+    }
+
+    public static Chat fromEntity(ChatEntity entity, Party party) {
+        return Chat.builder()
+                .id(entity.getId())
+                .message(entity.getMessage())
+                .type(MessageType.valueOf(entity.getType()))
+                .sentAt(entity.getCreatedAt())
+                .party(party)
+                .sender(User.fromEntity(entity.getUser()))
+                .build();
+    }
+
+    public ChatEntity toEntity(UserEntity user) {
+        return ChatEntity.builder()
                 .id(id)
                 .message(message)
                 .type(type.name())
-                .partyId(party.getId());
-        if (sender != null) {
-            chatEntityBuilder.userId(sender.getId());
-        }
-        return chatEntityBuilder.build();
+                .partyId(party.getId())
+                .createdAt(sentAt)
+                .user(user)
+                .build();
     }
 
     public boolean isParticipateMessage() {

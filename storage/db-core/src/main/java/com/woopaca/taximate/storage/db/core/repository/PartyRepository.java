@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,8 +16,16 @@ public interface PartyRepository extends JpaRepository<PartyEntity, Long>, Party
     @EntityGraph(attributePaths = {"participationSet"})
     @Query("""
             SELECT p
-            FROM com.woopaca.taximate.storage.db.core.entity.PartyEntity p
+            FROM party p
             WHERE p.id = :id
             """)
     Optional<PartyEntity> findByIdWithParticipation(@Param("id") Long id);
+
+    @Query("""
+            SELECT DISTINCT p
+            FROM party p
+                JOIN FETCH p.participationSet pt
+            WHERE pt.userId = :userId
+            """)
+    List<PartyEntity> findByParticipationUserId(@Param("userId") Long userId);
 }

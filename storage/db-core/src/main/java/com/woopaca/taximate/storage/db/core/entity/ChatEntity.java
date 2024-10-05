@@ -1,18 +1,16 @@
 package com.woopaca.taximate.storage.db.core.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Getter
-@EntityListeners(AuditingEntityListener.class)
 @Entity(name = "chat")
 public class ChatEntity {
 
@@ -23,25 +21,24 @@ public class ChatEntity {
 
     private String type;
 
-    private Long userId;
+    private LocalDateTime createdAt;
 
     private Long partyId;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(optional = false, targetEntity = UserEntity.class, fetch = FetchType.LAZY)
+    private UserEntity user;
 
     public ChatEntity() {
     }
 
     @Builder
-    public ChatEntity(Long id, String message, String type, Long userId, Long partyId) {
+    public ChatEntity(Long id, String message, String type, LocalDateTime createdAt, Long partyId, UserEntity user) {
         this.id = id;
         this.message = message;
         this.type = type;
-        this.userId = userId;
+        this.createdAt = createdAt;
         this.partyId = partyId;
+        this.user = user;
     }
 }
