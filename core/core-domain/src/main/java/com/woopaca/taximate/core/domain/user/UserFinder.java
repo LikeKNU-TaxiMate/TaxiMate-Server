@@ -22,6 +22,7 @@ public class UserFinder {
         return User.fromEntity(userEntity);
     }
 
+    // TODO cache 적용
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .map(User::fromEntity);
