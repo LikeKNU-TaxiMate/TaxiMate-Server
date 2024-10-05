@@ -11,6 +11,7 @@ import com.woopaca.taximate.core.domain.event.ChatEventProducer;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
 import com.woopaca.taximate.core.domain.user.User;
+import com.woopaca.taximate.storage.db.core.repository.ChatReadRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +27,15 @@ public class ChatService {
     private final ChatEventProducer chatEventProducer;
     private final ChatFinder chatFinder;
     private final ChatReadRecorder chatReadRecorder;
+    private final ChatReadRepository chatReadRepository;
 
-    public ChatService(PartyFinder partyFinder, MessageNotifier messageNotifier, ChatEventProducer chatEventProducer, ChatFinder chatFinder, ChatReadRecorder chatReadRecorder) {
+    public ChatService(PartyFinder partyFinder, MessageNotifier messageNotifier, ChatEventProducer chatEventProducer, ChatFinder chatFinder, ChatReadRecorder chatReadRecorder, ChatReadRepository chatReadRepository) {
         this.partyFinder = partyFinder;
         this.messageNotifier = messageNotifier;
         this.chatEventProducer = chatEventProducer;
         this.chatFinder = chatFinder;
         this.chatReadRecorder = chatReadRecorder;
+        this.chatReadRepository = chatReadRepository;
     }
 
     public void sendStandardMessage(Long partyId, User sender, String message) {
@@ -73,5 +76,10 @@ public class ChatService {
         }
         chatReadRecorder.recordReadHistory(chats.get(chats.size() - 1), authenticatedUser);
         return chats;
+    }
+
+    @Transactional
+    public void receiveMessage(Long partyId, Long chatId, User receiver) {
+        chatReadRepository.updateLastChatId(receiver.getId(), partyId, chatId);
     }
 }
