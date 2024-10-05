@@ -7,6 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ChatFinder {
 
@@ -24,5 +26,12 @@ public class ChatFinder {
 
     public int calculateUnreadCount(Party party, User user) {
         return chatRepository.countByLastChatId(party.getId(), user.getId());
+    }
+
+    public List<Chat> findChats(Party party) {
+        return chatRepository.findByPartyId(party.getId(), Sort.by("id"))
+                .stream()
+                .map(entity -> Chat.fromEntity(entity, party))
+                .toList();
     }
 }

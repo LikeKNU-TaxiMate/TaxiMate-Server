@@ -3,6 +3,7 @@ package com.woopaca.taximate.core.domain.chat.service;
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
 import com.woopaca.taximate.core.domain.chat.Chat;
 import com.woopaca.taximate.core.domain.chat.ChatFinder;
+import com.woopaca.taximate.core.domain.chat.ChatReadRecorder;
 import com.woopaca.taximate.core.domain.chat.ChatRoom;
 import com.woopaca.taximate.core.domain.chat.MessageNotifier;
 import com.woopaca.taximate.core.domain.error.exception.NotParticipatedPartyException;
@@ -13,6 +14,7 @@ import com.woopaca.taximate.core.domain.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,12 +25,14 @@ public class ChatService {
     private final MessageNotifier messageNotifier;
     private final ChatEventProducer chatEventProducer;
     private final ChatFinder chatFinder;
+    private final ChatReadRecorder chatReadRecorder;
 
-    public ChatService(PartyFinder partyFinder, MessageNotifier messageNotifier, ChatEventProducer chatEventProducer, ChatFinder chatFinder) {
+    public ChatService(PartyFinder partyFinder, MessageNotifier messageNotifier, ChatEventProducer chatEventProducer, ChatFinder chatFinder, ChatReadRecorder chatReadRecorder) {
         this.partyFinder = partyFinder;
         this.messageNotifier = messageNotifier;
         this.chatEventProducer = chatEventProducer;
         this.chatFinder = chatFinder;
+        this.chatReadRecorder = chatReadRecorder;
     }
 
     public void sendStandardMessage(Long partyId, User sender, String message) {
@@ -54,5 +58,20 @@ public class ChatService {
                 .sorted(Comparator.comparing(ChatRoom::isProgress)
                         .thenComparing(ChatRoom::getRecentMessageTime).reversed())
                 .toList();
+    }
+
+    @Transactional
+    public List<Chat> getChats(Party party) {
+        User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
+        if (!party.isParticipated(authenticatedUser)) {
+            throw new NotParticipatedPartyException();
+        }
+
+        List<Chat> chats = chatFinder.findChats(party);
+        if (chats.isEmpty()) {
+            return Collections.emptyList();
+        }
+        chatReadRecorder.recordReadHistory(chats.get(chats.size() - 1), authenticatedUser);
+        return chats;
     }
 }

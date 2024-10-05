@@ -17,7 +17,7 @@ public interface ChatReadRepository extends JpaRepository<ChatReadEntity, Long> 
             UPDATE chat_read
             SET lastChatId = :chatId
             WHERE userId = :userId AND partyId = :partyId
-            AND lastChatId = :chatId
+            AND lastChatId < :chatId
             """)
     void updateLastChatId(@Param("userId") Long userId, @Param("partyId") Long partyId, @Param("chatId") Long chatId);
 }
