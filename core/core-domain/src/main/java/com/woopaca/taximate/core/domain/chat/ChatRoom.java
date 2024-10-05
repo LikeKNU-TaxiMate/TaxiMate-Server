@@ -3,6 +3,8 @@ package com.woopaca.taximate.core.domain.chat;
 import com.woopaca.taximate.core.domain.party.Party;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class ChatRoom {
 
@@ -14,5 +16,13 @@ public class ChatRoom {
         this.party = party;
         this.recentMessage = recentMessage;
         this.unreadCount = unreadCount;
+    }
+
+    public Boolean isProgress() {
+        return party.isProgress();
+    }
+
+    public LocalDateTime getRecentMessageTime() {
+        return recentMessage.getSentAt();
     }
 }

@@ -13,6 +13,7 @@ import com.woopaca.taximate.core.domain.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -50,6 +51,8 @@ public class ChatService {
                     int unreadCount = chatFinder.calculateUnreadCount(party, authenticatedUser);
                     return new ChatRoom(party, recentMessage, unreadCount);
                 })
+                .sorted(Comparator.comparing(ChatRoom::isProgress)
+                        .thenComparing(ChatRoom::getRecentMessageTime).reversed())
                 .toList();
     }
 }
