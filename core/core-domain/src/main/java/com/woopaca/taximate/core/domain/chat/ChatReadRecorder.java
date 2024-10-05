@@ -5,7 +5,9 @@ import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.ChatReadEntity;
 import com.woopaca.taximate.storage.db.core.repository.ChatReadRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Component
 public class ChatReadRecorder {
 

@@ -6,6 +6,7 @@ import com.woopaca.taximate.core.domain.chat.ChatReadRecorder;
 import com.woopaca.taximate.core.domain.event.dto.ChatEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ChatEventConsumer {
@@ -18,6 +19,7 @@ public class ChatEventConsumer {
         this.chatReadRecorder = chatReadRecorder;
     }
 
+    @Transactional
     @EventListener
     public void handleChatEvent(ChatEvent chatEvent) {
         Chat chat = chatEvent.chat();
