@@ -2,9 +2,7 @@ package com.woopaca.taximate.core.domain.party;
 
 import com.woopaca.taximate.core.domain.error.exception.NonexistentPartyException;
 import com.woopaca.taximate.core.domain.user.User;
-import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
-import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +12,9 @@ import java.util.List;
 public class PartyFinder {
 
     private final PartyRepository partyRepository;
-    private final ParticipationRepository participationRepository;
 
-    public PartyFinder(PartyRepository partyRepository, ParticipationRepository participationRepository) {
+    public PartyFinder(PartyRepository partyRepository) {
         this.partyRepository = partyRepository;
-        this.participationRepository = participationRepository;
     }
 
     public Party findParty(Long partyId) {
@@ -34,20 +30,15 @@ public class PartyFinder {
     }
 
     public List<Party> findParticipatingParties(User user) {
-        return participationRepository.findByUserId(user.getId())
+        return partyRepository.findByParticipationUserId(user.getId())
                 .stream()
-                .map(ParticipationEntity::getParty)
                 .map(Party::fromEntityExcludeParticipants)
                 .filter(Party::isProgress)
                 .toList();
     }
 
     public List<Party> findAllParticipatedParty(User user) {
-        List<Long> ids = participationRepository.findByUserId(user.getId())
-                .stream()
-                .map(entity -> entity.getParty().getId())
-                .toList();
-        return partyRepository.findByIdIn(ids)
+        return partyRepository.findByParticipationUserId(user.getId())
                 .stream()
                 .map(Party::fromEntity)
                 .toList();

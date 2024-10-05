@@ -29,8 +29,7 @@ public class ChatReadRecorder {
     public void removeReadHistory(Chat leaveChat) {
         User user = leaveChat.getSender();
         Party party = leaveChat.getParty();
-        chatReadRepository.findByUserIdAndPartyId(user.getId(), party.getId())
-                .ifPresent(chatReadRepository::delete);
+        chatReadRepository.deleteByUserIdAndPartyId(user.getId(), party.getId());
     }
 
     public void recordReadHistory(Chat chat) {
@@ -38,10 +37,6 @@ public class ChatReadRecorder {
     }
 
     public void recordReadHistory(Chat chat, User user) {
-        chatReadRepository.findByUserIdAndPartyId(user.getId(), chat.getParty().getId())
-                .ifPresent(entity -> {
-                    entity.updateLastChatId(chat.getId());
-                    chatReadRepository.save(entity);
-                });
+        chatReadRepository.updateLastChatId(user.getId(), chat.getParty().getId(), chat.getId());
     }
 }

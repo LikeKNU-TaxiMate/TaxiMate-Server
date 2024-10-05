@@ -1,11 +1,9 @@
 package com.woopaca.taximate.core.domain.party;
 
 import com.woopaca.taximate.core.domain.error.exception.NonexistentPartyException;
-import com.woopaca.taximate.core.domain.fixture.ParticipationFixtures;
 import com.woopaca.taximate.core.domain.fixture.PartyFixtures;
 import com.woopaca.taximate.core.domain.fixture.UserFixtures;
-import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
-import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
+import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -34,8 +32,6 @@ class PartyFinderTest {
 
     @Mock
     private PartyRepository partyRepository;
-    @Mock
-    private ParticipationRepository participationRepository;
 
     @Nested
     class findParty_메서드는 {
@@ -97,15 +93,16 @@ class PartyFinderTest {
     class findParticipatingParties_메서드는 {
 
         @Test
-        void 참여중인_팟을_찾아서_반환한다() {
+        void 종료되지_않은_참여중인_팟을_찾아서_반환한다() {
             // given
             final long userId = 1L;
             final int partiesSize = 2;
-            List<ParticipationEntity> participationEntities = IntStream.rangeClosed(1, partiesSize)
-                    .mapToObj(index -> ParticipationFixtures.createParticipationEntityWith(PartyFixtures.createPartyEntity(), userId))
+            List<PartyEntity> partyEntities = IntStream.rangeClosed(1, partiesSize)
+                    .mapToObj(index -> PartyFixtures.createPartyEntity())
                     .collect(Collectors.toList());
-            participationEntities.add(ParticipationFixtures.createParticipationEntityWith(PartyFixtures.createTerminatedPartyEntity(), userId));
-            when(participationRepository.findByUserId(userId)).thenReturn(participationEntities);
+            // 종료된 팟 추가
+            partyEntities.add(PartyFixtures.createTerminatedPartyEntity());
+            when(partyRepository.findByParticipationUserId(userId)).thenReturn(partyEntities);
 
             // when
             var parties = partyFinder.findParticipatingParties(UserFixtures.createUser(userId));
