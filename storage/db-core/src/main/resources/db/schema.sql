@@ -61,7 +61,6 @@ CREATE TABLE IF NOT EXISTS `chat`
     `user_id`    BIGINT,
     `party_id`   BIGINT       NOT NULL,
     `created_at` DATETIME     NOT NULL,
-    `updated_at` DATETIME     NOT NULL,
     PRIMARY KEY (`id`)
 );
 
