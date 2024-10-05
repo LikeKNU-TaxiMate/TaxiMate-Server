@@ -29,7 +29,7 @@ public class ChatFinder {
     }
 
     public List<Chat> findChats(Party party) {
-        return chatRepository.findByPartyId(party.getId(), Sort.by(Order.desc("id")))
+        return chatRepository.findByPartyId(party.getId(), Sort.by("id"))
                 .stream()
                 .map(entity -> Chat.fromEntity(entity, party))
                 .toList();

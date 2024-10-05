@@ -71,7 +71,7 @@ public class ChatService {
         if (chats.isEmpty()) {
             return Collections.emptyList();
         }
-        chatReadRecorder.recordReadHistory(chats.get(0), authenticatedUser);
+        chatReadRecorder.recordReadHistory(chats.get(chats.size() - 1), authenticatedUser);
         return chats;
     }
 }
