@@ -47,7 +47,7 @@ public class ErrorControllerAdvice {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException exception) {
         String message = exception.getMessage();
-        log.warn(message, exception);
+        log.warn(message);
         ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.badRequest()
                 .body(errorResponse);
@@ -103,7 +103,7 @@ public class ErrorControllerAdvice {
     @ExceptionHandler(BindException.class)
     public ResponseEntity<ErrorResponse> handleBindException(BindException exception) {
         String message = exception.getMessage();
-        log.warn(message, exception);
+        log.warn(message);
         ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.badRequest()
                 .body(errorResponse);
@@ -118,7 +118,7 @@ public class ErrorControllerAdvice {
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
         String message = exception.getMessage();
         String name = exception.getName();
-        log.warn(message, exception);
+        log.warn(message);
         ErrorResponse errorResponse = ApiResults.error(String.join(": ", message, name), "");
         return ResponseEntity.badRequest()
                 .body(errorResponse);
@@ -132,7 +132,7 @@ public class ErrorControllerAdvice {
     @ExceptionHandler(MissingRequestCookieException.class)
     public ResponseEntity<ErrorResponse> handleMissingRequestCookieException(MissingRequestCookieException exception) {
         String message = exception.getMessage();
-        log.warn(message, exception);
+        log.warn(message);
         ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.badRequest()
                 .body(errorResponse);
@@ -180,7 +180,7 @@ public class ErrorControllerAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException exception) {
         String message = exception.getMessage();
-        log.warn(message, exception);
+        log.warn(message);
         ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
@@ -194,7 +194,7 @@ public class ErrorControllerAdvice {
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException exception) {
         String message = exception.getMessage();
-        log.warn(message, exception);
+        log.warn(message);
         ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(errorResponse);
