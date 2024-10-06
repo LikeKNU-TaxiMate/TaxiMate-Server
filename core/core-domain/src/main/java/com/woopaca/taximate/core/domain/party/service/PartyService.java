@@ -79,10 +79,9 @@ public class PartyService {
         //TODO 조회수 증가
 
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
-        User host = party.getHost();
 
         Taxi taxi = kakaoMobilityClient.requestTaxi(party.getOriginLocation(), party.getDestinationLocation());
-        return new PartyDetails(party, host, taxi, authenticatedUser);
+        return new PartyDetails(party, taxi, authenticatedUser);
     }
 
     /**

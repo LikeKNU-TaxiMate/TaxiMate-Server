@@ -10,14 +10,12 @@ import lombok.Getter;
 public class PartyDetails {
 
     private final Party party;
-    private final User host;
     @EqualsAndHashCode.Exclude
     private final Taxi taxi;
     private final User authenticatedUser;
 
-    public PartyDetails(Party party, User host, Taxi taxi, User authenticatedUser) {
+    public PartyDetails(Party party, Taxi taxi, User authenticatedUser) {
         this.party = party;
-        this.host = host;
         this.taxi = taxi;
         this.authenticatedUser = authenticatedUser;
     }

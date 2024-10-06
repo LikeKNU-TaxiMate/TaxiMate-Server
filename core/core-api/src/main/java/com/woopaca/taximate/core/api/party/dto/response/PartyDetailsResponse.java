@@ -1,5 +1,7 @@
 package com.woopaca.taximate.core.api.party.dto.response;
 
+import com.woopaca.taximate.core.domain.party.Participation;
+import com.woopaca.taximate.core.domain.party.Participation.ParticipationRole;
 import com.woopaca.taximate.core.domain.party.Participation.ParticipationStatus;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyDetails;
@@ -8,6 +10,7 @@ import com.woopaca.taximate.core.domain.taxi.Taxi;
 import com.woopaca.taximate.core.domain.user.User;
 import lombok.Builder;
 
+import java.util.Collection;
 import java.util.List;
 
 @Builder
@@ -15,15 +18,19 @@ public record PartyDetailsResponse(Long id, String title, String departureTime, 
                                    String origin, String originAddress, Coordinate originLocation,
                                    String destination, String destinationAddress, Coordinate destinationLocation,
                                    int maxParticipants, int currentParticipants, int views, String status,
-                                   String createdAt, HostResponse host, TaxiResponse taxi) {
+                                   String createdAt, List<ParticipantResponse> participants, TaxiResponse taxi) {
 
     public static PartyDetailsResponse from(PartyDetails partyDetails) {
-        ParticipationStatus status = partyDetails.getParty()
+        Party party = partyDetails.getParty();
+        ParticipationStatus status = party
                 .participationStatusOf(partyDetails.getAuthenticatedUser());
-        return PartyDetailsResponse.of(partyDetails.getParty(), partyDetails.getHost(), partyDetails.getTaxi(), status);
+        return PartyDetailsResponse.of(party, party.getParticipationSet(), partyDetails.getTaxi(), status);
     }
 
-    public static PartyDetailsResponse of(Party party, User user, Taxi taxi, ParticipationStatus status) {
+    public static PartyDetailsResponse of(Party party, Collection<Participation> participationList, Taxi taxi, ParticipationStatus status) {
+        List<ParticipantResponse> participantResponses = participationList.stream()
+                .map(ParticipantResponse::from)
+                .toList();
         return PartyDetailsResponse.builder()
                 .id(party.getId())
                 .title(party.getTitle())
@@ -40,15 +47,17 @@ public record PartyDetailsResponse(Long id, String title, String departureTime, 
                 .views(party.getViews())
                 .status(status.name())
                 .createdAt(party.getCreatedAt().toString())
-                .host(HostResponse.from(user))
+                .participants(participantResponses)
                 .taxi(TaxiResponse.from(taxi))
                 .build();
     }
 
-    record HostResponse(Long id, String nickname, String profileImage, boolean isMe) {
+    record ParticipantResponse(Long id, String nickname, String profileImage, ParticipationRole role) {
 
-        public static HostResponse from(User user) {
-            return new HostResponse(user.getId(), user.getNickname(), user.getProfileImage(), user.isCurrentUser());
+        public static ParticipantResponse from(Participation participation) {
+            User user = participation.getUser();
+            ParticipationRole role = participation.getRole();
+            return new ParticipantResponse(user.getId(), user.getNickname(), user.getProfileImage(), role);
         }
     }
 
