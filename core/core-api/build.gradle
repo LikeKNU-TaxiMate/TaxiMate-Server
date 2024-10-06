@@ -17,7 +17,7 @@ dependencies {
     implementation 'org.springframework.retry:spring-retry'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    testImplementation 'org.orbisgis:h2gis:2.2.2'
+    testImplementation 'org.orbisgis:h2gis:2.2.3'
 }
 
 test {
