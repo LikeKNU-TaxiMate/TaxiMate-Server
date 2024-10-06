@@ -1,4 +1,4 @@
-package com.woopaca.taximate.core.api.notification;
+package com.woopaca.taximate.core.api.notification.api;
 
 import com.woopaca.taximate.core.domain.notification.PushNotification;
 import com.woopaca.taximate.core.domain.notification.PushNotificationClient;
