@@ -78,3 +78,15 @@ CREATE TABLE IF NOT EXISTS `chat_read`
 );
 
 CREATE UNIQUE INDEX `uidx_user_id_party_id` ON `chat_read` (`user_id`, `party_id`);
+
+CREATE TABLE IF NOT EXISTS `push_token`
+(
+    `id`         BIGINT      NOT NULL AUTO_INCREMENT,
+    `user_id`    BIGINT      NOT NULL,
+    `token`      VARCHAR(63) NOT NULL,
+    `created_at` DATETIME    NOT NULL,
+    `updated_at` DATETIME    NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+CREATE INDEX `idx_user_id` ON `push_token` (`user_id`);
