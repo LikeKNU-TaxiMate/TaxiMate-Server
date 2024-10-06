@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -160,5 +161,12 @@ public class Party {
 
     public boolean isHostUser(User user) {
         return Objects.equals(getHost(), user);
+    }
+
+    public List<User> getParticipants() {
+        return getParticipationSet().stream()
+                .filter(Participation::isParticipating)
+                .map(Participation::getUser)
+                .toList();
     }
 }
