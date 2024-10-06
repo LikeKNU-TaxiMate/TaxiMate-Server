@@ -40,21 +40,19 @@ public class ParticipationModifier {
         return Participation.fromEntity(savedParticipationEntity);
     }
 
-    public Participation appendParticipant(Party party, User user) {
-        ParticipationEntity savedParticipationEntity = participationRepository.findByPartyIdAndUserId(party.getId(), user.getId())
-                .map(entity -> {
+    public void appendParticipant(Party party, User user) {
+        participationRepository.findByPartyIdAndUserId(party.getId(), user.getId())
+                .ifPresentOrElse(entity -> {
                     entity.participate();
-                    return participationRepository.save(entity);
-                })
-                .orElseGet(() -> {
+                    participationRepository.save(entity);
+                }, () -> {
                     UserEntity userEntity = userRepository.findById(user.getId())
                             .orElseThrow(NonexistentUserException::new);
                     PartyEntity partyEntity = partyRepository.findById(party.getId())
                             .orElseThrow(() -> new NonexistentPartyException(party.getId()));
                     ParticipationEntity participationEntity = ParticipationEntity.participant(partyEntity, userEntity);
-                    return participationRepository.save(participationEntity);
+                    participationRepository.save(participationEntity);
                 });
-        return Participation.fromEntity(savedParticipationEntity);
     }
 
     public void delegateHost(Party party, User host) {
@@ -69,11 +67,10 @@ public class ParticipationModifier {
                         participationRepository.updateRole(participation.getId(), ParticipationRole.HOST.name()));
     }
 
-    public Participation removeParticipant(Party party, User user) {
+    public void removeParticipant(Party party, User user) {
         ParticipationEntity participationEntity = participationRepository.findByPartyIdAndUserId(party.getId(), user.getId())
                 .orElseThrow(NotParticipatedPartyException::new);
         participationEntity.leave();
-        ParticipationEntity updatedParticipationEntity = participationRepository.save(participationEntity);
-        return Participation.fromEntity(updatedParticipationEntity);
+        participationRepository.save(participationEntity);
     }
 }
