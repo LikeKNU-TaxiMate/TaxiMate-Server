@@ -28,4 +28,13 @@ public final class UserFixtures {
                 .status(AccountStatus.ACTIVE)
                 .build();
     }
+
+    public static UserEntity createUserEntity() {
+        return UserEntity.builder()
+                .email("test@example.com")
+                .nickname("test")
+                .provider(OAuth2Provider.KAKAO.name())
+                .status(AccountStatus.ACTIVE.name())
+                .build();
+    }
 }

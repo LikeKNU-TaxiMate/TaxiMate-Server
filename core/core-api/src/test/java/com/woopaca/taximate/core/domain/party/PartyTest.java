@@ -58,10 +58,10 @@ class PartyTest {
                     .build();
 
             //when
-            Long hostId = party.hostId();
+            User host = party.getHost();
 
             //then
-            assertThat(hostId).isEqualTo(expectedHostId);
+            assertThat(host.getId()).isEqualTo(expectedHostId);
         }
     }
 

@@ -92,7 +92,7 @@ class ParticipationTest {
             assertThat(participation.getId()).isEqualTo(entity.getId());
             assertThat(participation.getRole()).isEqualTo(Participation.ParticipationRole.valueOf(entity.getRole()));
             assertThat(participation.getStatus()).isEqualTo(Participation.ParticipationStatus.valueOf(entity.getStatus()));
-            assertThat(participation.getUserId()).isEqualTo(entity.getUserId());
+            assertThat(participation.getUser().getId()).isEqualTo(entity.getUser().getId());
         }
     }
 }

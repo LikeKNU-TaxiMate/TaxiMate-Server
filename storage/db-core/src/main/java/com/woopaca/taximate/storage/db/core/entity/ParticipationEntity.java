@@ -18,7 +18,9 @@ public class ParticipationEntity extends BaseEntity {
     @Column(columnDefinition = "CHAR(13)")
     private String status;
 
-    private Long userId;
+    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(optional = false, targetEntity = UserEntity.class, fetch = FetchType.LAZY)
+    private UserEntity user;
 
     @JoinColumn(name = "party_id", nullable = false)
     @ManyToOne(optional = false, targetEntity = PartyEntity.class, fetch = FetchType.LAZY)
@@ -28,10 +30,36 @@ public class ParticipationEntity extends BaseEntity {
     }
 
     @Builder
-    public ParticipationEntity(String role, String status, Long userId, PartyEntity party) {
+    public ParticipationEntity(String role, String status, UserEntity user, PartyEntity party) {
         this.role = role;
         this.status = status;
-        this.userId = userId;
+        this.user = user;
         this.party = party;
+    }
+
+    public static ParticipationEntity participant(PartyEntity partyEntity, UserEntity userEntity) {
+        return ParticipationEntity.builder()
+                .role("PARTICIPANT")
+                .user(userEntity)
+                .party(partyEntity)
+                .status("PARTICIPATING")
+                .build();
+    }
+
+    public static ParticipationEntity host(PartyEntity partyEntity, UserEntity userEntity) {
+        return ParticipationEntity.builder()
+                .role("HOST")
+                .user(userEntity)
+                .party(partyEntity)
+                .status("PARTICIPATING")
+                .build();
+    }
+
+    public void leave() {
+        this.status = "LEFT";
+    }
+
+    public void participate() {
+        this.status = "PARTICIPATING";
     }
 }

@@ -5,6 +5,7 @@ import com.woopaca.taximate.core.domain.chat.MessageSender;
 import com.woopaca.taximate.core.domain.chat.WebSocketSessions;
 import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.Party;
+import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.core.message.dto.ChatMessage;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,12 @@ public class StompMessageSender implements MessageSender {
     public void send(Chat chat) {
         Party party = chat.getParty();
         for (Participation participation : party.getParticipationSet()) {
-            Long recipientId = participation.getUserId();
-            String identifier = webSocketSessions.getSession(recipientId);
+            User recipient = participation.getUser();
+            if (chat.isLeaveMessage() && chat.getSender().equals(recipient)) {
+                continue;
+            }
+
+            String identifier = webSocketSessions.getSession(recipient.getId());
             if (StringUtils.hasText(identifier)) {
                 sendTo(chat, identifier);
             }

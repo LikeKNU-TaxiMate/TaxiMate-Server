@@ -5,6 +5,7 @@ import com.woopaca.taximate.core.domain.party.Participation.ParticipationRole;
 import com.woopaca.taximate.core.domain.party.Participation.ParticipationStatus;
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
+import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 
 public final class ParticipationFixtures {
 
@@ -15,7 +16,7 @@ public final class ParticipationFixtures {
         return Participation.builder()
                 .role(ParticipationRole.PARTICIPANT)
                 .status(ParticipationStatus.PARTICIPATING)
-                .userId(userId)
+                .user(UserFixtures.createUser(userId))
                 .build();
     }
 
@@ -23,14 +24,14 @@ public final class ParticipationFixtures {
         return Participation.builder()
                 .role(ParticipationRole.HOST)
                 .status(ParticipationStatus.PARTICIPATING)
-                .userId(userId)
+                .user(UserFixtures.createUser(userId))
                 .build();
     }
 
-    public static ParticipationEntity createParticipationEntityWith(PartyEntity partyEntity, Long userId) {
+    public static ParticipationEntity createParticipationEntityWith(PartyEntity partyEntity, UserEntity userEntity) {
         return ParticipationEntity.builder()
                 .party(partyEntity)
-                .userId(userId)
+                .user(userEntity)
                 .role(ParticipationRole.PARTICIPANT.name())
                 .status(ParticipationStatus.PARTICIPATING.name())
                 .build();
@@ -40,6 +41,8 @@ public final class ParticipationFixtures {
         return ParticipationEntity.builder()
                 .role(ParticipationRole.PARTICIPANT.name())
                 .status(ParticipationStatus.PARTICIPATING.name())
+                .user(UserFixtures.createUserEntity())
+                .party(PartyFixtures.createPartyEntity())
                 .build();
     }
 }

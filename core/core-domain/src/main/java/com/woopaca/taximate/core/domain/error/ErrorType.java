@@ -23,12 +23,11 @@ public enum ErrorType {
     PARTY_ALREADY_ENDED("", ErrorHttpStatus.BAD_REQUEST),
     PARTY_ALREADY_PARTICIPATED("", ErrorHttpStatus.BAD_REQUEST),
     PARTICIPANTS_FULL("", ErrorHttpStatus.BAD_REQUEST),
+    NOT_PARTICIPATED_PARTY("", ErrorHttpStatus.BAD_REQUEST),
 
     MESSAGE_TOO_LONG("", ErrorHttpStatus.BAD_REQUEST),
 
-    INVALID_REFRESH_TOKEN("", ErrorHttpStatus.UNAUTHORIZED),
-
-    NOT_PARTICIPATED_PARTY("", ErrorHttpStatus.FORBIDDEN);
+    INVALID_REFRESH_TOKEN("", ErrorHttpStatus.UNAUTHORIZED);
 
     private final String errorCode;
     private final ErrorHttpStatus errorHttpStatus;
@@ -43,8 +42,7 @@ public enum ErrorType {
 
         BAD_REQUEST(400, "Bad Request"),
         UNAUTHORIZED(401, "Unauthorized"),
-        NOT_FOUND(404, "Not Found"),
-        FORBIDDEN(403, "Forbidden");
+        NOT_FOUND(404, "Not Found");
 
         private final int value;
         private final String reasonPhrase;

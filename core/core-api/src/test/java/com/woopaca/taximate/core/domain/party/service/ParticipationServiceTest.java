@@ -59,14 +59,16 @@ class ParticipationServiceTest {
             partyEntity = partyRepository.save(PartyFixtures.createPartyEntity());
             UserEntity userEntity = UserFixtures.createUserEntityWith("host");
             userRepository.save(userEntity);
-            ParticipationEntity participationEntity = ParticipationFixtures.createParticipationEntityWith(partyEntity, userEntity.getId());
+            ParticipationEntity participationEntity = ParticipationFixtures.createParticipationEntityWith(partyEntity, userEntity);
             participationRepository.save(participationEntity);
         }
 
         @Test
         void 팟_참여_정보를_생성한다() {
             // given
-            User user = UserFixtures.createUser(2L);
+            UserEntity userEntity = UserFixtures.createUserEntity();
+            UserEntity savedUserEntity = userRepository.save(userEntity);
+            User user = UserFixtures.createUser(savedUserEntity.getId());
             AuthenticatedUserHolder.setAuthenticatedUser(user);
 
             // when
@@ -82,7 +84,7 @@ class ParticipationServiceTest {
                             .anyMatch(entity ->
                                     entity.getRole().equals(ParticipationRole.PARTICIPANT.name()) &&
                                             entity.getStatus().equals(ParticipationStatus.PARTICIPATING.name()) &&
-                                            entity.getUserId().equals(user.getId()) &&
+                                            entity.getUser().getId().equals(user.getId()) &&
                                             entity.getParty().getId().equals(partyEntity.getId())
                             ),
                     () -> verify(participationEventProducer).publishParticipateEvent(any(), any(), any())
