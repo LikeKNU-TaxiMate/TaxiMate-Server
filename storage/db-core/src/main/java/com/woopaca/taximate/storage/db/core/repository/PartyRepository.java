@@ -28,7 +28,7 @@ public interface PartyRepository extends JpaRepository<PartyEntity, Long>, Party
             WHERE p.id IN (
                     SELECT pt.party.id
                     FROM participation pt
-                    WHERE pt.user.id = :userId
+                    WHERE pt.user.id = :userId AND pt.status = 'PARTICIPATING'
             )
             """)
     List<PartyEntity> findByParticipationUserId(@Param("userId") Long userId);

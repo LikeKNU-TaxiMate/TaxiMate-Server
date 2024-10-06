@@ -17,12 +17,14 @@ import com.woopaca.taximate.core.domain.party.model.MapBound;
 import com.woopaca.taximate.core.domain.taxi.Taxi;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.core.domain.user.UserLock;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 public class PartyService {
 
@@ -57,10 +59,12 @@ public class PartyService {
     public Parties getPartiesInRange(MapBound mapBound) {
         LocalDateTime currentDateTime = LocalDateTime.now();
         List<Party> partiesInRange = partyMapFinder.findByRangeAndDateTime(
-                Coordinate.of(mapBound.minLatitude(), mapBound.minLongitude()),
-                Coordinate.of(mapBound.maxLatitude(), mapBound.maxLongitude()),
-                currentDateTime.minusMinutes(10)
-        );
+                        Coordinate.of(mapBound.minLatitude(), mapBound.minLongitude()),
+                        Coordinate.of(mapBound.maxLatitude(), mapBound.maxLongitude()),
+                        currentDateTime.minusMinutes(10)
+                ).stream()
+                .filter(party -> party.currentParticipantsCount() != 0)
+                .toList();
         return new Parties(partiesInRange);
     }
 
