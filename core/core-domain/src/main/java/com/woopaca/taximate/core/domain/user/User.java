@@ -11,7 +11,7 @@ import lombok.Getter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
 
-    public static final User GUEST = new User(-1L, "guest", "guest", null, null, AccountStatus.ACTIVE, null);
+    public static final User GUEST = new User(-1L, "guest", "guest", null, null, AccountStatus.ACTIVE);
 
     @EqualsAndHashCode.Include
     private Long id;
@@ -20,17 +20,15 @@ public class User {
     private String profileImage;
     private OAuth2Provider provider;
     private AccountStatus status;
-    private String pushNotificationToken;
 
     @Builder
-    public User(Long id, String email, String nickname, String profileImage, OAuth2Provider provider, AccountStatus status, String pushNotificationToken) {
+    public User(Long id, String email, String nickname, String profileImage, OAuth2Provider provider, AccountStatus status) {
         this.id = id;
         this.email = email;
         this.nickname = nickname;
         this.profileImage = profileImage;
         this.provider = provider;
         this.status = status;
-        this.pushNotificationToken = pushNotificationToken;
     }
 
     public static User fromEntity(UserEntity entity) {
@@ -41,7 +39,6 @@ public class User {
                 .profileImage(entity.getProfileImage())
                 .provider(OAuth2Provider.valueOf(entity.getProvider()))
                 .status(AccountStatus.valueOf(entity.getStatus()))
-                .pushNotificationToken(entity.getPushNotificationToken())
                 .build();
     }
 
