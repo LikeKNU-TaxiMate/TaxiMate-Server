@@ -78,7 +78,7 @@ class ParticipationServiceConcurrencyTest extends ConcurrencyTest {
 
     private void createAndSaveInitialParticipation() {
         ParticipationEntity participation = ParticipationFixtures
-                .createParticipationEntityWith(partyEntity, userEntities.get(0).getId());
+                .createParticipationEntityWith(partyEntity, userEntities.get(0));
         participationRepository.save(participation);
     }
 

@@ -54,13 +54,14 @@ class PartyValidatorTest {
     @Nested
     class validateCreateParty_메서드는 {
 
+        private UserEntity hostEntity;
         private User host;
 
         @BeforeEach
         void setUp() {
             UserEntity userEntity = UserFixtures.createUserEntityWith("test");
-            UserEntity savedUserEntity = userRepository.save(userEntity);
-            host = User.fromEntity(savedUserEntity);
+            hostEntity = userRepository.save(userEntity);
+            host = User.fromEntity(hostEntity);
         }
 
         @Nested
@@ -153,7 +154,7 @@ class PartyValidatorTest {
                             PartyEntity partyEntity = PartyFixtures.createPartyEntity();
                             partyRepository.save(partyEntity);
                             ParticipationEntity participationEntity = ParticipationFixtures
-                                    .createParticipationEntityWith(partyEntity, host.getId());
+                                    .createParticipationEntityWith(partyEntity, hostEntity);
                             participationRepository.save(participationEntity);
                         });
 
@@ -176,14 +177,15 @@ class PartyValidatorTest {
     class validateParticipateParty_메서드는 {
 
         private PartyEntity partyEntity;
+        private UserEntity participantEntity;
         private User participant;
         private Party party;
 
         @BeforeEach
         void setUp() {
             UserEntity userEntity = UserFixtures.createUserEntityWith("test");
-            UserEntity savedUserEntity = userRepository.save(userEntity);
-            participant = User.fromEntity(savedUserEntity);
+            participantEntity = userRepository.save(userEntity);
+            participant = User.fromEntity(participantEntity);
 
             PartyEntity partyEntity = PartyFixtures.createPartyEntity();
             this.partyEntity = partyRepository.save(partyEntity);
@@ -197,7 +199,7 @@ class PartyValidatorTest {
             void 아무런_예외가_발생하지_않는다() {
                 // given
                 ParticipationEntity participationEntity = ParticipationFixtures
-                        .createParticipationEntityWith(partyEntity, participant.getId());
+                        .createParticipationEntityWith(partyEntity, participantEntity);
                 participationRepository.save(participationEntity);
 
                 // when & then
@@ -225,7 +227,7 @@ class PartyValidatorTest {
             void 이미_참여한_팟에_참여하는_경우_예외가_발생한다() {
                 // given
                 ParticipationEntity participationEntity = ParticipationFixtures
-                        .createParticipationEntityWith(partyEntity, participant.getId());
+                        .createParticipationEntityWith(partyEntity, participantEntity);
                 participationRepository.save(participationEntity);
 
                 party.getParticipationSet()
@@ -245,7 +247,7 @@ class PartyValidatorTest {
                             PartyEntity partyEntity = PartyFixtures.createPartyEntity();
                             partyRepository.save(partyEntity);
                             ParticipationEntity participationEntity = ParticipationFixtures
-                                    .createParticipationEntityWith(partyEntity, participant.getId());
+                                    .createParticipationEntityWith(partyEntity, participantEntity);
                             participationRepository.save(participationEntity);
                         });
 
@@ -260,8 +262,10 @@ class PartyValidatorTest {
                 // given
                 IntStream.rangeClosed(1, party.getMaxParticipants())
                         .forEach(i -> {
+                            UserEntity userEntity = UserFixtures.createUserEntityWith(String.valueOf(i + 100));
+                            userRepository.save(userEntity);
                             ParticipationEntity participationEntity = ParticipationFixtures
-                                    .createParticipationEntityWith(partyEntity, (long) i + 100);
+                                    .createParticipationEntityWith(partyEntity, userEntity);
                             participationRepository.save(participationEntity);
                             party.getParticipationSet()
                                     .add(Participation.fromEntity(participationEntity));

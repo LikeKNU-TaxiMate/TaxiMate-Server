@@ -12,8 +12,10 @@ import com.woopaca.taximate.core.domain.party.model.Coordinate;
 import com.woopaca.taximate.core.domain.party.model.MapBound;
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
+import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
+import com.woopaca.taximate.storage.db.core.repository.UserRepository;
 import org.h2gis.functions.factory.H2GISFunctions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +49,8 @@ class PartyServiceTest {
 
     @MockBean
     private AddressAllocator addressAllocator;
+    @Autowired
+    private UserRepository userRepository;
 
     @Nested
     class getPartiesInRange_메서드는 {
@@ -95,8 +99,10 @@ class PartyServiceTest {
         @Test
         void 새로운_팟을_생성하고_참여_정보를_생성한다() {
             //given
+            UserEntity userEntity = UserFixtures.createUserEntity();
+            UserEntity savedUserEntity = userRepository.save(userEntity);
             Party party = PartyFixtures.createParty();
-            AuthenticatedUserHolder.setAuthenticatedUser(UserFixtures.createUser(1L));
+            AuthenticatedUserHolder.setAuthenticatedUser(UserFixtures.createUser(savedUserEntity.getId()));
 
             //when
             Long partyId = partyService.createParty(party);
@@ -109,7 +115,7 @@ class PartyServiceTest {
             Assertions.assertAll(
                     () -> assertThat(partyEntity.getId()).isEqualTo(partyId),
                     () -> assertThat(participationEntity).isNotNull(),
-                    () -> assertThat(participationEntity.getUserId()).isEqualTo(1L),
+                    () -> assertThat(participationEntity.getUser().getId()).isEqualTo(1L),
                     () -> assertThat(participationEntity.getRole()).isEqualTo(ParticipationRole.HOST.name()),
                     () -> assertThat(participationEntity.getStatus()).isEqualTo(ParticipationStatus.PARTICIPATING.name())
             );

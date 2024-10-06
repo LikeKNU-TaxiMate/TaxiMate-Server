@@ -104,13 +104,13 @@ public class Party {
                 .count();
     }
 
-    public Long hostId() {
+    public User getHost() {
         // TODO 호스트가 존재하지 않는 경우 예외 처리
         return participationSet.stream()
                 .filter(Participation::isHost)
                 .findAny()
-                .map(Participation::getUserId)
-                .orElse(-1L);
+                .map(Participation::getUser)
+                .orElse(null);
     }
 
     public ParticipationStatus participationStatusOf(User user) {
@@ -118,7 +118,7 @@ public class Party {
             return ParticipationStatus.TERMINATED;
         }
         return participationSet.stream()
-                .filter(participation -> Objects.equals(participation.getUserId(), user.getId()))
+                .filter(participation -> Objects.equals(participation.getUser(), user))
                 .findAny()
                 .map(Participation::getStatus)
                 .orElse(ParticipationStatus.NONE);
@@ -143,7 +143,7 @@ public class Party {
     public boolean isParticipated(User user) {
         return participationSet.stream()
                 .filter(Participation::isParticipating)
-                .anyMatch(participation -> participation.getUserId().equals(user.getId()));
+                .anyMatch(participation -> Objects.equals(participation.getUser(), user));
     }
 
     public boolean isFull() {
@@ -152,9 +152,13 @@ public class Party {
 
     public LocalDateTime getParticipatedAt(User user) {
         return participationSet.stream()
-                .filter(participation -> participation.getUserId().equals(user.getId()))
-                .findFirst()
+                .filter(participation -> Objects.equals(participation.getUser(), user))
+                .findAny()
                 .map(Participation::getParticipatedAt)
                 .orElse(LocalDateTime.MIN);
+    }
+
+    public boolean isHostUser(User user) {
+        return Objects.equals(getHost(), user);
     }
 }

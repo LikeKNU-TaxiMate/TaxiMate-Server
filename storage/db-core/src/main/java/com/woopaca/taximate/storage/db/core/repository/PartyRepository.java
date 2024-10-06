@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface PartyRepository extends JpaRepository<PartyEntity, Long>, PartyQueryDslRepository {
 
-    @EntityGraph(attributePaths = {"participationSet"})
+    @EntityGraph(attributePaths = {"participationSet", "participationSet.user"})
     @Query("""
             SELECT p
             FROM party p
@@ -21,14 +21,14 @@ public interface PartyRepository extends JpaRepository<PartyEntity, Long>, Party
             """)
     Optional<PartyEntity> findByIdWithParticipation(@Param("id") Long id);
 
-    @EntityGraph(attributePaths = {"participationSet"})
+    @EntityGraph(attributePaths = {"participationSet", "participationSet.user"})
     @Query("""
             SELECT p
             FROM party p
             WHERE p.id IN (
                     SELECT pt.party.id
                     FROM participation pt
-                    WHERE pt.userId = :userId
+                    WHERE pt.user.id = :userId
             )
             """)
     List<PartyEntity> findByParticipationUserId(@Param("userId") Long userId);

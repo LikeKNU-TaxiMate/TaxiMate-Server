@@ -1,5 +1,6 @@
 package com.woopaca.taximate.core.domain.party;
 
+import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -18,15 +19,15 @@ public class Participation {
     private ParticipationRole role;
     private ParticipationStatus status;
     private LocalDateTime participatedAt;
-    private Long userId;
+    private User user;
 
     @Builder
-    public Participation(Long id, ParticipationRole role, ParticipationStatus status, LocalDateTime participatedAt, Long userId) {
+    public Participation(Long id, ParticipationRole role, ParticipationStatus status, LocalDateTime participatedAt, User user) {
         this.id = id;
         this.role = role;
         this.status = status;
         this.participatedAt = participatedAt;
-        this.userId = userId;
+        this.user = user;
     }
 
     public static Participation fromEntity(ParticipationEntity entity) {
@@ -35,12 +36,16 @@ public class Participation {
                 .role(ParticipationRole.valueOf(entity.getRole()))
                 .status(ParticipationStatus.valueOf(entity.getStatus()))
                 .participatedAt(entity.getCreatedAt())
-                .userId(entity.getUserId())
+                .user(User.fromEntity(entity.getUser()))
                 .build();
     }
 
     public boolean isHost() {
         return role == ParticipationRole.HOST;
+    }
+
+    public boolean isParticipant() {
+        return role == ParticipationRole.PARTICIPANT;
     }
 
     public boolean isParticipating() {

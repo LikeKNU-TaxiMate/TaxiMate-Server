@@ -59,9 +59,9 @@ class PartyServiceConcurrencyTest extends ConcurrencyTest {
         partyRepository.save(partyEntity2);
 
         ParticipationEntity participationEntity1 = ParticipationFixtures
-                .createParticipationEntityWith(partyEntity1, userEntity.getId());
+                .createParticipationEntityWith(partyEntity1, userEntity);
         ParticipationEntity participationEntity2 = ParticipationFixtures
-                .createParticipationEntityWith(partyEntity2, userEntity.getId());
+                .createParticipationEntityWith(partyEntity2, userEntity);
         participationRepository.save(participationEntity1);
         participationRepository.save(participationEntity2);
     }
