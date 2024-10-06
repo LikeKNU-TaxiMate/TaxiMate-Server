@@ -114,7 +114,7 @@ public class Party {
     }
 
     public ParticipationStatus participationStatusOf(User user) {
-        if (!isProgress()) {
+        if (isTerminated()) {
             return ParticipationStatus.TERMINATED;
         }
         return participationSet.stream()
@@ -126,6 +126,10 @@ public class Party {
 
     public boolean isProgress() {
         return departureTime.isAfter(LocalDateTime.now().minusMinutes(10));
+    }
+
+    public boolean isTerminated() {
+        return !isProgress();
     }
 
     public Party allocateAddress(Address originAddress, Address destinationAddress) {
@@ -144,5 +148,13 @@ public class Party {
 
     public boolean isFull() {
         return currentParticipantsCount() >= maxParticipants;
+    }
+
+    public LocalDateTime getParticipatedAt(User user) {
+        return participationSet.stream()
+                .filter(participation -> participation.getUserId().equals(user.getId()))
+                .findFirst()
+                .map(Participation::getParticipatedAt)
+                .orElse(LocalDateTime.MIN);
     }
 }

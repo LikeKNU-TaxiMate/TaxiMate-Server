@@ -75,7 +75,7 @@ public class PartyValidator {
     }
 
     private void validateProgress(Party party) {
-        if (!party.isProgress()) {
+        if (party.isTerminated()) {
             throw new PartyAlreadyEndedException(party.getId());
         }
     }
