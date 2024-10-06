@@ -37,7 +37,29 @@ public class ParticipationEntity extends BaseEntity {
         this.party = party;
     }
 
+    public static ParticipationEntity participant(PartyEntity partyEntity, UserEntity userEntity) {
+        return ParticipationEntity.builder()
+                .role("PARTICIPANT")
+                .user(userEntity)
+                .party(partyEntity)
+                .status("PARTICIPATING")
+                .build();
+    }
+
+    public static ParticipationEntity host(PartyEntity partyEntity, UserEntity userEntity) {
+        return ParticipationEntity.builder()
+                .role("HOST")
+                .user(userEntity)
+                .party(partyEntity)
+                .status("PARTICIPATING")
+                .build();
+    }
+
     public void leave() {
         this.status = "LEFT";
+    }
+
+    public void participate() {
+        this.status = "PARTICIPATING";
     }
 }
