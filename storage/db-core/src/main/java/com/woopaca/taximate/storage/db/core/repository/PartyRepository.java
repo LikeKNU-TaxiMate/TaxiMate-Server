@@ -21,11 +21,15 @@ public interface PartyRepository extends JpaRepository<PartyEntity, Long>, Party
             """)
     Optional<PartyEntity> findByIdWithParticipation(@Param("id") Long id);
 
+    @EntityGraph(attributePaths = {"participationSet"})
     @Query("""
-            SELECT DISTINCT p
+            SELECT p
             FROM party p
-                JOIN FETCH p.participationSet pt
-            WHERE pt.userId = :userId
+            WHERE p.id IN (
+                    SELECT pt.party.id
+                    FROM participation pt
+                    WHERE pt.userId = :userId
+            )
             """)
     List<PartyEntity> findByParticipationUserId(@Param("userId") Long userId);
 }
