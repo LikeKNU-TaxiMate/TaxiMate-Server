@@ -32,14 +32,6 @@ public class PartyFinder {
     public List<Party> findParticipatingParties(User user) {
         return partyRepository.findByParticipationUserId(user.getId())
                 .stream()
-                .map(Party::fromEntityExcludeParticipants)
-                .filter(Party::isProgress)
-                .toList();
-    }
-
-    public List<Party> findAllParticipatedParty(User user) {
-        return partyRepository.findByParticipationUserId(user.getId())
-                .stream()
                 .map(Party::fromEntity)
                 .toList();
     }

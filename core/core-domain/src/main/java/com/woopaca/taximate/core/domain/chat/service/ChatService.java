@@ -51,8 +51,8 @@ public class ChatService {
     @Transactional(readOnly = true)
     public List<ChatRoom> getChatRoomList() {
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
-        List<Party> participatedParties = partyFinder.findAllParticipatedParty(authenticatedUser);
-        return participatedParties.stream()
+        return partyFinder.findParticipatingParties(authenticatedUser)
+                .stream()
                 .map(party -> {
                     Chat recentMessage = chatFinder.findRecentMessage(party);
                     int unreadCount = chatFinder.calculateUnreadCount(party, authenticatedUser);
