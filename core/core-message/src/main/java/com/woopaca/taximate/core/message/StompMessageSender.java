@@ -29,6 +29,10 @@ public class StompMessageSender implements MessageSender {
         Party party = chat.getParty();
         for (Participation participation : party.getParticipationSet()) {
             User recipient = participation.getUser();
+            if (chat.isLeaveMessage() && chat.getSender().equals(recipient)) {
+                continue;
+            }
+
             String identifier = webSocketSessions.getSession(recipient.getId());
             if (StringUtils.hasText(identifier)) {
                 sendTo(chat, identifier);
