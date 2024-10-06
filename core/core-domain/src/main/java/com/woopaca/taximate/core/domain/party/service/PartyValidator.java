@@ -1,6 +1,7 @@
 package com.woopaca.taximate.core.domain.party.service;
 
 import com.woopaca.taximate.core.domain.error.exception.ExplanationTooLongException;
+import com.woopaca.taximate.core.domain.error.exception.NotParticipatedPartyException;
 import com.woopaca.taximate.core.domain.error.exception.ParticipantsCountException;
 import com.woopaca.taximate.core.domain.error.exception.ParticipantsFullException;
 import com.woopaca.taximate.core.domain.error.exception.ParticipationLimitException;
@@ -89,6 +90,15 @@ public class PartyValidator {
     private void validateParticipantsFull(Party party) {
         if (party.isFull()) {
             throw new ParticipantsFullException(party.getMaxParticipants(), party.getId());
+        }
+    }
+
+    public void validateLeaveParty(Party party, User leaver) {
+        if (!party.isProgress()) {
+            throw new PartyAlreadyEndedException(party.getId());
+        }
+        if (!party.isParticipated(leaver)) {
+            throw new NotParticipatedPartyException();
         }
     }
 }

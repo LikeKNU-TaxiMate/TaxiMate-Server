@@ -1,7 +1,6 @@
 package com.woopaca.taximate.core.domain.party.service;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
-import com.woopaca.taximate.core.domain.error.exception.NotParticipatedPartyException;
 import com.woopaca.taximate.core.domain.event.ParticipationEventProducer;
 import com.woopaca.taximate.core.domain.party.ParticipationModifier;
 import com.woopaca.taximate.core.domain.party.Party;
@@ -56,9 +55,7 @@ public class ParticipationService {
     public Long leaveParty(Long partyId) {
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
         Party party = partyFinder.findPartyWithLock(partyId);
-        if (!party.isParticipated(authenticatedUser)) {
-            throw new NotParticipatedPartyException();
-        }
+        partyValidator.validateLeaveParty(party, authenticatedUser);
 
         if (party.isHostUser(authenticatedUser)) {
             participationModifier.delegateHost(party, authenticatedUser);
