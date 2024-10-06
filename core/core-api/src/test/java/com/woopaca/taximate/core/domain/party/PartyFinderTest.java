@@ -93,11 +93,10 @@ class PartyFinderTest {
     class findParticipatingParties_메서드는 {
 
         @Test
-        void 종료되지_않은_참여중인_팟을_찾아서_반환한다() {
+        void 참여중인_팟을_찾아서_반환한다() {
             // given
             final long userId = 1L;
-            final int partiesSize = 2;
-            List<PartyEntity> partyEntities = IntStream.rangeClosed(1, partiesSize)
+            List<PartyEntity> partyEntities = IntStream.rangeClosed(1, 2)
                     .mapToObj(index -> PartyFixtures.createPartyEntity())
                     .collect(Collectors.toList());
             // 종료된 팟 추가
@@ -109,7 +108,7 @@ class PartyFinderTest {
 
             // then
             assertThat(parties).isNotEmpty();
-            assertThat(parties).hasSize(partiesSize);
+            assertThat(parties).hasSize(3);
         }
     }
 }
