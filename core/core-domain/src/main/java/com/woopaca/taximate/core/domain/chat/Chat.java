@@ -76,6 +76,7 @@ public class Chat {
         return Chat.builder()
                 .message("")
                 .type(MessageType.MESSAGE)
+                .sentAt(LocalDateTime.MIN)
                 .party(party)
                 .build();
     }
