@@ -81,7 +81,11 @@ public class PartyService {
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
 
         Taxi taxi = kakaoMobilityClient.requestTaxi(party.getOriginLocation(), party.getDestinationLocation());
-        return new PartyDetails(party, taxi, authenticatedUser);
+        List<Participation> participationList = party.getParticipationSet()
+                .stream()
+                .filter(Participation::isParticipating)
+                .toList();
+        return new PartyDetails(party, participationList, taxi, authenticatedUser);
     }
 
     /**
