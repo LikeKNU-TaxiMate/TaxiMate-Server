@@ -24,7 +24,7 @@ public record PartyDetailsResponse(Long id, String title, String departureTime, 
         Party party = partyDetails.getParty();
         ParticipationStatus status = party
                 .participationStatusOf(partyDetails.getAuthenticatedUser());
-        return PartyDetailsResponse.of(party, party.getParticipationSet(), partyDetails.getTaxi(), status);
+        return PartyDetailsResponse.of(party, partyDetails.getParticipationList(), partyDetails.getTaxi(), status);
     }
 
     public static PartyDetailsResponse of(Party party, Collection<Participation> participationList, Taxi taxi, ParticipationStatus status) {

@@ -1,4 +1,7 @@
 package com.woopaca.taximate.core.message.dto;
 
-public record ReceivedChat(Long partyId, Long chatId) {
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+public record ReceivedChat(@Positive @NotNull Long partyId, @Positive @NotNull Long chatId) {
 }

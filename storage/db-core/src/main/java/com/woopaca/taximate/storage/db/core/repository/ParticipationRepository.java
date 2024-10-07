@@ -25,7 +25,7 @@ public interface ParticipationRepository extends JpaRepository<ParticipationEnti
     @Query("""
             UPDATE participation
             SET role = :role
-            WHERE id = :id
+            WHERE user.id = :userId AND party.id = :partyId
             """)
-    void updateRole(@Param("id") Long id, @Param("role") String role);
+    void updateRole(@Param("userId") Long userId, @Param("partyId") Long partyId, @Param("role") String role);
 }

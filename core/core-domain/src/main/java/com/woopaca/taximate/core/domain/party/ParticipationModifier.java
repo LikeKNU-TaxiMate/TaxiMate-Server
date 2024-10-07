@@ -56,6 +56,7 @@ public class ParticipationModifier {
     }
 
     public void delegateHost(Party party, User host) {
+        participationRepository.updateRole(host.getId(), party.getId(), ParticipationRole.PARTICIPANT.name());
         if (party.currentParticipantsCount() == 1) {
             return;
         }
@@ -63,8 +64,8 @@ public class ParticipationModifier {
                 .stream()
                 .filter(participation -> !Objects.equals(participation.getUser(), host))
                 .max(Comparator.comparing(Participation::getParticipatedAt))
-                .ifPresent(participation ->
-                        participationRepository.updateRole(participation.getId(), ParticipationRole.HOST.name()));
+                .ifPresent(participation -> participationRepository
+                        .updateRole(participation.getUser().getId(), party.getId(), ParticipationRole.HOST.name()));
     }
 
     public void removeParticipant(Party party, User user) {
