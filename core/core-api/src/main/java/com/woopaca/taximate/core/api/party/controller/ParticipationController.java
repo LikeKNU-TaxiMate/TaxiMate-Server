@@ -49,7 +49,8 @@ public class ParticipationController {
         List<ParticipatingPartyResponse> response = partyFinder.findParticipatingParties(authenticatedUser)
                 .stream()
                 .filter(isTerminated ? Party::isTerminated : Party::isProgress)
-                .sorted(Comparator.comparing(party -> party.getParticipatedAt(authenticatedUser)))
+                .sorted(Comparator.comparing(party -> party.getParticipatedAt(authenticatedUser),
+                        Comparator.reverseOrder()))
                 .map(ParticipatingPartyResponse::from)
                 .toList();
         return ApiResults.success(response);
