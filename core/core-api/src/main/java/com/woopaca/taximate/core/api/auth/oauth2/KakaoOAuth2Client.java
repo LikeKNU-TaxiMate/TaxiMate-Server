@@ -8,6 +8,9 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @Slf4j
 @Component
@@ -52,8 +55,12 @@ public class KakaoOAuth2Client implements OAuth2Client {
     @Override
     public KakaoUser requestUserInfo(String accessToken) {
         try {
-            return restClient.get()
-                    .uri(kakaoOAuth2Properties.getUserUrl())
+            URI uri = UriComponentsBuilder.fromUriString(kakaoOAuth2Properties.getUserUrl())
+                    .queryParam("secure_resource", true)
+                    .build()
+                    .toUri();
+            return restClient.post()
+                    .uri(uri)
                     .headers(headers -> headers.setBearerAuth(accessToken))
                     .retrieve()
                     .body(KakaoUser.class);
