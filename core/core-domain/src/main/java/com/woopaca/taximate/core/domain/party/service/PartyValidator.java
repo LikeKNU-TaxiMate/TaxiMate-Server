@@ -69,7 +69,10 @@ public class PartyValidator {
     }
 
     private void validateMaxParticipationCount(User user) {
-        List<Party> participatingParties = partyFinder.findParticipatingParties(user);
+        List<Party> participatingParties = partyFinder.findParticipatingParties(user)
+                .stream()
+                .filter(Party::isProgress)
+                .toList();
         if (participatingParties.size() >= Participation.MAX_PARTICIPATING_PARTIES_COUNT) {
             throw new ParticipationLimitException();
         }
