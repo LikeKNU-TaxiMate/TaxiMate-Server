@@ -21,7 +21,7 @@ public abstract class ConcurrencyTest {
         IntStream.rangeClosed(1, executionCount)
                 .forEach(i -> executorService.execute(() -> {
                     try {
-                        consumer.accept(i);
+                        consumer.accept(i - 1);
                     } catch (Exception e) {
                         log.error("Error: ", e);
                     } finally {
