@@ -20,6 +20,9 @@ public class PushTokenAppender {
         if (!StringUtils.hasText(token)) {
             return;
         }
+        if (pushTokenRepository.existsByToken(token)) {
+            return;
+        }
 
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
         PushTokenEntity pushTokenEntity = PushTokenEntity.builder()

@@ -11,4 +11,6 @@ import java.util.List;
 public interface PushTokenRepository extends JpaRepository<PushTokenEntity, Long> {
 
     List<PushTokenEntity> findByUserIdIn(Collection<Long> ids);
+
+    boolean existsByToken(String token);
 }

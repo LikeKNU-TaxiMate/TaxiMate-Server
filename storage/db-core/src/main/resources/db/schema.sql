@@ -90,3 +90,5 @@ CREATE TABLE IF NOT EXISTS `push_token`
 );
 
 CREATE INDEX `idx_user_id` ON `push_token` (`user_id`);
+
+CREATE UNIQUE INDEX `uidx_token` ON `push_token` (`token`);
