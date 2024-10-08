@@ -15,8 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.Comparator;
 import java.util.Objects;
 
-import static com.woopaca.taximate.core.domain.party.Participation.ParticipationRole;
-
 @Component
 public class ParticipationModifier {
 
@@ -56,22 +54,23 @@ public class ParticipationModifier {
     }
 
     public void delegateHost(Party party, User host) {
-        participationRepository.updateRole(host.getId(), party.getId(), ParticipationRole.PARTICIPANT.name());
         if (party.currentParticipantsCount() == 1) {
             return;
         }
+        participationRepository.findByPartyIdAndUserId(party.getId(), host.getId())
+                .ifPresent(ParticipationEntity::changeToParticipant);
         party.getParticipationSet()
                 .stream()
                 .filter(participation -> !Objects.equals(participation.getUser(), host))
                 .max(Comparator.comparing(Participation::getParticipatedAt))
-                .ifPresent(participation -> participationRepository
-                        .updateRole(participation.getUser().getId(), party.getId(), ParticipationRole.HOST.name()));
+                .flatMap(participation -> participationRepository
+                        .findByPartyIdAndUserId(party.getId(), participation.getUser().getId()))
+                .ifPresent(ParticipationEntity::changeToHost);
     }
 
     public void removeParticipant(Party party, User user) {
         ParticipationEntity participationEntity = participationRepository.findByPartyIdAndUserId(party.getId(), user.getId())
                 .orElseThrow(NotParticipatedPartyException::new);
         participationEntity.leave();
-        participationRepository.save(participationEntity);
     }
 }

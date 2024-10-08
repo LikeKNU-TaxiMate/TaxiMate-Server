@@ -7,8 +7,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Getter
+@DynamicUpdate
 @Entity(name = "participation")
 public class ParticipationEntity extends BaseEntity {
 
@@ -61,5 +63,13 @@ public class ParticipationEntity extends BaseEntity {
 
     public void participate() {
         this.status = "PARTICIPATING";
+    }
+
+    public void changeToParticipant() {
+        this.role = "PARTICIPANT";
+    }
+
+    public void changeToHost() {
+        this.role = "HOST";
     }
 }
