@@ -72,8 +72,6 @@ CREATE TABLE IF NOT EXISTS `chat_read`
     `user_id`      BIGINT   NOT NULL,
     `party_id`     BIGINT   NOT NULL,
     `last_chat_id` BIGINT   NOT NULL,
-    `created_at`   DATETIME NOT NULL,
-    `updated_at`   DATETIME NOT NULL,
     PRIMARY KEY (`id`)
 );
 

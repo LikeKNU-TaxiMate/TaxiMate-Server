@@ -1,12 +1,19 @@
 package com.woopaca.taximate.storage.db.core.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Entity(name = "chat_read")
-public class ChatReadEntity extends BaseEntity {
+public class ChatReadEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private Long userId;
 
@@ -22,11 +29,5 @@ public class ChatReadEntity extends BaseEntity {
         this.userId = userId;
         this.partyId = partyId;
         this.lastChatId = lastChatId;
-    }
-
-    public void updateLastChatId(Long readChatId) {
-        if (lastChatId < readChatId) {
-            lastChatId = readChatId;
-        }
     }
 }
