@@ -3,7 +3,6 @@ package com.woopaca.taximate.core.message;
 import com.woopaca.taximate.core.domain.chat.Chat;
 import com.woopaca.taximate.core.domain.chat.MessageSender;
 import com.woopaca.taximate.core.domain.chat.WebSocketSessions;
-import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.core.message.dto.ChatMessage;
@@ -27,8 +26,7 @@ public class StompMessageSender implements MessageSender {
     @Override
     public void send(Chat chat) {
         Party party = chat.getParty();
-        for (Participation participation : party.getParticipationSet()) {
-            User receiver = participation.getUser();
+        for (User receiver : party.getParticipants()) {
             if (chat.isLeaveMessage() && chat.getSender().equals(receiver)) {
                 continue;
             }
