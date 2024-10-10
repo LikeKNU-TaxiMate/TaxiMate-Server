@@ -22,7 +22,7 @@ public class ParticipationEventSubscriber {
         this.messageNotifier = messageNotifier;
     }
 
-    @Async
+    @Async("eventHandlerTaskExecutor")
     @TransactionalEventListener
     public void handleParticipateEvent(ParticipateEvent participateEvent) {
         User participant = participateEvent.participant();
@@ -32,7 +32,7 @@ public class ParticipationEventSubscriber {
         messageNotifier.notify(participateMessage);
     }
 
-    @Async
+    @Async("eventHandlerTaskExecutor")
     @TransactionalEventListener
     public void handleLeaveEvent(LeaveEvent leaveEvent) {
         User leaver = leaveEvent.leaver();

@@ -18,7 +18,7 @@ public class MessageNotifier {
         this.pushNotificationSender = pushNotificationSender;
     }
 
-    @Async
+    @Async("eventHandlerTaskExecutor")
     public void notify(Chat chat) {
         messageSender.send(chat);
         Party party = chat.getParty();

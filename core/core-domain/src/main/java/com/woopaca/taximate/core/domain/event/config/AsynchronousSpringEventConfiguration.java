@@ -16,14 +16,15 @@ import java.time.Duration;
 public class AsynchronousSpringEventConfiguration {
 
     @Bean
-    public ApplicationEventMulticaster applicationEventMulticaster(@Qualifier("taskExecutor") TaskExecutor taskExecutor) {
+    public ApplicationEventMulticaster applicationEventMulticaster(
+            @Qualifier("eventHandlerTaskExecutor") TaskExecutor taskExecutor) {
         SimpleApplicationEventMulticaster eventMulticaster = new SimpleApplicationEventMulticaster();
         eventMulticaster.setTaskExecutor(taskExecutor);
         return eventMulticaster;
     }
 
     @Bean
-    public TaskExecutor taskExecutor() {
+    public TaskExecutor eventHandlerTaskExecutor() {
         return new ThreadPoolTaskExecutorBuilder()
                 .corePoolSize(10)
                 .maxPoolSize(50)
