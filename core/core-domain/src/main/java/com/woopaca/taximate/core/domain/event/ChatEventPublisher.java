@@ -6,11 +6,11 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ChatEventProducer {
+public class ChatEventPublisher {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public ChatEventProducer(ApplicationEventPublisher eventPublisher) {
+    public ChatEventPublisher(ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 

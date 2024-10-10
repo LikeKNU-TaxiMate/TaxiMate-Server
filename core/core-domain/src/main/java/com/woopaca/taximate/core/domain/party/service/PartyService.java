@@ -1,7 +1,7 @@
 package com.woopaca.taximate.core.domain.party.service;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
-import com.woopaca.taximate.core.domain.event.ParticipationEventProducer;
+import com.woopaca.taximate.core.domain.event.ParticipationEventPublisher;
 import com.woopaca.taximate.core.domain.local.AddressAllocator;
 import com.woopaca.taximate.core.domain.party.KakaoMobilityClientProxy;
 import com.woopaca.taximate.core.domain.party.Participation;
@@ -34,9 +34,9 @@ public class PartyService {
     private final ParticipationModifier participationModifier;
     private final PartyAppender partyAppender;
     private final UserLock userLock;
-    private final ParticipationEventProducer participationEventProducer;
+    private final ParticipationEventPublisher participationEventPublisher;
 
-    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, KakaoMobilityClientProxy kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationModifier participationModifier, PartyAppender partyAppender, UserLock userLock, ParticipationEventProducer participationEventProducer) {
+    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, KakaoMobilityClientProxy kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationModifier participationModifier, PartyAppender partyAppender, UserLock userLock, ParticipationEventPublisher participationEventPublisher) {
         this.partyMapFinder = partyMapFinder;
         this.partyFinder = partyFinder;
         this.kakaoMobilityClient = kakaoMobilityClient;
@@ -45,7 +45,7 @@ public class PartyService {
         this.participationModifier = participationModifier;
         this.partyAppender = partyAppender;
         this.userLock = userLock;
-        this.participationEventProducer = participationEventProducer;
+        this.participationEventPublisher = participationEventPublisher;
     }
 
     /**
@@ -102,7 +102,7 @@ public class PartyService {
         Party party = partyAppender.appendNew(newParty);
         Participation participation = participationModifier.appendHost(party, authenticatedUser);
 
-        participationEventProducer.publishParticipateEvent(party, authenticatedUser, participation.getParticipatedAt());
+        participationEventPublisher.publishParticipateEvent(party, authenticatedUser, participation.getParticipatedAt());
         return party.getId();
     }
 }

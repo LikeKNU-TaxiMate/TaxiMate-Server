@@ -10,11 +10,11 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class ParticipationEventProducer {
+public class ParticipationEventPublisher {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    public ParticipationEventProducer(ApplicationEventPublisher eventPublisher) {
+    public ParticipationEventPublisher(ApplicationEventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 

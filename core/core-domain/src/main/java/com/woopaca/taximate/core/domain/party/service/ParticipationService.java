@@ -1,7 +1,7 @@
 package com.woopaca.taximate.core.domain.party.service;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
-import com.woopaca.taximate.core.domain.event.ParticipationEventProducer;
+import com.woopaca.taximate.core.domain.event.ParticipationEventPublisher;
 import com.woopaca.taximate.core.domain.party.ParticipationModifier;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
@@ -18,14 +18,14 @@ public class ParticipationService {
     private final PartyFinder partyFinder;
     private final PartyValidator partyValidator;
     private final ParticipationModifier participationModifier;
-    private final ParticipationEventProducer participationEventProducer;
+    private final ParticipationEventPublisher participationEventPublisher;
     private final UserLock userLock;
 
-    public ParticipationService(PartyFinder partyFinder, PartyValidator partyValidator, ParticipationModifier participationModifier, ParticipationEventProducer participationEventProducer, UserLock userLock) {
+    public ParticipationService(PartyFinder partyFinder, PartyValidator partyValidator, ParticipationModifier participationModifier, ParticipationEventPublisher participationEventPublisher, UserLock userLock) {
         this.partyFinder = partyFinder;
         this.partyValidator = partyValidator;
         this.participationModifier = participationModifier;
-        this.participationEventProducer = participationEventProducer;
+        this.participationEventPublisher = participationEventPublisher;
         this.userLock = userLock;
     }
 
@@ -42,7 +42,7 @@ public class ParticipationService {
         partyValidator.validateParticipateParty(party, authenticatedUser);
         participationModifier.appendParticipant(party, authenticatedUser);
 
-        participationEventProducer.publishParticipateEvent(party, authenticatedUser, LocalDateTime.now());
+        participationEventPublisher.publishParticipateEvent(party, authenticatedUser, LocalDateTime.now());
         return partyId;
     }
 
@@ -62,7 +62,7 @@ public class ParticipationService {
         }
         participationModifier.removeParticipant(party, authenticatedUser);
 
-        participationEventProducer.publishLeaveEvent(party, authenticatedUser, LocalDateTime.now());
+        participationEventPublisher.publishLeaveEvent(party, authenticatedUser, LocalDateTime.now());
         return party.getId();
     }
 }

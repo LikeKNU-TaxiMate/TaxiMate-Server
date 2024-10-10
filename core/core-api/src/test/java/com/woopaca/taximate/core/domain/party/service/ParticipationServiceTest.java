@@ -1,7 +1,7 @@
 package com.woopaca.taximate.core.domain.party.service;
 
 import com.woopaca.taximate.core.domain.auth.AuthenticatedUserHolder;
-import com.woopaca.taximate.core.domain.event.ParticipationEventProducer;
+import com.woopaca.taximate.core.domain.event.ParticipationEventPublisher;
 import com.woopaca.taximate.core.domain.fixture.ParticipationFixtures;
 import com.woopaca.taximate.core.domain.fixture.PartyFixtures;
 import com.woopaca.taximate.core.domain.fixture.UserFixtures;
@@ -47,7 +47,7 @@ class ParticipationServiceTest {
     private UserRepository userRepository;
 
     @MockBean
-    private ParticipationEventProducer participationEventProducer;
+    private ParticipationEventPublisher participationEventPublisher;
 
     @Nested
     class participateParty_메서드는 {
@@ -87,7 +87,7 @@ class ParticipationServiceTest {
                                             entity.getUser().getId().equals(user.getId()) &&
                                             entity.getParty().getId().equals(partyEntity.getId())
                             ),
-                    () -> verify(participationEventProducer).publishParticipateEvent(any(), any(), any())
+                    () -> verify(participationEventPublisher).publishParticipateEvent(any(), any(), any())
             );
         }
     }

@@ -7,7 +7,7 @@ import com.woopaca.taximate.core.domain.chat.ChatReadRecorder;
 import com.woopaca.taximate.core.domain.chat.ChatRoom;
 import com.woopaca.taximate.core.domain.chat.MessageNotifier;
 import com.woopaca.taximate.core.domain.error.exception.NotParticipatedPartyException;
-import com.woopaca.taximate.core.domain.event.ChatEventProducer;
+import com.woopaca.taximate.core.domain.event.ChatEventPublisher;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
 import com.woopaca.taximate.core.domain.user.User;
@@ -24,15 +24,15 @@ public class ChatService {
 
     private final PartyFinder partyFinder;
     private final MessageNotifier messageNotifier;
-    private final ChatEventProducer chatEventProducer;
+    private final ChatEventPublisher chatEventPublisher;
     private final ChatFinder chatFinder;
     private final ChatReadRecorder chatReadRecorder;
     private final ChatReadRepository chatReadRepository;
 
-    public ChatService(PartyFinder partyFinder, MessageNotifier messageNotifier, ChatEventProducer chatEventProducer, ChatFinder chatFinder, ChatReadRecorder chatReadRecorder, ChatReadRepository chatReadRepository) {
+    public ChatService(PartyFinder partyFinder, MessageNotifier messageNotifier, ChatEventPublisher chatEventPublisher, ChatFinder chatFinder, ChatReadRecorder chatReadRecorder, ChatReadRepository chatReadRepository) {
         this.partyFinder = partyFinder;
         this.messageNotifier = messageNotifier;
-        this.chatEventProducer = chatEventProducer;
+        this.chatEventPublisher = chatEventPublisher;
         this.chatFinder = chatFinder;
         this.chatReadRecorder = chatReadRecorder;
         this.chatReadRepository = chatReadRepository;
@@ -44,7 +44,7 @@ public class ChatService {
             throw new NotParticipatedPartyException();
         }
         Chat chat = Chat.standardMessage(party, sender, message);
-        chatEventProducer.publishChatEvent(chat);
+        chatEventPublisher.publishChatEvent(chat);
         messageNotifier.notify(chat);
     }
 

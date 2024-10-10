@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class ChatEventConsumer {
+public class ChatEventSubscriber {
 
     private final ChatAppender chatAppender;
     private final ChatReadRecorder chatReadRecorder;
 
-    public ChatEventConsumer(ChatAppender chatAppender, ChatReadRecorder chatReadRecorder) {
+    public ChatEventSubscriber(ChatAppender chatAppender, ChatReadRecorder chatReadRecorder) {
         this.chatAppender = chatAppender;
         this.chatReadRecorder = chatReadRecorder;
     }

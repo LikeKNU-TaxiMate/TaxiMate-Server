@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
-public class ParticipationEventConsumer {
+public class ParticipationEventSubscriber {
 
-    private final ChatEventProducer chatEventProducer;
+    private final ChatEventPublisher chatEventPublisher;
     private final MessageNotifier messageNotifier;
 
-    public ParticipationEventConsumer(ChatEventProducer chatEventProducer, MessageNotifier messageNotifier) {
-        this.chatEventProducer = chatEventProducer;
+    public ParticipationEventSubscriber(ChatEventPublisher chatEventPublisher, MessageNotifier messageNotifier) {
+        this.chatEventPublisher = chatEventPublisher;
         this.messageNotifier = messageNotifier;
     }
 
@@ -28,7 +28,7 @@ public class ParticipationEventConsumer {
         User participant = participateEvent.participant();
         Party party = participateEvent.party();
         Chat participateMessage = Chat.participateMessage(party, participant, participateEvent.participatedAt());
-        chatEventProducer.publishChatEvent(participateMessage);
+        chatEventPublisher.publishChatEvent(participateMessage);
         messageNotifier.notify(participateMessage);
     }
 
@@ -38,7 +38,7 @@ public class ParticipationEventConsumer {
         User leaver = leaveEvent.leaver();
         Party party = leaveEvent.party();
         Chat leaveMessage = Chat.leaveMessage(party, leaver, leaveEvent.leftAt());
-        chatEventProducer.publishChatEvent(leaveMessage);
+        chatEventPublisher.publishChatEvent(leaveMessage);
         messageNotifier.notify(leaveMessage);
     }
 }
