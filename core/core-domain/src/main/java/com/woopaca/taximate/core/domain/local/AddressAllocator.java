@@ -2,10 +2,8 @@ package com.woopaca.taximate.core.domain.local;
 
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.model.Coordinate;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 public class AddressAllocator {
 

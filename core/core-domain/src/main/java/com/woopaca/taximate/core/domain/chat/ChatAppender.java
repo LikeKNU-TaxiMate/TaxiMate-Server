@@ -5,11 +5,9 @@ import com.woopaca.taximate.storage.db.core.entity.ChatEntity;
 import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import com.woopaca.taximate.storage.db.core.repository.UserRepository;
 import jakarta.persistence.EntityManager;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-@Slf4j
 @Component
 public class ChatAppender {
 

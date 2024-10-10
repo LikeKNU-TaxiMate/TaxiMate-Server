@@ -17,14 +17,12 @@ import com.woopaca.taximate.core.domain.party.model.MapBound;
 import com.woopaca.taximate.core.domain.taxi.Taxi;
 import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.core.domain.user.UserLock;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Service
 public class PartyService {
 

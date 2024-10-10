@@ -16,7 +16,6 @@ import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import com.woopaca.taximate.storage.db.core.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +28,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 @DisplayName("PartyService 동시성 테스트")
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class PartyServiceConcurrencyTest extends ConcurrencyTest {

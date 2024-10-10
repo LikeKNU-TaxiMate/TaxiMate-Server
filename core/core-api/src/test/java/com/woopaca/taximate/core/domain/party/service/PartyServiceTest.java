@@ -17,7 +17,6 @@ import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import com.woopaca.taximate.storage.db.core.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.h2gis.functions.factory.H2GISFunctions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -37,7 +36,6 @@ import java.sql.SQLException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Slf4j
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 class PartyServiceTest {

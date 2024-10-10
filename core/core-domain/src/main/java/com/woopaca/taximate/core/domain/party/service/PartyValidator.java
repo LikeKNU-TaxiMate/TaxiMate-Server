@@ -13,13 +13,11 @@ import com.woopaca.taximate.core.domain.party.Participation;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
 import com.woopaca.taximate.core.domain.user.User;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Slf4j
 @Component
 public class PartyValidator {
 

@@ -12,13 +12,11 @@ import com.woopaca.taximate.core.domain.user.User;
 import com.woopaca.taximate.core.domain.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
 @RequestMapping("/oauth2")
 @RestController
 public class OAuth2Controller {
