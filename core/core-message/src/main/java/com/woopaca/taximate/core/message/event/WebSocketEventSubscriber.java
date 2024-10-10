@@ -12,11 +12,11 @@ import org.springframework.web.socket.messaging.SessionSubscribeEvent;
 import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
 
 @Component
-public class WebSocketEventListener {
+public class WebSocketEventSubscriber {
 
     private final WebSocketSessions webSocketSessions;
 
-    public WebSocketEventListener(WebSocketSessions webSocketSessions) {
+    public WebSocketEventSubscriber(WebSocketSessions webSocketSessions) {
         this.webSocketSessions = webSocketSessions;
     }
 

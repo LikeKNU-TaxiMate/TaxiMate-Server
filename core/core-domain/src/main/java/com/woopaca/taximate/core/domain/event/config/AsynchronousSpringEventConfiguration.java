@@ -30,7 +30,7 @@ public class AsynchronousSpringEventConfiguration {
                 .maxPoolSize(50)
                 .queueCapacity(200)
                 .threadNamePrefix("EventHandler-")
-                .keepAlive(Duration.ofSeconds(60))
+                .keepAlive(Duration.ofHours(1))
                 .allowCoreThreadTimeOut(true)
                 .build();
     }

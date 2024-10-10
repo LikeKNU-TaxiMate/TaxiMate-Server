@@ -6,7 +6,6 @@ import com.woopaca.taximate.core.domain.event.dto.LeaveEvent;
 import com.woopaca.taximate.core.domain.event.dto.ParticipateEvent;
 import com.woopaca.taximate.core.domain.party.Party;
 import com.woopaca.taximate.core.domain.user.User;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
