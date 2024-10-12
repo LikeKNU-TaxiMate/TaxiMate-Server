@@ -3,8 +3,6 @@ package com.woopaca.taximate.core.domain.chat;
 import com.woopaca.taximate.storage.db.nosql.repository.KeyValueRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
-
 @Component
 public class WebSocketSessions {
 
@@ -33,10 +31,5 @@ public class WebSocketSessions {
 
     private String generateKey(Long userId) {
         return String.join(":", KEY_PREFIX, String.valueOf(userId));
-    }
-
-    public Collection<String> testSend() {
-        return keyValueRepository.getAll(KEY_PREFIX + ":*")
-                .values();
     }
 }
