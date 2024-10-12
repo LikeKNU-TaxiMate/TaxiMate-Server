@@ -4,10 +4,11 @@ import com.woopaca.taximate.core.domain.notification.PushNotification;
 import lombok.Builder;
 
 import java.util.List;
+import java.util.Map;
 
 @Builder
 public record ExpoPushNotification(List<String> to, String title, String subtitle, String body, String sound,
-                                   int badge) {
+                                   int badge, Map<String, Object> data) {
 
     public ExpoPushNotification {
         sound = "default";
@@ -20,6 +21,7 @@ public record ExpoPushNotification(List<String> to, String title, String subtitl
                 .subtitle(pushNotification.subtitle())
                 .body(pushNotification.body())
                 .badge(pushNotification.badge())
+                .data(pushNotification.data())
                 .build();
     }
 }

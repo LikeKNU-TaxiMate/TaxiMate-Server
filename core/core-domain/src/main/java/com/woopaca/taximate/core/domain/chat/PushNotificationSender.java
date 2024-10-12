@@ -8,6 +8,7 @@ import com.woopaca.taximate.core.domain.user.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class PushNotificationSender {
@@ -28,7 +29,7 @@ public class PushNotificationSender {
         Party party = chat.getParty();
         User sender = chat.getSender();
         PushNotification pushNotification = new PushNotification(party.getTitle(), sender.getNickname(),
-                chat.getMessage(), 0);
+                chat.getMessage(), 0, Map.of("partyId", chat.getParty().getId()));
         List<String> tokens = pushTokenFinder.findTokens(receivers);
         pushNotificationClient.sendNotifications(pushNotification, tokens);
     }
