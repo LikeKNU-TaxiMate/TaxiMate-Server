@@ -6,6 +6,7 @@ dependencies {
     implementation project(':core:core-security')
 
     runtimeOnly project(':core:core-message')
+    runtimeOnly project(':support:monitoring')
 
     testImplementation project(':core:core-domain')
     testImplementation project(':core:core-security')
@@ -16,7 +17,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.retry:spring-retry'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
     testImplementation 'org.orbisgis:h2gis:2.2.3'
 }
 

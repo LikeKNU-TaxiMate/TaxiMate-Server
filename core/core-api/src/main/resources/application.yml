@@ -32,3 +32,4 @@ spring:
   config:
     import:
       - logging.yml
+      - monitoring.yml
