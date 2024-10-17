@@ -15,10 +15,10 @@ public abstract class BusinessException extends RuntimeException {
     }
 
     public ErrorHttpStatus getErrorHttpStatus() {
-        ErrorHttpStatus ErrorHttpStatus = errorType.getErrorHttpStatus();
-        if (ErrorHttpStatus == null) {
-            return ErrorType.ErrorHttpStatus.BAD_REQUEST;
+        ErrorHttpStatus errorHttpStatus = errorType.getErrorHttpStatus();
+        if (errorHttpStatus == null) {
+            return ErrorHttpStatus.BAD_REQUEST;
         }
-        return ErrorHttpStatus;
+        return errorHttpStatus;
     }
 }
