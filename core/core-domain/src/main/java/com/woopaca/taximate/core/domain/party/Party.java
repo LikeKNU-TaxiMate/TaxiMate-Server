@@ -23,6 +23,7 @@ public class Party {
     public static final int MAX_EXPLANATION_LENGTH = 500;
     public static final int MAX_PARTICIPANTS_COUNT = 4;
     public static final int MIN_PARTICIPANTS_COUNT = 2;
+    public static final int TERMINATE_AFTER_MINUTES = 10;
 
     @EqualsAndHashCode.Include
     private Long id;
@@ -126,7 +127,7 @@ public class Party {
     }
 
     public boolean isProgress() {
-        return departureTime.isAfter(LocalDateTime.now().minusMinutes(10));
+        return departureTime.isAfter(LocalDateTime.now().minusMinutes(TERMINATE_AFTER_MINUTES));
     }
 
     public boolean isTerminated() {

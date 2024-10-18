@@ -7,6 +7,8 @@ import com.woopaca.taximate.storage.db.core.entity.ParticipationEntity;
 import com.woopaca.taximate.storage.db.core.entity.PartyEntity;
 import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 
+import java.time.LocalDateTime;
+
 public final class ParticipationFixtures {
 
     private ParticipationFixtures() {
@@ -17,6 +19,7 @@ public final class ParticipationFixtures {
                 .role(ParticipationRole.PARTICIPANT)
                 .status(ParticipationStatus.PARTICIPATING)
                 .user(UserFixtures.createUser(userId))
+                .participatedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -25,6 +28,7 @@ public final class ParticipationFixtures {
                 .role(ParticipationRole.HOST)
                 .status(ParticipationStatus.PARTICIPATING)
                 .user(UserFixtures.createUser(userId))
+                .participatedAt(LocalDateTime.now())
                 .build();
     }
 

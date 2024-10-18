@@ -15,9 +15,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class PartyTest {
@@ -126,10 +128,10 @@ class PartyTest {
     class isProgress_메서드는 {
 
         @Test
-        void 출발_시간이_30분_이상_지나지_않았으면_true를_반환한다() {
+        void 출발_시간이_10분_이상_지나지_않았으면_true를_반환한다() {
             //given
             Party party = Party.builder()
-                    .departureTime(LocalDateTime.now().plusMinutes(29))
+                    .departureTime(LocalDateTime.now().minusMinutes(Party.TERMINATE_AFTER_MINUTES - 1))
                     .build();
 
             //when
@@ -140,10 +142,10 @@ class PartyTest {
         }
 
         @Test
-        void 출발_시간이_30분_이상_지났으면_false를_반환한다() {
+        void 출발_시간이_10분_이상_지났으면_false를_반환한다() {
             //given
             Party party = Party.builder()
-                    .departureTime(LocalDateTime.now().minusMinutes(31))
+                    .departureTime(LocalDateTime.now().minusMinutes(Party.TERMINATE_AFTER_MINUTES + 1))
                     .build();
 
             //when
@@ -177,6 +179,191 @@ class PartyTest {
     }
 
     @Nested
+    class isParticipated_메서드는 {
+
+        @Test
+        void 참여자가_팟에_참여중인_경우_true를_반환한다() {
+            //given
+            final long userId = 1L;
+            User user = UserFixtures.createUser(userId);
+            Participation participation = ParticipationFixtures.createParticipantParticipationOf(userId);
+            Party party = Party.builder()
+                    .participationSet(Set.of(participation))
+                    .build();
+
+            //when
+            boolean isParticipated = party.isParticipated(user);
+
+            //then
+            assertThat(isParticipated).isTrue();
+        }
+
+        @Test
+        void 참여자가_팟에_참여중이_아닌_경우_false를_반환한다() {
+            //given
+            final long userId = 1L;
+            User user = UserFixtures.createUser(userId);
+            Party party = Party.builder()
+                    .participationSet(Set.of(Participation.builder().status(ParticipationStatus.LEFT).user(user).build()))
+                    .build();
+
+            //when
+            boolean isParticipated = party.isParticipated(user);
+
+            //then
+            assertThat(isParticipated).isFalse();
+        }
+    }
+
+    @Nested
+    class isFull_메서드는 {
+
+        @Test
+        void 참여자가_최대_참여자_수에_도달한_경우_true를_반환한다() {
+            //given
+            Party party = Party.builder()
+                    .maxParticipants(2)
+                    .participationSet(Set.of(
+                            Participation.builder().id(1L).status(ParticipationStatus.PARTICIPATING).build(),
+                            Participation.builder().id(2L).status(ParticipationStatus.PARTICIPATING).build()
+                    ))
+                    .build();
+
+            //when
+            boolean isFull = party.isFull();
+
+            //then
+            assertThat(isFull).isTrue();
+        }
+
+        @Test
+        void 참여자가_최대_참여자_수에_도달하지_않은_경우_false를_반환한다() {
+            //given
+            Party party = Party.builder()
+                    .maxParticipants(2)
+                    .participationSet(Set.of(
+                            Participation.builder().id(1L).status(ParticipationStatus.PARTICIPATING).build(),
+                            Participation.builder().id(2L).status(ParticipationStatus.LEFT).build()
+                    ))
+                    .build();
+
+            //when
+            boolean isFull = party.isFull();
+
+            //then
+            assertThat(isFull).isFalse();
+        }
+    }
+
+    @Nested
+    class getParticipatedAt_메서드는 {
+
+        @Test
+        void 참여자의_참여_시간을_반환한다() {
+            //given
+            final long userId = 1L;
+            User user = UserFixtures.createUser(userId);
+            Participation participation = ParticipationFixtures.createParticipantParticipationOf(userId);
+            Party party = Party.builder()
+                    .participationSet(Set.of(participation))
+                    .build();
+
+            //when
+            LocalDateTime participatedAt = party.getParticipatedAt(user);
+
+            //then
+            assertThat(participatedAt).isEqualTo(participation.getParticipatedAt());
+        }
+
+        @Test
+        void 참여자가_팟에_참여중이_아닌_경우_최소_시간을_반환한다() {
+            //given
+            final long userId = 1L;
+            User user = UserFixtures.createUser(userId);
+            Party party = Party.builder()
+                    .participationSet(Collections.emptySet())
+                    .build();
+
+            //when
+            LocalDateTime participatedAt = party.getParticipatedAt(user);
+
+            //then
+            assertThat(participatedAt).isEqualTo(LocalDateTime.MIN);
+        }
+    }
+
+    @Nested
+    class isHostUser_메서드는 {
+
+        @Test
+        void 호스트인_경우_true를_반환한다() {
+            //given
+            final long userId = 1L;
+            User user = UserFixtures.createUser(userId);
+            Participation hostParticipation = ParticipationFixtures.createHostParticipationOf(userId);
+            Party party = Party.builder()
+                    .participationSet(Set.of(hostParticipation))
+                    .build();
+
+            //when
+            boolean isHostUser = party.isHostUser(user);
+
+            //then
+            assertThat(isHostUser).isTrue();
+        }
+
+        @Test
+        void 호스트가_아닌_경우_false를_반환한다() {
+            //given
+            final long userId = 1L;
+            User user = UserFixtures.createUser(userId);
+            Participation participantParticipation = ParticipationFixtures.createParticipantParticipationOf(userId);
+            Party party = Party.builder()
+                    .participationSet(Set.of(participantParticipation))
+                    .build();
+
+            //when
+            boolean isHostUser = party.isHostUser(user);
+
+            //then
+            assertThat(isHostUser).isFalse();
+        }
+    }
+
+    @Nested
+    class getParticipants_메서드는 {
+
+        @Test
+        void 참여_중인_참여자_목록을_반환한다() {
+            //given
+            final long userId = 1L;
+            User user = UserFixtures.createUser(userId);
+            Participation participating = Participation.builder()
+                    .id(1L)
+                    .user(user)
+                    .status(ParticipationStatus.PARTICIPATING)
+                    .build();
+            Participation left = Participation.builder()
+                    .id(2L)
+                    .user(UserFixtures.createUser(2L))
+                    .status(ParticipationStatus.LEFT)
+                    .build();
+            Party party = Party.builder()
+                    .participationSet(Set.of(participating, left))
+                    .build();
+
+            //when
+            List<User> participants = party.getParticipants();
+
+            //then
+            assertAll(
+                    () -> assertThat(participants).hasSize(1),
+                    () -> assertThat(participants).contains(user)
+            );
+        }
+    }
+
+    @Nested
     class fromEntity_메서드는 {
 
         @Test
@@ -188,20 +375,22 @@ class PartyTest {
             Party party = Party.fromEntity(partyEntity);
 
             //then
-            assertThat(party.getTitle()).isEqualTo(partyEntity.getTitle());
-            assertThat(party.getExplanation()).isEqualTo(partyEntity.getExplanation());
-            assertThat(party.getDepartureTime()).isEqualTo(partyEntity.getDepartureTime());
-            assertThat(party.getOrigin()).isEqualTo(partyEntity.getOrigin());
-            assertThat(party.getOriginAddress()).isEqualTo(partyEntity.getOriginAddress());
-            assertThat(party.getOriginLocation().latitude()).isEqualTo(partyEntity.getOriginLatitude());
-            assertThat(party.getOriginLocation().longitude()).isEqualTo(partyEntity.getOriginLongitude());
-            assertThat(party.getDestination()).isEqualTo(partyEntity.getDestination());
-            assertThat(party.getDestinationAddress()).isEqualTo(partyEntity.getDestinationAddress());
-            assertThat(party.getDestinationLocation().latitude()).isEqualTo(partyEntity.getDestinationLatitude());
-            assertThat(party.getDestinationLocation().longitude()).isEqualTo(partyEntity.getDestinationLongitude());
-            assertThat(party.getMaxParticipants()).isEqualTo(partyEntity.getMaxParticipants());
-            assertThat(party.getViews()).isEqualTo(partyEntity.getViews());
-            assertThat(party.getParticipationSet()).isEmpty();
+            assertAll(
+                    () -> assertThat(party.getTitle()).isEqualTo(partyEntity.getTitle()),
+                    () -> assertThat(party.getExplanation()).isEqualTo(partyEntity.getExplanation()),
+                    () -> assertThat(party.getDepartureTime()).isEqualTo(partyEntity.getDepartureTime()),
+                    () -> assertThat(party.getOrigin()).isEqualTo(partyEntity.getOrigin()),
+                    () -> assertThat(party.getOriginAddress()).isEqualTo(partyEntity.getOriginAddress()),
+                    () -> assertThat(party.getOriginLocation().latitude()).isEqualTo(partyEntity.getOriginLatitude()),
+                    () -> assertThat(party.getOriginLocation().longitude()).isEqualTo(partyEntity.getOriginLongitude()),
+                    () -> assertThat(party.getDestination()).isEqualTo(partyEntity.getDestination()),
+                    () -> assertThat(party.getDestinationAddress()).isEqualTo(partyEntity.getDestinationAddress()),
+                    () -> assertThat(party.getDestinationLocation().latitude()).isEqualTo(partyEntity.getDestinationLatitude()),
+                    () -> assertThat(party.getDestinationLocation().longitude()).isEqualTo(partyEntity.getDestinationLongitude()),
+                    () -> assertThat(party.getMaxParticipants()).isEqualTo(partyEntity.getMaxParticipants()),
+                    () -> assertThat(party.getViews()).isEqualTo(partyEntity.getViews()),
+                    () -> assertThat(party.getParticipationSet()).isEmpty()
+            );
         }
     }
 
@@ -217,20 +406,22 @@ class PartyTest {
             Party party = Party.fromEntityExcludeParticipants(partyEntity);
 
             //then
-            assertThat(party.getTitle()).isEqualTo(partyEntity.getTitle());
-            assertThat(party.getExplanation()).isEqualTo(partyEntity.getExplanation());
-            assertThat(party.getDepartureTime()).isEqualTo(partyEntity.getDepartureTime());
-            assertThat(party.getOrigin()).isEqualTo(partyEntity.getOrigin());
-            assertThat(party.getOriginAddress()).isEqualTo(partyEntity.getOriginAddress());
-            assertThat(party.getOriginLocation().latitude()).isEqualTo(partyEntity.getOriginLatitude());
-            assertThat(party.getOriginLocation().longitude()).isEqualTo(partyEntity.getOriginLongitude());
-            assertThat(party.getDestination()).isEqualTo(partyEntity.getDestination());
-            assertThat(party.getDestinationAddress()).isEqualTo(partyEntity.getDestinationAddress());
-            assertThat(party.getDestinationLocation().latitude()).isEqualTo(partyEntity.getDestinationLatitude());
-            assertThat(party.getDestinationLocation().longitude()).isEqualTo(partyEntity.getDestinationLongitude());
-            assertThat(party.getMaxParticipants()).isEqualTo(partyEntity.getMaxParticipants());
-            assertThat(party.getViews()).isEqualTo(partyEntity.getViews());
-            assertThat(party.getParticipationSet()).isNull();
+            assertAll(
+                    () -> assertThat(party.getTitle()).isEqualTo(partyEntity.getTitle()),
+                    () -> assertThat(party.getExplanation()).isEqualTo(partyEntity.getExplanation()),
+                    () -> assertThat(party.getDepartureTime()).isEqualTo(partyEntity.getDepartureTime()),
+                    () -> assertThat(party.getOrigin()).isEqualTo(partyEntity.getOrigin()),
+                    () -> assertThat(party.getOriginAddress()).isEqualTo(partyEntity.getOriginAddress()),
+                    () -> assertThat(party.getOriginLocation().latitude()).isEqualTo(partyEntity.getOriginLatitude()),
+                    () -> assertThat(party.getOriginLocation().longitude()).isEqualTo(partyEntity.getOriginLongitude()),
+                    () -> assertThat(party.getDestination()).isEqualTo(partyEntity.getDestination()),
+                    () -> assertThat(party.getDestinationAddress()).isEqualTo(partyEntity.getDestinationAddress()),
+                    () -> assertThat(party.getDestinationLocation().latitude()).isEqualTo(partyEntity.getDestinationLatitude()),
+                    () -> assertThat(party.getDestinationLocation().longitude()).isEqualTo(partyEntity.getDestinationLongitude()),
+                    () -> assertThat(party.getMaxParticipants()).isEqualTo(partyEntity.getMaxParticipants()),
+                    () -> assertThat(party.getViews()).isEqualTo(partyEntity.getViews()),
+                    () -> assertThat(party.getParticipationSet()).isNull()
+            );
         }
     }
 }
