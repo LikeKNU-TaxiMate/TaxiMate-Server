@@ -32,6 +32,15 @@ public final class ParticipationFixtures {
                 .build();
     }
 
+    public static ParticipationEntity createHostParticipationEntityWith(PartyEntity partyEntity, UserEntity userEntity) {
+        return ParticipationEntity.builder()
+                .party(partyEntity)
+                .user(userEntity)
+                .role(ParticipationRole.HOST.name())
+                .status(ParticipationStatus.PARTICIPATING.name())
+                .build();
+    }
+
     public static ParticipationEntity createParticipationEntityWith(PartyEntity partyEntity, UserEntity userEntity) {
         return ParticipationEntity.builder()
                 .party(partyEntity)

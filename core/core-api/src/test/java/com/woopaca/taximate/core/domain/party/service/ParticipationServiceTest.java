@@ -14,6 +14,8 @@ import com.woopaca.taximate.storage.db.core.entity.UserEntity;
 import com.woopaca.taximate.storage.db.core.repository.ParticipationRepository;
 import com.woopaca.taximate.storage.db.core.repository.PartyRepository;
 import com.woopaca.taximate.storage.db.core.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -46,6 +48,9 @@ class ParticipationServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @MockBean
     private ParticipationEventPublisher participationEventPublisher;
 
@@ -59,8 +64,10 @@ class ParticipationServiceTest {
             partyEntity = partyRepository.save(PartyFixtures.createPartyEntity());
             UserEntity userEntity = UserFixtures.createUserEntityWith("host");
             userRepository.save(userEntity);
-            ParticipationEntity participationEntity = ParticipationFixtures.createParticipationEntityWith(partyEntity, userEntity);
+            ParticipationEntity participationEntity = ParticipationFixtures.createHostParticipationEntityWith(partyEntity, userEntity);
             participationRepository.save(participationEntity);
+
+            entityManager.clear();
         }
 
         @Test
@@ -68,7 +75,7 @@ class ParticipationServiceTest {
             // given
             UserEntity userEntity = UserFixtures.createUserEntity();
             UserEntity savedUserEntity = userRepository.save(userEntity);
-            User user = UserFixtures.createUser(savedUserEntity.getId());
+            User user = User.fromEntity(savedUserEntity);
             AuthenticatedUserHolder.setAuthenticatedUser(user);
 
             // when
@@ -89,6 +96,77 @@ class ParticipationServiceTest {
                             ),
                     () -> verify(participationEventPublisher).publishParticipateEvent(any(), any(), any())
             );
+        }
+    }
+
+    @Nested
+    class leaveParty_메서드는 {
+
+        private PartyEntity partyEntity;
+        private UserEntity host;
+        private UserEntity participant;
+
+        @BeforeEach
+        void setUp() {
+            partyEntity = partyRepository.save(PartyFixtures.createPartyEntity());
+            host = userRepository.save(UserFixtures.createUserEntityWith("host"));
+            participant = userRepository.save(UserFixtures.createUserEntityWith("participant"));
+            participationRepository.save(ParticipationFixtures.createHostParticipationEntityWith(partyEntity, host));
+            participationRepository.save(ParticipationFixtures.createParticipationEntityWith(partyEntity, participant));
+
+            entityManager.clear();
+        }
+
+        @Nested
+        class 호스트가_아닌_참여자가_나가는_경우 {
+
+            @Test
+            void 팟_참여_상태를_LEFT로_변경한다() {
+                // given
+                User user = User.fromEntity(participant);
+                AuthenticatedUserHolder.setAuthenticatedUser(user);
+
+                // when
+                participationService.leaveParty(partyEntity.getId());
+
+                // then
+                ParticipationEntity participationEntity = participationRepository
+                        .findByPartyIdAndUserId(partyEntity.getId(), participant.getId())
+                        .orElseThrow();
+                assertAll(
+                        () -> assertThat(participationEntity.getRole()).isEqualTo(ParticipationRole.PARTICIPANT.name()),
+                        () -> assertThat(participationEntity.getStatus()).isEqualTo(ParticipationStatus.LEFT.name()),
+                        () -> verify(participationEventPublisher).publishLeaveEvent(any(), any(), any())
+                );
+            }
+        }
+
+        @Nested
+        class 호스트인_참여자가_나가는_경우 {
+
+            @Test
+            void 팟_참여_상태를_LEFT로_변경하고_다음_참여자에게_호스트를_위임한다() {
+                // given
+                User user = User.fromEntity(host);
+                AuthenticatedUserHolder.setAuthenticatedUser(user);
+
+                // when
+                participationService.leaveParty(partyEntity.getId());
+
+                // then
+                ParticipationEntity hostEntity = participationRepository
+                        .findByPartyIdAndUserId(partyEntity.getId(), host.getId())
+                        .orElseThrow();
+                ParticipationEntity participantEntity = participationRepository
+                        .findByPartyIdAndUserId(partyEntity.getId(), participant.getId())
+                        .orElseThrow();
+                assertAll(
+                        () -> assertThat(hostEntity.getRole()).isEqualTo(ParticipationRole.PARTICIPANT.name()),
+                        () -> assertThat(hostEntity.getStatus()).isEqualTo(ParticipationStatus.LEFT.name()),
+                        () -> verify(participationEventPublisher).publishLeaveEvent(any(), any(), any()),
+                        () -> assertThat(participantEntity.getRole()).isEqualTo(ParticipationRole.HOST.name())
+                );
+            }
         }
     }
 }
