@@ -12,6 +12,7 @@ import com.woopaca.taximate.core.domain.party.PartyAppender;
 import com.woopaca.taximate.core.domain.party.PartyDetails;
 import com.woopaca.taximate.core.domain.party.PartyFinder;
 import com.woopaca.taximate.core.domain.party.PartyMapFinder;
+import com.woopaca.taximate.core.domain.party.PartyViewsIncreaser;
 import com.woopaca.taximate.core.domain.party.model.Coordinate;
 import com.woopaca.taximate.core.domain.party.model.MapBound;
 import com.woopaca.taximate.core.domain.taxi.Taxi;
@@ -35,8 +36,9 @@ public class PartyService {
     private final PartyAppender partyAppender;
     private final UserLock userLock;
     private final ParticipationEventPublisher participationEventPublisher;
+    private final PartyViewsIncreaser partyViewsIncreaser;
 
-    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, KakaoMobilityClientProxy kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationModifier participationModifier, PartyAppender partyAppender, UserLock userLock, ParticipationEventPublisher participationEventPublisher) {
+    public PartyService(PartyMapFinder partyMapFinder, PartyFinder partyFinder, KakaoMobilityClientProxy kakaoMobilityClient, PartyValidator partyValidator, AddressAllocator addressAllocator, ParticipationModifier participationModifier, PartyAppender partyAppender, UserLock userLock, ParticipationEventPublisher participationEventPublisher, PartyViewsIncreaser partyViewsIncreaser) {
         this.partyMapFinder = partyMapFinder;
         this.partyFinder = partyFinder;
         this.kakaoMobilityClient = kakaoMobilityClient;
@@ -46,6 +48,7 @@ public class PartyService {
         this.partyAppender = partyAppender;
         this.userLock = userLock;
         this.participationEventPublisher = participationEventPublisher;
+        this.partyViewsIncreaser = partyViewsIncreaser;
     }
 
     /**
@@ -74,7 +77,7 @@ public class PartyService {
     @Transactional
     public PartyDetails getPartyDetails(Long partyId) {
         Party party = partyFinder.findParty(partyId);
-        //TODO 조회수 증가
+        partyViewsIncreaser.increaseViews(party);
 
         User authenticatedUser = AuthenticatedUserHolder.getAuthenticatedUser();
 
