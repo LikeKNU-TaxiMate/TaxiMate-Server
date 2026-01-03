@@ -3,19 +3,14 @@ package com.woopaca.taximate.core.api.common.error;
 import com.woopaca.taximate.core.api.common.model.ApiResults;
 import com.woopaca.taximate.core.domain.error.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
-import org.springframework.web.bind.MissingRequestCookieException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.concurrent.CompletionException;
 
@@ -23,10 +18,11 @@ import static com.woopaca.taximate.core.api.common.model.ApiResults.ErrorRespons
 
 @Slf4j
 @RestControllerAdvice
-public class ErrorControllerAdvice {
+public class ErrorControllerAdvice extends ResponseEntityExceptionHandler {
 
     /**
      * 비즈니스 예외 처리
+     *
      * @param exception {@link BusinessException} 예외
      * @return {@link ErrorResponse}
      */
@@ -40,21 +36,8 @@ public class ErrorControllerAdvice {
     }
 
     /**
-     * 요청 파라미터 누락 예외 처리
-     * @param exception {@link MissingServletRequestParameterException} 예외
-     * @return {@link ErrorResponse}
-     */
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException exception) {
-        String message = exception.getMessage();
-        log.warn(message);
-        ErrorResponse errorResponse = ApiResults.error(message, "");
-        return ResponseEntity.badRequest()
-                .body(errorResponse);
-    }
-
-    /**
      * HTTP 메시지 변환 예외 처리
+     *
      * @param exception {@link HttpMessageConversionException} 예외
      * @return {@link ErrorResponse}
      */
@@ -69,6 +52,7 @@ public class ErrorControllerAdvice {
 
     /**
      * 잘못된 인자 예외 처리
+     *
      * @param exception {@link IllegalArgumentException} 예외
      * @return {@link ErrorResponse}
      */
@@ -83,6 +67,7 @@ public class ErrorControllerAdvice {
 
     /**
      * 잘못된 상태 예외 처리
+     *
      * @param exception {@link IllegalStateException} 예외
      * @return {@link ErrorResponse}
      */
@@ -97,6 +82,7 @@ public class ErrorControllerAdvice {
 
     /**
      * 바인딩 예외 처리
+     *
      * @param exception {@link BindException} 예외
      * @return {@link ErrorResponse}
      */
@@ -110,36 +96,8 @@ public class ErrorControllerAdvice {
     }
 
     /**
-     * 메소드 인자 타입 불일치 예외 처리
-     * @param exception {@link MethodArgumentTypeMismatchException} 예외
-     * @return {@link ErrorResponse}
-     */
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
-        String message = exception.getMessage();
-        String name = exception.getName();
-        log.warn(message);
-        ErrorResponse errorResponse = ApiResults.error(String.join(": ", message, name), "");
-        return ResponseEntity.badRequest()
-                .body(errorResponse);
-    }
-
-    /**
-     * 요청 쿠키 누락 예외 처리
-     * @param exception {@link MissingRequestCookieException} 예외
-     * @return {@link ErrorResponse}
-     */
-    @ExceptionHandler(MissingRequestCookieException.class)
-    public ResponseEntity<ErrorResponse> handleMissingRequestCookieException(MissingRequestCookieException exception) {
-        String message = exception.getMessage();
-        log.warn(message);
-        ErrorResponse errorResponse = ApiResults.error(message, "");
-        return ResponseEntity.badRequest()
-                .body(errorResponse);
-    }
-
-    /**
      * HTTP 상태 코드 예외 처리
+     *
      * @param exception {@link HttpStatusCodeException} 예외
      * @return {@link ErrorResponse}
      */
@@ -154,6 +112,7 @@ public class ErrorControllerAdvice {
 
     /**
      * CompletableFuture 예외 처리
+     *
      * @param exception {@link CompletionException} 예외
      * @return {@link ErrorResponse}
      */
@@ -173,35 +132,8 @@ public class ErrorControllerAdvice {
     }
 
     /**
-     * 핸들러 없음 예외 처리
-     * @param exception {@link NoHandlerFoundException} 예외
-     * @return {@link ErrorResponse}
-     */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException exception) {
-        String message = exception.getMessage();
-        log.warn(message);
-        ErrorResponse errorResponse = ApiResults.error(message, "");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
-    }
-
-    /**
-     * 리소스 없음 예외 처리
-     * @param exception {@link NoResourceFoundException} 예외
-     * @return {@link ErrorResponse}
-     */
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException exception) {
-        String message = exception.getMessage();
-        log.warn(message);
-        ErrorResponse errorResponse = ApiResults.error(message, "");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(errorResponse);
-    }
-
-    /**
      * 예외 처리
+     *
      * @param exception {@link Exception} 예외
      * @return {@link ErrorResponse}
      */
