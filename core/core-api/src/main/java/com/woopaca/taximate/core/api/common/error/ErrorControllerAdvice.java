@@ -5,7 +5,6 @@ import com.woopaca.taximate.core.domain.error.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpStatusCodeException;
@@ -75,21 +74,6 @@ public class ErrorControllerAdvice extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalStateException(IllegalStateException exception) {
         String message = exception.getMessage();
         log.warn(message, exception);
-        ErrorResponse errorResponse = ApiResults.error(message, "");
-        return ResponseEntity.badRequest()
-                .body(errorResponse);
-    }
-
-    /**
-     * 바인딩 예외 처리
-     *
-     * @param exception {@link BindException} 예외
-     * @return {@link ErrorResponse}
-     */
-    @ExceptionHandler(BindException.class)
-    public ResponseEntity<ErrorResponse> handleBindException(BindException exception) {
-        String message = exception.getMessage();
-        log.warn(message);
         ErrorResponse errorResponse = ApiResults.error(message, "");
         return ResponseEntity.badRequest()
                 .body(errorResponse);
