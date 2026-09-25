@@ -1,4 +1,8 @@
-bootJar.enabled = true
+bootJar {
+    archiveFileName = 'TaxiMate.jar'
+    enabled = true
+}
+
 jar.enabled = false
 
 dependencies {
@@ -18,10 +22,8 @@ dependencies {
     implementation 'org.springframework.retry:spring-retry'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     testImplementation 'org.orbisgis:h2gis:2.2.3'
-}
 
-bootJar {
-    archiveFileName = 'TaxiMate.jar'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 }
 
 test {
